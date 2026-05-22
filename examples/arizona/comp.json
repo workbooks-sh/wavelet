@@ -1,0 +1,78 @@
+{
+  "width": 1280,
+  "height": 720,
+  "fps": 30,
+  "duration_frames": 360,
+  "scenes": [
+    {
+      "html_path": "scenes/saguaro.html",
+      "video_bg": "assets/saguaro.mp4",
+      "start_frame": 0,
+      "duration_frames": 94,
+      "motion": [
+        { "selector": "#counter", "props": [["opacity", 0.0]], "duration_secs": 0.5, "easing": "Linear", "start_at_secs": 0.0, "kind": "from" },
+        { "selector": "#title",   "props": [["y", 50.0], ["opacity", 0.0]], "duration_secs": 0.8, "easing": "EaseOutQuart", "start_at_secs": 0.2, "kind": "from" },
+        { "selector": "#kicker",  "props": [["opacity", 0.0]], "duration_secs": 0.6, "easing": "Linear", "start_at_secs": 0.5, "kind": "from" }
+      ]
+    },
+    {
+      "html_path": "scenes/canyon.html",
+      "video_bg": "assets/canyon.mp4",
+      "start_frame": 94,
+      "duration_frames": 81,
+      "transition_in": {
+        "shady": "src(0).blend(src(1), prop(\"progress\")).out",
+        "duration_secs": 0.6
+      },
+      "motion": [
+        { "selector": "#counter", "props": [["opacity", 0.0]], "duration_secs": 0.5, "easing": "Linear", "start_at_secs": 0.0, "kind": "from" },
+        { "selector": "#title",   "props": [["y", 50.0], ["opacity", 0.0]], "duration_secs": 0.8, "easing": "EaseOutQuart", "start_at_secs": 0.2, "kind": "from" },
+        { "selector": "#kicker",  "props": [["opacity", 0.0]], "duration_secs": 0.6, "easing": "Linear", "start_at_secs": 0.5, "kind": "from" }
+      ]
+    },
+    {
+      "html_path": "scenes/sedona.html",
+      "video_bg": "assets/sedona.mp4",
+      "start_frame": 175,
+      "duration_frames": 78,
+      "transition_in": {
+        "shady": "src(0).blur(8).blend(src(1).blur(8), prop(\"progress\")).out",
+        "duration_secs": 0.6
+      },
+      "motion": [
+        { "selector": "#counter", "props": [["opacity", 0.0]], "duration_secs": 0.5, "easing": "Linear", "start_at_secs": 0.0, "kind": "from" },
+        { "selector": "#title",   "props": [["y", 50.0], ["opacity", 0.0]], "duration_secs": 0.8, "easing": "EaseOutQuart", "start_at_secs": 0.2, "kind": "from" },
+        { "selector": "#kicker",  "props": [["opacity", 0.0]], "duration_secs": 0.6, "easing": "Linear", "start_at_secs": 0.5, "kind": "from" }
+      ]
+    },
+    {
+      "html_path": "scenes/road.html",
+      "video_bg": "assets/road.mp4",
+      "start_frame": 253,
+      "duration_frames": 107,
+      "transition_in": {
+        "shady": "src(0).scroll(prop(\"progress\"), 0.0).blend(src(1), prop(\"progress\")).out",
+        "duration_secs": 0.6
+      },
+      "motion": [
+        { "selector": "#counter", "props": [["opacity", 0.0]], "duration_secs": 0.5, "easing": "Linear", "start_at_secs": 0.0, "kind": "from" },
+        { "selector": "#title",   "props": [["y", 50.0], ["opacity", 0.0]], "duration_secs": 0.8, "easing": "EaseOutQuart", "start_at_secs": 0.2, "kind": "from" },
+        { "selector": "#kicker",  "props": [["opacity", 0.0]], "duration_secs": 0.6, "easing": "Linear", "start_at_secs": 0.5, "kind": "from" }
+      ]
+    }
+  ],
+  "audio_cues": [
+    {
+      "asset_path": "music.mp3",
+      "id": "music",
+      "start_frame": 0,
+      "duration_frames": 360,
+      "volume": 0.7,
+      "pan": 0.0,
+      "fade_in_frames": 6,
+      "fade_out_frames": 24,
+      "duck_targets": [],
+      "duck_db": 0.0
+    }
+  ]
+}

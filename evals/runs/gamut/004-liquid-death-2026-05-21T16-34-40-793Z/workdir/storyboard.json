@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "duration_secs": 12.0,
+  "fps": 30,
+  "resolution": [
+    1080,
+    1920
+  ],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "INT. ABANDONED ROOM - NIGHT",
+      "first_shot": 0,
+      "shot_count": 1
+    },
+    {
+      "scene_index": 1,
+      "slugline": "INT. ABANDONED ROOM - CONTINUOUS",
+      "first_shot": 1,
+      "shot_count": 1
+    },
+    {
+      "scene_index": 2,
+      "slugline": "INT. VOID - CONTINUOUS",
+      "first_shot": 2,
+      "shot_count": 1
+    },
+    {
+      "scene_index": 3,
+      "slugline": "INT. TITLE CARD - CONTINUOUS",
+      "first_shot": 3,
+      "shot_count": 1
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-1",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 0,
+      "start_secs": 0.0,
+      "duration_secs": 3.0,
+      "shot_type": "ws",
+      "camera_movement": "push",
+      "camera_side": "center",
+      "subject": "Liquid Death tallboy aluminum can alone on a dusty wooden floor in an abandoned room, single tungsten desk lamp casting a hard sidelight, dead static-flickering CRT television in the background, deep shadows, vertical 9:16 framing",
+      "generation": {
+        "kind": "txt2_vid",
+        "prompt": "Vertical 9:16 mock-horror VHS commercial shot. An unopened matte-black Liquid Death tallboy aluminum can sits alone on a dusty wooden floor in an abandoned room. A single dim tungsten desk lamp throws a hard amber sidelight; the rest of the frame is in deep shadow. Behind the can, a dead CRT television flickers cold blue static, pulsing on and off. Locked-off camera with a very slow push-in. VHS register: heavy chromatic aberration on the highlights, fine horizontal scanlines, mild frame jitter, low-fi color, soft tape grain. No people, no logos other than the can. Cinematic, dread-soaked, no humor.",
+        "orientation": "portrait",
+        "backend": "fal-wan-t2v"
+      }
+    },
+    {
+      "id": "shot-2",
+      "shot_index": 1,
+      "scene_index": 1,
+      "screenplay_element_index": 1,
+      "start_secs": 3.0,
+      "duration_secs": 3.0,
+      "shot_type": "ecu",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "tight macro on the Liquid Death can wordmark, condensation droplet running down matte black aluminum, hard tungsten sidelight catching the white chiseled metal-band typography",
+      "generation": {
+        "kind": "txt2_vid",
+        "prompt": "Vertical 9:16 mock-horror VHS commercial shot. Extreme macro on a matte-black Liquid Death tallboy aluminum can; the white chiseled metal-band 'LIQUID DEATH' wordmark fills the right half of the frame. A single hard tungsten sidelight from camera-right rakes across the matte surface; the left side falls into deep shadow. A single bead of condensation slides slowly down the aluminum, catching the light. Locked-off camera, no movement. VHS register: heavy chromatic aberration on the highlights, fine horizontal scanlines, mild frame jitter, low-fi color, soft tape grain. Same tungsten color temperature as the previous shot. Cinematic, dread-soaked.",
+        "orientation": "portrait",
+        "backend": "fal-wan-t2v"
+      }
+    },
+    {
+      "id": "shot-3",
+      "shot_index": 2,
+      "scene_index": 2,
+      "screenplay_element_index": 3,
+      "start_secs": 6.0,
+      "duration_secs": 3.0,
+      "shot_type": "ms",
+      "camera_movement": "dolly",
+      "camera_side": "center",
+      "subject": "the Liquid Death can levitating in a pitch black void, hard tungsten sidelight, slow rotation, faint smoke curling at the base",
+      "generation": {
+        "kind": "txt2_vid",
+        "prompt": "Vertical 9:16 mock-horror VHS commercial shot. The matte-black Liquid Death tallboy aluminum can levitates dead-center in a pitch black void. A single hard tungsten sidelight from camera-right rakes across the can. The can rotates slowly about its vertical axis, revealing the white chiseled metal-band 'LIQUID DEATH' wordmark. Faint grey smoke curls upward from the base of the can. Locked-off camera, the can does the moving. VHS register: heavy chromatic aberration on the highlights, fine horizontal scanlines, mild frame jitter, low-fi color, soft tape grain. Same tungsten color temperature as the previous shots. Cinematic, dread-soaked, no humor.",
+        "orientation": "portrait",
+        "backend": "fal-wan-t2v"
+      }
+    },
+    {
+      "id": "shot-4",
+      "shot_index": 3,
+      "scene_index": 3,
+      "screenplay_element_index": 5,
+      "start_secs": 9.0,
+      "duration_secs": 3.0,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "title card: white LIQUID DEATH wordmark stamps onto black, then MURDER YOUR THIRST punches up beneath. Scanlines, tape warble.",
+      "generation": {
+        "kind": "native",
+        "prompt": "Title card composed as HTML in compose stage. Pitch black background. White LIQUID DEATH wordmark in heavy chiseled metal-band style, center of frame. MURDER YOUR THIRST punches up beneath in Acumin-Pro-style heavy condensed. Scanline texture overlay. Frame jitter. Tape warble.",
+        "orientation": "portrait",
+        "backend": "html",
+        "html": "<div></div>"
+      }
+    }
+  ]
+}

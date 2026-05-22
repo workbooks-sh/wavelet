@@ -1,0 +1,23 @@
+{
+  "name": "@work.books/wavelet-cli",
+  "version": "0.0.0",
+  "description": "wavelet — imperative editing CLI for wavelet compositions. init / inspect / lint / preview + (later) trim / split / cut / concat / move / verify / render.",
+  "type": "module",
+  "bin": {
+    "wavelet": "./bin/wavelet.mjs"
+  },
+  "main": "./src/index.mjs",
+  "scripts": {
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@work.books/wavelet-runtime": "workspace:*",
+    "linkedom": "^0.18.0",
+    "playwright-core": "^1.49.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.14",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.0"
+  }
+}

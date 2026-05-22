@@ -1,0 +1,31 @@
+{
+  "width": 1280,
+  "height": 720,
+  "fps": 30,
+  "duration_frames": 150,
+  "scenes": [
+    {
+      "html_path": "scenes/01-pour.html",
+      "video_bg": "shots/shot-1-pour.mp4",
+      "start_frame": 0,
+      "duration_frames": 150,
+      "motion": [
+        { "selector": "#cta", "props": [["opacity", 0.0], ["y", 24.0]], "duration_secs": 1.2, "easing": "EaseOutQuart", "start_at_secs": 1.5, "kind": "from" }
+      ]
+    }
+  ],
+  "audio_cues": [
+    {
+      "id": "music",
+      "asset_path": "music.wav",
+      "start_frame": 0,
+      "duration_frames": 150,
+      "volume": 0.6,
+      "pan": 0.0,
+      "fade_in_frames": 6,
+      "fade_out_frames": 24,
+      "duck_targets": [],
+      "duck_db": 0.0
+    }
+  ]
+}

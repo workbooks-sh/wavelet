@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; position: relative; font-family: "Acumin Pro", "Inter", "Helvetica Neue", sans-serif; color: #fff; }
+  .stage { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 36px; }
+  .wordmark {
+    font-family: Impact, "Haettenschweiler", "Arial Narrow", "Acumin Pro", sans-serif;
+    font-weight: 900;
+    font-stretch: 75%;
+    font-size: 168px;
+    line-height: 0.85;
+    letter-spacing: 0.005em;
+    text-align: center;
+    color: #f4f4ee;
+    text-transform: uppercase;
+    text-shadow:
+      0 0 1px #000,
+      0 4px 0 #1a1a1a,
+      0 8px 24px rgba(0,0,0,0.8),
+      0 0 36px rgba(180, 180, 230, 0.15);
+    transform: scaleY(1.18);
+    transform-origin: center;
+  }
+  .wordmark .line { display: block; }
+  .wordmark .line + .line { margin-top: -22px; }
+  .rule {
+    width: 70%;
+    height: 4px;
+    background: #f4f4ee;
+    box-shadow: 0 0 12px rgba(255,255,255,0.25);
+  }
+  .cta {
+    font-family: Impact, "Haettenschweiler", "Arial Narrow", "Acumin Pro", sans-serif;
+    font-weight: 900;
+    font-stretch: 75%;
+    font-size: 72px;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    text-align: center;
+    color: #f4f4ee;
+    text-transform: uppercase;
+    transform: scaleY(1.1);
+    text-shadow: 0 2px 0 #1a1a1a, 0 4px 18px rgba(0,0,0,0.7);
+  }
+  .vhs-scanlines {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image: repeating-linear-gradient(0deg, rgba(0,0,0,0.22) 0px, rgba(0,0,0,0.22) 1px, transparent 2px, transparent 3px);
+    mix-blend-mode: multiply;
+  }
+  .vhs-chroma {
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, rgba(255,0,80,0.06) 0%, transparent 50%, rgba(0,200,255,0.06) 100%);
+    mix-blend-mode: screen;
+  }
+  .vhs-grain {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.03), transparent 60%),
+                      radial-gradient(circle at 70% 60%, rgba(255,255,255,0.025), transparent 60%);
+  }
+  .vignette {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 25%, rgba(0,0,0,0.95) 100%);
+  }
+  .skull-mark {
+    position: absolute; top: 12%; font-family: ui-monospace, "SF Mono", monospace;
+    font-size: 22px; letter-spacing: 0.5em; color: #f4f4ee; opacity: 0.4;
+    text-transform: uppercase;
+  }
+  .tape-stamp {
+    position: absolute; bottom: 36px; left: 36px;
+    font-family: ui-monospace, "SF Mono", monospace;
+    font-size: 18px; font-weight: 700;
+    color: #d23; letter-spacing: 0.12em;
+    opacity: 0.75;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="skull-mark">— DRINK —</div>
+    <div class="wordmark">
+      <span class="line">LIQUID</span>
+      <span class="line">DEATH</span>
+    </div>
+    <div class="rule"></div>
+    <div class="cta">MURDER YOUR THIRST</div>
+  </div>
+  <div class="vhs-chroma"></div>
+  <div class="vhs-scanlines"></div>
+  <div class="vhs-grain"></div>
+  <div class="vignette"></div>
+  <div class="tape-stamp">● REC &nbsp; FIN</div>
+</body>
+</html>

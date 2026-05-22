@@ -1,0 +1,70 @@
+{
+  "title_page": {
+    "title": "Murder Your Thirst",
+    "author": "Liquid Death",
+    "other": {
+      "format": "9:16 / 12s"
+    }
+  },
+  "elements": [
+    {
+      "type": "scene_heading",
+      "slugline": "INT. ABANDONED ROOM - NIGHT",
+      "ie": "int",
+      "location": "ABANDONED ROOM",
+      "time_of_day": "NIGHT"
+    },
+    {
+      "type": "action",
+      "text": "A dead television flickers awake. Static. A single tungsten lamp hums.\nOn the dusty floor: an unopened Liquid Death tallboy can, alone in shadow.\nLocked-off frame. Mock-VHS chromatic aberration, scanlines, slow zoom."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. ABANDONED ROOM - CONTINUOUS",
+      "ie": "int",
+      "location": "ABANDONED ROOM",
+      "time_of_day": "CONTINUOUS"
+    },
+    {
+      "type": "action",
+      "text": "Pull tight on the can. Condensation slides down matte black aluminum.\nThe white chiseled metal-band wordmark catches the lamp. A drop falls.\nLocked-off frame. Same scanlines, same tungsten key. Frame jitter."
+    },
+    {
+      "type": "transition",
+      "text": "SMASH CUT TO:",
+      "kind": "smash_cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. VOID - CONTINUOUS",
+      "ie": "int",
+      "location": "VOID",
+      "time_of_day": "CONTINUOUS"
+    },
+    {
+      "type": "action",
+      "text": "Pitch black. The can rises into a hard tungsten side-light, levitating.\nSlow rotation. Smoke at the base. Chromatic aberration tighter now.\nLocked-off frame. Same VHS register, deeper shadow."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. TITLE CARD - CONTINUOUS",
+      "ie": "int",
+      "location": "TITLE CARD",
+      "time_of_day": "CONTINUOUS"
+    },
+    {
+      "type": "action",
+      "text": "Black. White Liquid Death wordmark stamps in with a single tom hit.\nBeneath it, the line punches up: MURDER YOUR THIRST.\nScanlines hold. Frame jitter. Tape warble."
+    }
+  ]
+}

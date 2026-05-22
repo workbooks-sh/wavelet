@@ -1,0 +1,17 @@
+{
+  "mode": "dry-run",
+  "provider": "fal-wan-i2v",
+  "request_hash": "42dd4c4601df2cbf",
+  "cached": false,
+  "cost_estimate_usd": 0.10000000149011612,
+  "result": {
+    "provider": "fal-wan-i2v",
+    "video_path": ".gamut-cache/fal-wan-i2v/42dd4c4601df2cbf.mp4",
+    "video_bytes": 0,
+    "mime": "video/mp4",
+    "duration_secs": 5.0,
+    "width": 1280,
+    "height": 720,
+    "prompt_sent": "The pour stream trembles slightly, steam rises, carafe remains hand-held and watched, nearly static observational macro product shot"
+  }
+}

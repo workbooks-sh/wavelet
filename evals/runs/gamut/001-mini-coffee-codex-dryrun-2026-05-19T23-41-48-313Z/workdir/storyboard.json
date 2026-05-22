@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "duration_secs": 5.0,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "INT. QUIET KITCHEN - MORNING",
+      "first_shot": 0,
+      "shot_count": 3
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-0-est",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 0,
+      "start_secs": 0.0,
+      "duration_secs": 1.6300993,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "QUIET KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "QUIET KITCHEN",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-1-0",
+      "shot_index": 1,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 1.6300993,
+      "duration_secs": 1.6618358,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "generic ceramic pour-over coffee carafe",
+      "generation": {
+        "kind": "stock_search",
+        "query": "generic ceramic pour-over coffee carafe",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-2-0",
+      "shot_index": 2,
+      "scene_index": 0,
+      "screenplay_element_index": 2,
+      "start_secs": 3.291935,
+      "duration_secs": 1.7080654,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "SUPER: Pour better",
+      "generation": {
+        "kind": "stock_search",
+        "query": "SUPER: Pour better",
+        "orientation": "landscape"
+      }
+    }
+  ]
+}

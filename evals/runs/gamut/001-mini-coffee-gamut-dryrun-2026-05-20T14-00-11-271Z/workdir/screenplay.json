@@ -1,0 +1,27 @@
+{
+  "title": "Mini Coffee",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "slugline": "INT. KITCHEN - DAY",
+      "description": "A ceramic pour-over carafe sits on a wooden table. Soft morning light filters in.",
+      "actions": [
+        {
+          "type": "action",
+          "text": "A ceramic pour-over carafe sits on a wooden table. Soft morning light filters in."
+        },
+        {
+          "type": "action",
+          "text": "A hand holds a kettle, pouring hot water in a slow, steady stream over the coffee grounds."
+        }
+      ],
+      "dialogue": [
+        {
+          "character": "NARRATOR",
+          "parenthetical": "V.O.",
+          "text": "Pour better."
+        }
+      ]
+    }
+  ]
+}

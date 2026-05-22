@@ -1,0 +1,15 @@
+{
+  "mode": "dry-run",
+  "provider": "fal-seedream-v45-edit",
+  "request_hash": "efba43b78f4f072f",
+  "cached": false,
+  "cost_estimate_usd": 0.03999999910593033,
+  "result": {
+    "provider": "fal-seedream-v45-edit",
+    "image_path": ".gamut-cache/fal-seedream-v45-edit/efba43b78f4f072f.png",
+    "image_bytes": 0,
+    "width": 0,
+    "height": 0,
+    "mime": "image/png"
+  }
+}

@@ -1,0 +1,68 @@
+name: example
+version: "0.1.0"
+description: >
+  Minimal end-to-end pipeline that exercises every field the schema
+  understands. Real pipelines live next to this file — see
+  commercial.yaml (wb-dlo2) for today's Path B v3.
+
+stages:
+  - name: brief
+    description: "Parse the 9-line ad-creative brief"
+    required_artifacts_out:
+      - brief.json
+    tools_available:
+      - "brief check"
+    success_criteria:
+      - kind: artifact_exists
+        params: { path: brief.json }
+
+  - name: screenplay
+    description: "Author the .fountain shot list"
+    required_artifacts_in:
+      - brief.json
+    required_artifacts_out:
+      - script.fountain
+    tools_available:
+      - "screenplay parse"
+    success_criteria:
+      - kind: artifact_exists
+        params: { path: script.fountain }
+
+  - name: storyboard
+    description: "Plan the storyboard from the screenplay"
+    required_artifacts_in:
+      - script.fountain
+    required_artifacts_out:
+      - storyboard.json
+    tools_available:
+      - "storyboard plan"
+      - "storyboard verify"
+    success_criteria:
+      - kind: artifact_exists
+        params: { path: storyboard.json }
+      - kind: storyboard_verify_passes
+
+  - name: render
+    description: "Render the spot to MP4"
+    required_artifacts_in:
+      - storyboard.json
+    required_artifacts_out:
+      - spot.mp4
+    tools_available:
+      - render
+      - verify
+    success_criteria:
+      - kind: artifact_exists
+        params: { path: spot.mp4 }
+      - kind: cost_below_usd
+        params: { max: 5.0 }
+
+orchestration:
+  budget_default_usd: 10.0
+  max_revisions_per_stage: 3
+  max_send_backs: 2
+  max_wall_time_minutes: 60
+
+reference_input:
+  supported: false
+  analysis_tools: []

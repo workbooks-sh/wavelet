@@ -1,0 +1,1 @@
+{"mode":"live","provider":"synthetic-equal-pacing","request_hash":"738b56da269e6531","cached":false,"cost_estimate_usd":0.0,"style":null,"result":{"provider":"synthetic-equal-pacing","words":[{"word":"Pour","start_ms":0,"end_ms":500},{"word":"better.","start_ms":500,"end_ms":1000}],"total_ms":1000}}

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "track_name": "on-screen-overlays",
+  "duration_secs": 12.0,
+  "words": [
+    {"text": "Liquid", "start": 9.6, "end": 10.4, "role": "wordmark-line-1"},
+    {"text": "Death",  "start": 9.6, "end": 10.4, "role": "wordmark-line-2"},
+    {"text": "MURDER", "start": 10.8, "end": 12.0, "role": "cta"},
+    {"text": "YOUR",   "start": 10.8, "end": 12.0, "role": "cta"},
+    {"text": "THIRST", "start": 10.8, "end": 12.0, "role": "cta"},
+    {"text": "LIQUIDDEATH.COM", "start": 10.95, "end": 12.0, "role": "cta-url"}
+  ],
+  "notes": "No VO — silent until the wordmark hit at t=9.6s. Captions tracks only the on-screen typography events in scene-5.html."
+}

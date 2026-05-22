@@ -1,0 +1,16 @@
+{
+  "mode": "dry-run",
+  "provider": "elevenlabs-music",
+  "request_hash": "129dfd7cc5ab7e63",
+  "cached": false,
+  "cost_estimate_usd": 0.02499999850988388,
+  "result": {
+    "provider": "elevenlabs-music",
+    "audio_path": ".gamut-cache/elevenlabs-music/129dfd7cc5ab7e63.mp3",
+    "audio_bytes": 0,
+    "mime": "audio/mpeg",
+    "model_variant": "music_v1",
+    "prompt_sent": "ambient piano, single sparse phrase, still observational A24 tone, 80bpm open → 80bpm steady → 60bpm action → 55bpm transition-fadeout, 70 bpm average",
+    "duration_secs": 5.0
+  }
+}

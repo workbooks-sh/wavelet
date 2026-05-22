@@ -1,0 +1,34 @@
+{"ts":"2026-05-19T23:15:37Z","argv":["gamut","--help"],"duration_ms":345,"exit":0,"stdout_bytes":4395,"stderr_bytes":0}
+{"ts":"2026-05-19T23:16:10Z","argv":["gamut","storyboard","plan","--help"],"duration_ms":474,"exit":0,"stdout_bytes":1827,"stderr_bytes":0}
+{"ts":"2026-05-19T23:16:10Z","argv":["gamut","screenplay","parse","--help"],"duration_ms":564,"exit":0,"stdout_bytes":516,"stderr_bytes":0}
+{"ts":"2026-05-19T23:16:10Z","argv":["gamut","velocity","propose","--help"],"duration_ms":544,"exit":0,"stdout_bytes":590,"stderr_bytes":0}
+{"ts":"2026-05-19T23:16:20Z","argv":["gamut","render","--help"],"duration_ms":236,"exit":0,"stdout_bytes":1880,"stderr_bytes":0}
+{"ts":"2026-05-19T23:16:20Z","argv":["gamut","verify","--help"],"duration_ms":247,"exit":0,"stdout_bytes":446,"stderr_bytes":0}
+{"ts":"2026-05-19T23:16:20Z","argv":["gamut","music","gen","--help"],"duration_ms":218,"exit":0,"stdout_bytes":1825,"stderr_bytes":0}
+{"ts":"2026-05-19T23:16:20Z","argv":["gamut","shot","txt2vid","--help"],"duration_ms":268,"exit":0,"stdout_bytes":2237,"stderr_bytes":0}
+{"ts":"2026-05-19T23:16:21Z","argv":["gamut","image","scene-still","--help"],"duration_ms":263,"exit":0,"stdout_bytes":3111,"stderr_bytes":0}
+{"ts":"2026-05-19T23:16:33Z","argv":["gamut","workflow","run","commercial","--help"],"duration_ms":355,"exit":0,"stdout_bytes":775,"stderr_bytes":0}
+{"ts":"2026-05-19T23:18:02Z","argv":["gamut","screenplay","parse","script.fountain","--pretty","-o","screenplay.json"],"duration_ms":350,"exit":0,"stdout_bytes":0,"stderr_bytes":22}
+{"ts":"2026-05-19T23:18:02Z","argv":["gamut","velocity","propose","script.fountain","--pretty","-o","velocity.json"],"duration_ms":355,"exit":0,"stdout_bytes":0,"stderr_bytes":20}
+{"ts":"2026-05-19T23:18:02Z","argv":["gamut","brief","check","brief.md"],"duration_ms":366,"exit":0,"stdout_bytes":3,"stderr_bytes":0}
+{"ts":"2026-05-19T23:18:09Z","argv":["gamut","storyboard","plan","script.fountain","--velocity","velocity.json","--match-runtime","5","--pretty","-o","storyboard.json"],"duration_ms":229,"exit":0,"stdout_bytes":0,"stderr_bytes":50}
+{"ts":"2026-05-19T23:18:09Z","argv":["gamut","transitions","classify","script.fountain","--velocity","velocity.json","--pretty","-o","transitions.json"],"duration_ms":226,"exit":0,"stdout_bytes":0,"stderr_bytes":54}
+{"ts":"2026-05-19T23:18:18Z","argv":["gamut","storyboard","verify","storyboard.json"],"duration_ms":372,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-19T23:18:18Z","argv":["gamut","continuity","check","storyboard.json"],"duration_ms":365,"exit":0,"stdout_bytes":38,"stderr_bytes":0}
+{"ts":"2026-05-19T23:18:31Z","argv":["gamut","shot","img2vid","--help"],"duration_ms":506,"exit":0,"stdout_bytes":3055,"stderr_bytes":0}
+{"ts":"2026-05-19T23:19:07Z","argv":["gamut","image","scene-still","--refs","https://example.com/generic-ceramic-pourover-carafe.jpg","--prompt","A generic ceramic pour-over coffee carafe on a linen kitchen counter at dawn, hand pouring water in a thin stream, warm side light, still observational A24 tone, no brand, no text","--image-size","landscape_16_9","--dry-run","--max-cost","0.05","--out","shots/still-001.png","--pretty"],"duration_ms":1289,"exit":0,"stdout_bytes":380,"stderr_bytes":62}
+{"ts":"2026-05-19T23:19:07Z","argv":["gamut","shot","img2vid","shots/still-001.png","The pour stream trembles slightly, steam rises, carafe remains hand-held and watched, nearly static observational macro product shot","--duration","5","--aspect","16:9","--dry-run","--max-cost","0.15","--out","shots/shot-001.mp4","--pretty"],"duration_ms":1321,"exit":0,"stdout_bytes":536,"stderr_bytes":0}
+{"ts":"2026-05-19T23:19:07Z","argv":["gamut","music","gen","--velocity","velocity.json","--style","ambient piano, sparse single phrase, still observational A24 morning ritual","--duration","5","--dry-run","--max-cost","0.10","--out","music/track.wav","--pretty"],"duration_ms":1324,"exit":0,"stdout_bytes":581,"stderr_bytes":0}
+{"ts":"2026-05-19T23:19:25Z","argv":["gamut","velocity","validate","velocity.json","--against","music/track.wav","--tolerance","20","--pretty"],"duration_ms":1048,"exit":1,"stdout_bytes":1138,"stderr_bytes":27}
+{"ts":"2026-05-19T23:19:25Z","argv":["gamut","verify","comp.json"],"duration_ms":1460,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-19T23:23:44Z","argv":["gamut","render","comp.json","-o","commercial.mp4","--title","Pour Better","--author","Codex"],"duration_ms":399,"exit":2,"stdout_bytes":0,"stderr_bytes":196}
+{"ts":"2026-05-19T23:23:44Z","argv":["gamut","verify","comp.json"],"duration_ms":1083,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-19T23:25:59Z","argv":["gamut","verify","comp.json"],"duration_ms":688,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-19T23:25:59Z","argv":["gamut","render","comp.json","-o","commercial.mp4"],"duration_ms":5141,"exit":0,"stdout_bytes":152,"stderr_bytes":675}
+{"ts":"2026-05-19T23:26:15Z","argv":["gamut","c2pa","--help"],"duration_ms":376,"exit":0,"stdout_bytes":787,"stderr_bytes":0}
+{"ts":"2026-05-19T23:26:15Z","argv":["gamut","c2pa","sign","--help"],"duration_ms":364,"exit":0,"stdout_bytes":1207,"stderr_bytes":0}
+{"ts":"2026-05-19T23:26:16Z","argv":["gamut","c2pa","verify","--help"],"duration_ms":469,"exit":0,"stdout_bytes":504,"stderr_bytes":0}
+{"ts":"2026-05-19T23:26:31Z","argv":["gamut","render","comp.json","-o","commercial.mp4"],"duration_ms":5538,"exit":0,"stdout_bytes":152,"stderr_bytes":675}
+{"ts":"2026-05-19T23:26:44Z","argv":["gamut","c2pa","sign","commercial.mp4","--comp","comp.json","--out","commercial.signed.mp4","--title","Pour Better","--author","Codex"],"duration_ms":481,"exit":0,"stdout_bytes":161,"stderr_bytes":0}
+{"ts":"2026-05-19T23:26:45Z","argv":["gamut","c2pa","verify","commercial.mp4"],"duration_ms":291,"exit":0,"stdout_bytes":223,"stderr_bytes":0}
+{"ts":"2026-05-19T23:26:58Z","argv":["gamut","workflow","run","commercial","--workdir",".","--text"],"duration_ms":385,"exit":0,"stdout_bytes":210,"stderr_bytes":0}

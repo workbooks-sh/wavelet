@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+    background: radial-gradient(ellipse 70% 55% at 50% 45%, #221814 0%, #08060a 75%);
+    font-family: 'Helvetica Neue', Arial, sans-serif; }
+  .shelf { position: absolute; left: 8%; right: 8%; top: 78%; height: 22px;
+    background: linear-gradient(180deg, #28201a 0%, #0e0907 100%);
+    border-radius: 3px; }
+  .mixer-wrap { position: absolute; left: 50%; top: 48%;
+    transform: translate(-50%, -50%);
+    width: 760px; height: 880px;
+    animation: hero-rise 1.8s cubic-bezier(.18,.8,.2,1) both; }
+  @keyframes hero-rise {
+    0%   { opacity: 0; transform: translate(-50%, -42%) scale(0.94); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+  .mixer-wrap svg { width: 100%; height: 100%; display: block; }
+  .beater { transform-origin: 420px 540px; animation: beat 0.9s linear infinite; }
+  @keyframes beat { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .vignette { position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%); }
+</style>
+</head>
+<body>
+  <div class="shelf"></div>
+  <div class="mixer-wrap">
+    <svg viewBox="0 0 760 880" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="body" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#fbf3e6"/>
+          <stop offset="0.5" stop-color="#ede1cb"/>
+          <stop offset="1" stop-color="#b89f78"/>
+        </linearGradient>
+        <linearGradient id="bowl" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#eaeaee"/>
+          <stop offset="1" stop-color="#6d7077"/>
+        </linearGradient>
+        <linearGradient id="bowlRim" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#f4f4f6"/>
+          <stop offset="1" stop-color="#9ea2a9"/>
+        </linearGradient>
+      </defs>
+      <path d="M 110 720 Q 110 660 200 650 L 560 650 Q 650 660 650 720 L 650 770 Q 650 800 610 800 L 150 800 Q 110 800 110 770 Z" fill="url(#body)"/>
+      <rect x="200" y="370" width="180" height="320" rx="40" fill="url(#body)"/>
+      <path d="M 200 380 Q 200 250 320 220 L 560 200 Q 640 200 640 280 L 640 380 Q 640 440 580 450 L 320 460 Q 200 460 200 380 Z" fill="url(#body)"/>
+      <rect x="370" y="285" width="220" height="60" rx="10" fill="#b22a18"/>
+      <text x="480" y="326" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#fbf3e6" letter-spacing="6">WHIRLPOOL</text>
+      <circle cx="290" cy="540" r="42" fill="#1a120d" stroke="#fbf3e6" stroke-width="3"/>
+      <rect x="287" y="510" width="6" height="22" rx="2" fill="#fbf3e6"/>
+      <text x="290" y="603" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#c9b89b" letter-spacing="2">10 SPEED</text>
+      <rect x="395" y="400" width="50" height="40" rx="6" fill="#2a1c12"/>
+      <g class="beater">
+        <rect x="416" y="430" width="8" height="100" fill="#aaadb3"/>
+        <ellipse cx="420" cy="560" rx="38" ry="46" fill="none" stroke="#aaadb3" stroke-width="6"/>
+        <path d="M 382 560 Q 420 520 458 560 Q 420 600 382 560 Z" fill="none" stroke="#aaadb3" stroke-width="3"/>
+      </g>
+      <ellipse cx="420" cy="660" rx="200" ry="40" fill="url(#bowlRim)"/>
+      <path d="M 220 660 Q 240 790 420 800 Q 600 790 620 660 Z" fill="url(#bowl)"/>
+      <ellipse cx="420" cy="660" rx="195" ry="34" fill="#1a1411" opacity="0.55"/>
+    </svg>
+  </div>
+  <div class="vignette"></div>
+</body>
+</html>

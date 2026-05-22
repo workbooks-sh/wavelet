@@ -1,0 +1,29 @@
+{"ts":"2026-05-19T18:19:01Z","argv":["gamut","--help"],"duration_ms":96,"exit":0,"stdout_bytes":4395,"stderr_bytes":0}
+{"ts":"2026-05-19T18:19:04Z","argv":["gamut","workflow","run","--help"],"duration_ms":47,"exit":0,"stdout_bytes":775,"stderr_bytes":0}
+{"ts":"2026-05-19T18:19:08Z","argv":["gamut","workflow","run","commercial.yaml","--text"],"duration_ms":76,"exit":0,"stdout_bytes":502,"stderr_bytes":0}
+{"ts":"2026-05-19T18:19:14Z","argv":["gamut","brief","check","/Users/shinyobjectz/Apps/workbooks/packages/gamut/evals/runs/2026-05-19-b-mini-claude/workdir/brief.md"],"duration_ms":55,"exit":1,"stdout_bytes":0,"stderr_bytes":43}
+{"ts":"2026-05-19T18:19:36Z","argv":["gamut","brief","check","brief.md"],"duration_ms":88,"exit":0,"stdout_bytes":3,"stderr_bytes":0}
+{"ts":"2026-05-19T18:19:44Z","argv":["gamut","screenplay","parse","script.fountain","--pretty","-o","screenplay.json"],"duration_ms":50,"exit":0,"stdout_bytes":0,"stderr_bytes":22}
+{"ts":"2026-05-19T18:19:48Z","argv":["gamut","velocity","propose","script.fountain","--pretty","-o","velocity.json"],"duration_ms":60,"exit":0,"stdout_bytes":0,"stderr_bytes":20}
+{"ts":"2026-05-19T18:19:48Z","argv":["gamut","storyboard","plan","script.fountain","--velocity","velocity.json","--pretty","-o","storyboard.json"],"duration_ms":69,"exit":0,"stdout_bytes":0,"stderr_bytes":50}
+{"ts":"2026-05-19T18:19:48Z","argv":["gamut","storyboard","verify","storyboard.json"],"duration_ms":56,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-19T18:19:49Z","argv":["gamut","continuity","check","storyboard.json"],"duration_ms":54,"exit":0,"stdout_bytes":38,"stderr_bytes":0}
+{"ts":"2026-05-19T18:19:49Z","argv":["gamut","transitions","classify","script.fountain","--velocity","velocity.json","--pretty","-o","transitions.json"],"duration_ms":51,"exit":0,"stdout_bytes":0,"stderr_bytes":54}
+{"ts":"2026-05-19T18:19:51Z","argv":["gamut","workflow","run","commercial.yaml","--text"],"duration_ms":57,"exit":0,"stdout_bytes":339,"stderr_bytes":0}
+{"ts":"2026-05-19T18:19:55Z","argv":["gamut","music","gen","--help"],"duration_ms":47,"exit":0,"stdout_bytes":1825,"stderr_bytes":0}
+{"ts":"2026-05-19T18:19:55Z","argv":["gamut","shot","txt2vid","--help"],"duration_ms":42,"exit":0,"stdout_bytes":2237,"stderr_bytes":0}
+{"ts":"2026-05-19T18:20:00Z","argv":["gamut","music","gen","--velocity","velocity.json","--style","ambient piano, single phrase, no vocals, slow","--duration","5","--max-cost","0.10","--out","music.wav","--dry-run","--pretty"],"duration_ms":60,"exit":0,"stdout_bytes":551,"stderr_bytes":0}
+{"ts":"2026-05-19T18:20:19Z","argv":["gamut","shot","txt2vid","a ceramic pour-over coffee carafe on a wooden kitchen counter, soft morning light, thin stream of water arcs into the bloom of coffee grounds, A24 cinematic, observational, shallow depth of field","--duration","5","--max-cost","0.20","--out","shots/shot-1-pour.mp4","--dry-run","--pretty"],"duration_ms":101,"exit":0,"stdout_bytes":599,"stderr_bytes":0}
+{"ts":"2026-05-19T18:20:25Z","argv":["gamut","workflow","run","commercial.yaml","--text"],"duration_ms":56,"exit":0,"stdout_bytes":309,"stderr_bytes":0}
+{"ts":"2026-05-19T18:20:29Z","argv":["gamut","velocity","validate","velocity.json","--against","music.wav","--tolerance","20","--pretty"],"duration_ms":183,"exit":1,"stdout_bytes":1021,"stderr_bytes":0}
+{"ts":"2026-05-19T18:20:37Z","argv":["gamut","velocity","onsets-to-edl","--help"],"duration_ms":45,"exit":0,"stdout_bytes":778,"stderr_bytes":0}
+{"ts":"2026-05-19T18:20:41Z","argv":["gamut","velocity","onsets-to-edl","--music","music.wav","--fps","30","-o","cuts.edl"],"duration_ms":162,"exit":0,"stdout_bytes":0,"stderr_bytes":26}
+{"ts":"2026-05-19T18:20:43Z","argv":["gamut","dialogue","captions","--help"],"duration_ms":44,"exit":0,"stdout_bytes":1767,"stderr_bytes":0}
+{"ts":"2026-05-19T18:20:47Z","argv":["gamut","dialogue","captions","--audio","music.wav","--text","Pour better","--backend","synthetic","--duration-ms","5000","--style","minimal","-o","captions.json","--pretty"],"duration_ms":46,"exit":0,"stdout_bytes":0,"stderr_bytes":0}
+{"ts":"2026-05-19T18:20:50Z","argv":["gamut","workflow","run","commercial.yaml","--text"],"duration_ms":43,"exit":0,"stdout_bytes":257,"stderr_bytes":0}
+{"ts":"2026-05-19T18:21:11Z","argv":["gamut","verify","comp.json"],"duration_ms":374,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-19T18:21:14Z","argv":["gamut","workflow","run","commercial.yaml","--text"],"duration_ms":44,"exit":0,"stdout_bytes":235,"stderr_bytes":0}
+{"ts":"2026-05-19T18:21:17Z","argv":["gamut","render","comp.json","-o","final.mp4","--sign-c2pa","--title","Pour Better","--author","gamut-director"],"duration_ms":8886,"exit":0,"stdout_bytes":267,"stderr_bytes":763}
+{"ts":"2026-05-19T18:21:34Z","argv":["gamut","c2pa","sign","commercial.mp4","-o","commercial.signed.mp4","--comp","comp.json","--title","Pour Better","--author","gamut-director"],"duration_ms":67,"exit":0,"stdout_bytes":161,"stderr_bytes":0}
+{"ts":"2026-05-19T18:21:34Z","argv":["gamut","c2pa","verify","commercial.mp4"],"duration_ms":54,"exit":0,"stdout_bytes":223,"stderr_bytes":0}
+{"ts":"2026-05-19T18:21:37Z","argv":["gamut","workflow","run","commercial.yaml","--text"],"duration_ms":44,"exit":0,"stdout_bytes":210,"stderr_bytes":0}

@@ -1,0 +1,17 @@
+{
+  "mode": "dry-run",
+  "provider": "fal-wan-t2v",
+  "request_hash": "59ad4dc426f36528",
+  "cached": false,
+  "cost_estimate_usd": 0.10000000149011612,
+  "result": {
+    "provider": "fal-wan-t2v",
+    "video_path": ".gamut-cache/fal-wan-t2v/59ad4dc426f36528.mp4",
+    "video_bytes": 0,
+    "mime": "video/mp4",
+    "duration_secs": 5.0,
+    "width": 1280,
+    "height": 720,
+    "prompt_sent": "A generic ceramic pour-over coffee carafe on a dark table at dawn, a thin hand-poured stream, steam drifting, still observational A24 product shot, no brand, no text"
+  }
+}

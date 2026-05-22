@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+    background: radial-gradient(ellipse 80% 60% at 50% 45%, #1f1612 0%, #07050a 75%);
+    font-family: 'Helvetica Neue', Arial, sans-serif; }
+  .crop { position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%) scale(1.0);
+    width: 1100px; height: 1100px;
+    animation: push-in 2.0s ease-out both; }
+  @keyframes push-in {
+    0%   { transform: translate(-50%, -50%) scale(1.0); }
+    100% { transform: translate(-50%, -50%) scale(1.15); }
+  }
+  .crop svg { width: 100%; height: 100%; display: block; }
+  .beater { transform-origin: 540px 610px; animation: beat 0.55s linear infinite; }
+  @keyframes beat { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .label { position: absolute; left: 50%; bottom: 8%;
+    transform: translateX(-50%);
+    color: #c9b89b; letter-spacing: 0.55em; font-size: 30px;
+    opacity: 0; animation: lbl 0.9s ease 0.5s forwards; }
+  @keyframes lbl { to { opacity: 1; } }
+  .vignette { position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.7) 100%); }
+</style>
+</head>
+<body>
+  <div class="crop">
+    <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bodyB" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#fbf3e6"/>
+          <stop offset="0.6" stop-color="#e9dec4"/>
+          <stop offset="1" stop-color="#b3996f"/>
+        </linearGradient>
+        <linearGradient id="bowlB" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#eaeaee"/>
+          <stop offset="1" stop-color="#5d6068"/>
+        </linearGradient>
+        <linearGradient id="bowlRimB" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#f7f7fa"/>
+          <stop offset="1" stop-color="#9aa0a8"/>
+        </linearGradient>
+        <linearGradient id="doughG" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#fbecd0"/>
+          <stop offset="1" stop-color="#c9a878"/>
+        </linearGradient>
+      </defs>
+      <path d="M 100 240 Q 100 140 250 130 L 880 130 Q 980 140 980 220 L 980 340 Q 980 400 900 410 L 250 420 Q 100 420 100 240 Z" fill="url(#bodyB)"/>
+      <rect x="510" y="360" width="80" height="60" rx="8" fill="#2a1c12"/>
+      <g class="beater">
+        <rect x="528" y="418" width="14" height="120" fill="#aaadb3"/>
+        <ellipse cx="535" cy="610" rx="58" ry="68" fill="none" stroke="#aaadb3" stroke-width="9"/>
+        <path d="M 477 610 Q 535 540 593 610 Q 535 680 477 610 Z" fill="none" stroke="#aaadb3" stroke-width="4"/>
+      </g>
+      <ellipse cx="540" cy="720" rx="320" ry="60" fill="url(#bowlRimB)"/>
+      <path d="M 220 720 Q 250 950 540 970 Q 830 950 860 720 Z" fill="url(#bowlB)"/>
+      <ellipse cx="540" cy="720" rx="310" ry="50" fill="#1a1411" opacity="0.7"/>
+      <path d="M 320 720 Q 360 800 540 810 Q 720 800 760 720" fill="url(#doughG)" opacity="0.85"/>
+    </svg>
+  </div>
+  <div class="label">MIX  ·  KNEAD  ·  WHIP</div>
+  <div class="vignette"></div>
+</body>
+</html>

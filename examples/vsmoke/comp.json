@@ -1,0 +1,230 @@
+{
+  "width": 1280,
+  "height": 720,
+  "fps": 30,
+  "duration_frames": 480,
+  "scenes": [
+    {
+      "html_path": "scenes/hero.html",
+      "start_frame": 0,
+      "duration_frames": 120,
+      "motion": [
+        {
+          "selector": "#headline",
+          "props": [
+            [
+              "y",
+              60.0
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.9,
+          "easing": "EaseOutBack",
+          "start_at_secs": 0.0,
+          "kind": "from"
+        },
+        {
+          "selector": "#subhead",
+          "props": [
+            [
+              "y",
+              40.0
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.7,
+          "easing": "EaseOutCubic",
+          "start_at_secs": 0.3,
+          "kind": "from"
+        }
+      ]
+    },
+    {
+      "html_path": "scenes/proof.html",
+      "start_frame": 120,
+      "duration_frames": 165,
+      "motion": [
+        {
+          "selector": "#stack",
+          "props": [
+            [
+              "y",
+              30.0
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.7,
+          "easing": "EaseOutQuart",
+          "start_at_secs": 0.0,
+          "kind": "from"
+        }
+      ]
+    },
+    {
+      "html_path": "scenes/imagery.html",
+      "start_frame": 285,
+      "duration_frames": 135,
+      "motion": [
+        {
+          "selector": "#kicker",
+          "props": [
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.5,
+          "easing": "Linear",
+          "start_at_secs": 0.0,
+          "kind": "from"
+        },
+        {
+          "selector": "#headline",
+          "props": [
+            [
+              "y",
+              50.0
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.8,
+          "easing": "EaseOutQuart",
+          "start_at_secs": 0.15,
+          "kind": "from"
+        },
+        {
+          "selector": "#caption",
+          "props": [
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.6,
+          "easing": "Linear",
+          "start_at_secs": 0.5,
+          "kind": "from"
+        }
+      ]
+    },
+    {
+      "html_path": "scenes/outro.html",
+      "start_frame": 420,
+      "duration_frames": 60,
+      "motion": [
+        {
+          "selector": "#headline",
+          "props": [
+            [
+              "scale",
+              0.85
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.6,
+          "easing": "EaseOutBack",
+          "start_at_secs": 0.0,
+          "kind": "from"
+        },
+        {
+          "selector": "#stack",
+          "props": [
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.5,
+          "easing": "EaseOutCubic",
+          "start_at_secs": 0.3,
+          "kind": "from"
+        }
+      ]
+    }
+  ],
+  "audio_cues": [
+    {
+      "asset_path": "assets/music.mp3",
+      "id": "music",
+      "start_frame": 0,
+      "duration_frames": 480,
+      "volume": 0.35,
+      "pan": 0.0,
+      "fade_in_frames": 30,
+      "fade_out_frames": 60,
+      "duck_targets": [],
+      "duck_db": 0.0
+    },
+    {
+      "asset_path": "assets/vo-hero.mp3",
+      "id": "vo-hero",
+      "start_frame": 9,
+      "duration_frames": 60,
+      "volume": 1.0,
+      "pan": 0.0,
+      "fade_in_frames": 9,
+      "fade_out_frames": 12,
+      "duck_targets": [
+        "music"
+      ],
+      "duck_db": 8.0
+    },
+    {
+      "asset_path": "assets/vo-proof.mp3",
+      "id": "vo-proof",
+      "start_frame": 129,
+      "duration_frames": 135,
+      "volume": 1.0,
+      "pan": 0.0,
+      "fade_in_frames": 9,
+      "fade_out_frames": 12,
+      "duck_targets": [
+        "music"
+      ],
+      "duck_db": 8.0
+    },
+    {
+      "asset_path": "assets/vo-imagery.mp3",
+      "id": "vo-imagery",
+      "start_frame": 294,
+      "duration_frames": 100,
+      "volume": 1.0,
+      "pan": 0.0,
+      "fade_in_frames": 9,
+      "fade_out_frames": 12,
+      "duck_targets": [
+        "music"
+      ],
+      "duck_db": 8.0
+    },
+    {
+      "asset_path": "assets/vo-outro.mp3",
+      "id": "vo-outro",
+      "start_frame": 429,
+      "duration_frames": 35,
+      "volume": 1.0,
+      "pan": 0.0,
+      "fade_in_frames": 9,
+      "fade_out_frames": 12,
+      "duck_targets": [
+        "music"
+      ],
+      "duck_db": 8.0
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "width": 320,
+  "height": 180,
+  "fps": 10,
+  "duration_frames": 51,
+  "aspect": "16:9",
+  "scenes": [
+    {
+      "html_path": "scenes/coffee.html",
+      "start_frame": 0,
+      "duration_frames": 51,
+      "motion": []
+    }
+  ],
+  "audio_cues": [
+    {
+      "asset_path": "music/track.wav",
+      "id": "music",
+      "start_frame": 0,
+      "duration_frames": 51,
+      "volume": 0.28,
+      "pan": 0.0,
+      "fade_in_frames": 8,
+      "fade_out_frames": 12,
+      "duck_targets": [],
+      "duck_db": 0.0
+    }
+  ]
+}

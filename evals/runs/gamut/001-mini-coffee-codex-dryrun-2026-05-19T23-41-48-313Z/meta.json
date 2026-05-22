@@ -1,0 +1,28 @@
+{
+  "run_id": "gamut/001-mini-coffee-codex-dryrun-2026-05-19T23-41-48-313Z",
+  "spec_name": "gamut/001-mini-coffee-codex-dryrun",
+  "brief_path": "/Users/shinyobjectz/Apps/workbooks/packages/gamut/evals/briefs/001-mini-coffee.md",
+  "agent": "codex",
+  "budget_usd": 0.05,
+  "pipeline": "commercial",
+  "dry_run": true,
+  "timeout_ms": 1800000,
+  "timed_out": false,
+  "exit_code": 0,
+  "started_at": "2026-05-19T23:41:48.360Z",
+  "ended_at": "2026-05-19T23:48:41.990Z",
+  "duration_ms": 413630,
+  "gamut_real": "/Users/shinyobjectz/Apps/workbooks/packages/gamut/target/debug/gamut",
+  "shim": "/Users/shinyobjectz/Apps/workbooks/packages/gamut/evals/bin/gamut-traced",
+  "workdir": "/Users/shinyobjectz/Apps/workbooks/packages/gamut/evals/runs/gamut/001-mini-coffee-codex-dryrun-2026-05-19T23-41-48-313Z/workdir",
+  "transcript_path": "/Users/shinyobjectz/Apps/workbooks/packages/gamut/evals/runs/gamut/001-mini-coffee-codex-dryrun-2026-05-19T23-41-48-313Z/transcript.log",
+  "trace_path": "/Users/shinyobjectz/Apps/workbooks/packages/gamut/evals/runs/gamut/001-mini-coffee-codex-dryrun-2026-05-19T23-41-48-313Z/workdir/.gamut-trace.jsonl",
+  "commercial_mp4": "/Users/shinyobjectz/Apps/workbooks/packages/gamut/evals/runs/gamut/001-mini-coffee-codex-dryrun-2026-05-19T23-41-48-313Z/workdir/commercial.mp4",
+  "env": {
+    "PATH": "/Users/shinyobjectz/Apps/workbooks/packages/gamut/evals/runs/gamut/001-mini-coffee-codex-dryrun-2026-05-19T23-41-48-313Z/workdir/.bin:/Users/shinyobjectz/Apps/workbooks/packages/gamut/target/debug:/Users/shinyobjectz/perl5/bin:/Users/shinyobjectz/.composio:/opt/homebrew/share/flutter/bin:/Users/shinyobjectz/.bun/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/Users/shinyobjectz/perl5/bin:/Users/shinyobjectz/.composio:/Users/shinyobjectz/.local/bin:/opt/homebrew/share/flutter/bin:/Users/shinyobjectz/.bun/bin:/Users/shinyobjectz/.cargo/bin:/Users/shinyobjectz/.claude/plugins/cache/claude-plugins-official/swift-lsp/1.0.0/bin:/Users/shinyobjectz/.claude/plugins/cache/claude-plugins-official/pinecone/1.3.0/bin:/Users/shinyobjectz/.claude/plugins/cache/claude-plugins-official/frontend-design/9b8d54932d48/bin:/Users/shinyobjectz/.claude/plugins/cache/claude-plugins-official/skill-creator/9b8d54932d48/bin:/Users/shinyobjectz/.claude/plugins/cache/claude-plugins-official/clangd-lsp/1.0.0/bin",
+    "GAMUT_REAL": "/Users/shinyobjectz/Apps/workbooks/packages/gamut/target/debug/gamut",
+    "GAMUT_TRACE": "/Users/shinyobjectz/Apps/workbooks/packages/gamut/evals/runs/gamut/001-mini-coffee-codex-dryrun-2026-05-19T23-41-48-313Z/workdir/.gamut-trace.jsonl",
+    "GAMUT_MAX_COST": "0.05",
+    "GAMUT_DRY_RUN": "1"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "title_page": {
+    "title": "Pour Better",
+    "author": "gamut-director"
+  },
+  "elements": [
+    {
+      "type": "scene_heading",
+      "slugline": "INT. QUIET KITCHEN - DAWN",
+      "ie": "int",
+      "location": "QUIET KITCHEN",
+      "time_of_day": "DAWN"
+    },
+    {
+      "type": "action",
+      "text": "A generic ceramic pour-over carafe rests on a dark table. A thin hand-poured stream falls through the dripper. Steam rises slowly. Nobody drinks yet; the watching is the point."
+    },
+    {
+      "type": "transition",
+      "text": "FADE OUT.",
+      "kind": "fade_out"
+    }
+  ]
+}

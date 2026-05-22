@@ -1,0 +1,13 @@
+{
+  "width": 320,
+  "height": 180,
+  "fps": 30,
+  "duration_frames": 30,
+  "scenes": [
+    {
+      "html_path": "tier1_scene.html",
+      "start_frame": 0,
+      "duration_frames": 30
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+[package]
+name = "wavelet-fx"
+version = "0.0.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+publish = false
+description = "Wavelet FX — fragment-shader DSL + render-graph emit for video post-effects. The internal authoring surface for CSS `filter:` hijacks and any custom shader effect a scene declares. Not exposed to agents directly; the agent-facing surface is standard CSS `filter:` (and a `<shader>` HTML tag when needed)."
+
+# One crate, one Cargo.toml — matches the convention in packages/wavelet and
+# packages/orchestrator-core. Split if/when modules become independently
+# consumable (e.g. wavelet_fx-stdlib as a separate published crate).
+
+[dependencies]
+thiserror = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Same timeline/timecode model as wavelet. The serde feature is required so
+# Tween / Timeline / Easing flow through the EmitOutput spec to the consumer.
+animato = { version = "1.1", features = ["serde"] }
+# Validate every emitted WGSL string by parsing it with naga before it
+# leaves the crate. Catches syntax / type errors at compile time instead
+# of at wgpu pipeline-creation time, where the error surfaces far from
+# its cause. Pinned to 28 to stay in lockstep with wavelet's wgpu = "28"
+# (wgpu re-exports naga internally; mismatched versions cause confusing
+# duplicate-symbol noise in downstream builds).
+naga = { version = "28", features = ["wgsl-in"] }
+
+[dev-dependencies]
+insta = "1"

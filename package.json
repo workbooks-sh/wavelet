@@ -1,0 +1,7 @@
+{
+  "name": "@work.books/wavelet",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Wavelet composition substrate — umbrella workspace marker. Sub-packages live in ./runtime, ./cli, ./hyperframes.",
+  "type": "module"
+}

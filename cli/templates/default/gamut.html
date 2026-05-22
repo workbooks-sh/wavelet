@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>__NAME__</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./styles.css">
+  <!-- wavelet runtime: loaded from the dev server's virtual bootstrap.
+       For production (when published), swap to:
+       <script type="module" src="https://unpkg.com/@work.books/wavelet-runtime"></script> -->
+  <script type="module" src="/__gamut_bootstrap__"></script>
+  <script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js"></script>
+</head>
+<body>
+  <gm-doc fps="30" resolution="1920x1080" aspect="16:9">
+
+    <!-- Assets — replace the placeholders in ./assets/ with your real
+         media. `wavelet init` generated a test-pattern video and a sine
+         tone so the scaffold renders end-to-end out of the box. -->
+    <gm-asset id="demo-clip" kind="video"      src="./assets/demo.mp4"></gm-asset>
+    <gm-asset id="vo-tone"   kind="audio"      src="./assets/vo-tone.mp3"></gm-asset>
+
+    <gm-timeline id="main" duration="6s">
+
+      <!-- z=0: base video layer. Plays a clip-asset from in/out range. -->
+      <gm-track id="base" z="0">
+        <gm-clip asset="demo-clip" start="0s" in="0s" out="6s"></gm-clip>
+      </gm-track>
+
+      <!-- z=10: overlay scenes using the registered-timeline pattern.
+           Each scene builds ONE paused GSAP timeline and registers it
+           via wavelet.registerTimeline(sceneId, tl). The runtime drives
+           tl.progress(localFrame / durationFrames) on every tick — so
+           the timeline's full length is THE scene's window, regardless
+           of the GSAP timeline's natural duration. Enter at the start
+           (time 0), exit at the end (time = scene duration). Scrub-safe
+           by construction; verify samples any frame and gets the right
+           state instantly. -->
+      <gm-track id="content" z="10">
+        <gm-scene id="hello" start="0.4s" duration="3.1s">
+          <template>
+            <h1 class="hello">__NAME__</h1>
+            <p class="sub">Built with wavelet.</p>
+            <script>
+              const tl = gsap.timeline({ paused: true });
+              // Enter — the first 0.8s
+              tl.from(".hello", { y: 80, opacity: 0, duration: 0.8, ease: "back.out(1.6)" }, 0);
+              tl.from(".sub",   { y: 40, opacity: 0, duration: 0.7, ease: "power3.out" }, 0.2);
+              // Exit — the last 0.6s (timeline runs to 3.1s = scene duration)
+              tl.to(".hello",   { y: -40, opacity: 0, duration: 0.6, ease: "power2.in" }, 2.5);
+              tl.to(".sub",     { y: -20, opacity: 0, duration: 0.5, ease: "power2.in" }, 2.6);
+              wavelet.registerTimeline("hello", tl);
+            </script>
+          </template>
+        </gm-scene>
+
+        <gm-scene id="payoff" start="3.1s" duration="2.9s">
+          <template>
+            <div class="payoff">WRITE YOUR OWN.</div>
+            <script>
+              window.__payoffRan = (window.__payoffRan ?? 0) + 1;
+              const tl = gsap.timeline({ paused: true });
+              tl.from(".payoff", {
+                scale: 0.7, opacity: 0, filter: "blur(20px)",
+                duration: 0.7, ease: "back.out(1.4)",
+              }, 0);
+              // Terminal scene — no exit tween needed (nothing to cut to)
+              wavelet.registerTimeline("payoff", tl);
+            </script>
+          </template>
+        </gm-scene>
+      </gm-track>
+
+      <!-- z=20: color grade applied to the viewport as CSS filter. -->
+      <gm-track id="grading" z="20">
+        <gm-adjustment start="0s" duration="6s" filter="contrast(1.04) saturate(1.06)"></gm-adjustment>
+      </gm-track>
+
+      <!-- Audio cues live on their own track. z doesn't affect audio
+           (it never composites visually) but every track needs a
+           unique z. The mixer handles per-cue vol / pan / fade-in /
+           fade-out / duck envelopes. -->
+      <gm-track id="audio" z="30">
+        <gm-audio asset="vo-tone" start="0s" duration="6s"
+                  volume="0.4" fade-in="0.3" fade-out="0.5"></gm-audio>
+      </gm-track>
+
+    </gm-timeline>
+  </gm-doc>
+</body>
+</html>

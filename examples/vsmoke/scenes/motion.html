@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head><style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
+  body {
+    background: #0f1116;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+  }
+  #title { font-size: 32px; color: #94a3b8; }
+  .row { display: flex; gap: 24px; }
+  .chip {
+    width: 120px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  #a { background: #6366f1; }
+  #b { background: #ec4899; }
+  #c { background: #14b8a6; }
+  #d { background: #f59e0b; }
+  #e { background: #8b5cf6; }
+</style></head>
+<body>
+  <div id="title">38 easings, one timeline kernel</div>
+  <div class="row">
+    <div id="a" class="chip">linear</div>
+    <div id="b" class="chip">cubic</div>
+    <div id="c" class="chip">quart</div>
+    <div id="d" class="chip">back</div>
+    <div id="e" class="chip">elastic</div>
+  </div>
+</body>
+</html>

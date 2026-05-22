@@ -1,0 +1,16 @@
+{"ts":"2026-05-22T17:19:08Z","argv":["wavelet","--help"],"duration_ms":87,"exit":0,"stdout_bytes":5237,"stderr_bytes":0}
+{"ts":"2026-05-22T17:19:13Z","argv":["wavelet","render","--help"],"duration_ms":48,"exit":0,"stdout_bytes":2223,"stderr_bytes":0}
+{"ts":"2026-05-22T17:19:16Z","argv":["wavelet","pipelines","list"],"duration_ms":60,"exit":0,"stdout_bytes":257,"stderr_bytes":0}
+{"ts":"2026-05-22T17:19:20Z","argv":["wavelet","pipelines","show","commercial"],"duration_ms":50,"exit":0,"stdout_bytes":6224,"stderr_bytes":0}
+{"ts":"2026-05-22T17:19:28Z","argv":["wavelet","workflow","--help"],"duration_ms":44,"exit":0,"stdout_bytes":659,"stderr_bytes":0}
+{"ts":"2026-05-22T17:20:32Z","argv":["wavelet","image","scene-still","--help"],"duration_ms":85,"exit":0,"stdout_bytes":3094,"stderr_bytes":0}
+{"ts":"2026-05-22T17:20:37Z","argv":["wavelet","shot","--help"],"duration_ms":46,"exit":0,"stdout_bytes":3934,"stderr_bytes":0}
+{"ts":"2026-05-22T17:20:41Z","argv":["wavelet","shot","search","--help"],"duration_ms":46,"exit":0,"stdout_bytes":1308,"stderr_bytes":0}
+{"ts":"2026-05-22T17:20:44Z","argv":["wavelet","shot","search","stand mixer baking","--orientation","portrait","--max-duration","4","--per-page","8"],"duration_ms":50,"exit":2,"stdout_bytes":0,"stderr_bytes":108}
+{"ts":"2026-05-22T17:24:29Z","argv":["wavelet","verify","commercial.html"],"duration_ms":89,"exit":3,"stdout_bytes":0,"stderr_bytes":75}
+{"ts":"2026-05-22T17:24:32Z","argv":["wavelet","verify","--help"],"duration_ms":46,"exit":0,"stdout_bytes":448,"stderr_bytes":0}
+{"ts":"2026-05-22T17:29:15Z","argv":["wavelet","render","--help"],"duration_ms":104,"exit":0,"stdout_bytes":2223,"stderr_bytes":0}
+{"ts":"2026-05-22T17:29:19Z","argv":["wavelet","--help"],"duration_ms":55,"exit":0,"stdout_bytes":5237,"stderr_bytes":0}
+{"ts":"2026-05-22T17:29:24Z","argv":["wavelet","pipelines","show","commercial"],"duration_ms":75,"exit":0,"stdout_bytes":6224,"stderr_bytes":0}
+{"ts":"2026-05-22T17:29:27Z","argv":["wavelet","pipelines","show","commercial"],"duration_ms":54,"exit":0,"stdout_bytes":6224,"stderr_bytes":0}
+{"ts":"2026-05-22T17:35:22Z","argv":["wavelet","render","commercial.html","--frame-budget-secs","10","-o","commercial.mp4"],"duration_ms":15485,"exit":0,"stdout_bytes":147,"stderr_bytes":717}

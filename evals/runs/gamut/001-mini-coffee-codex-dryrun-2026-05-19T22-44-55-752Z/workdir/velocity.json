@@ -1,0 +1,29 @@
+{
+  "duration_secs": 14.499999,
+  "mean_bpm": 69.01724,
+  "anchors": [
+    {
+      "t": 0.0,
+      "bpm": 80.0,
+      "label": "open"
+    },
+    {
+      "t": 0.4,
+      "bpm": 80.0
+    },
+    {
+      "t": 12.799999,
+      "bpm": 60.0,
+      "label": "action"
+    },
+    {
+      "t": 13.999999,
+      "bpm": 60.0
+    },
+    {
+      "t": 14.499999,
+      "bpm": 55.0,
+      "label": "transition-fadeout"
+    }
+  ]
+}

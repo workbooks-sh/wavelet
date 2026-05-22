@@ -1,0 +1,122 @@
+{
+  "version": 1,
+  "duration_secs": 12.0,
+  "fps": 30,
+  "resolution": [1920, 1080],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "EXT. RACETRACK - DAWN",
+      "first_shot": 0,
+      "shot_count": 4
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-0-0",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 0.0,
+      "duration_secs": 3.0,
+      "shot_type": "ews",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "the racetrack",
+      "generation": {
+        "kind": "txt2_vid",
+        "prompt": "ignored when attributes is set",
+        "backend": "veo"
+      },
+      "attributes": {
+        "subject": "an empty asphalt circuit",
+        "action": "lies silent before first light",
+        "scene": "in mist at the edge of the desert",
+        "camera": "EWS 35mm, eye level, centered",
+        "lens": "deep DoF, rectilinear",
+        "lighting": "pre-dawn ambient, low-contrast",
+        "style": "cinematic, A24-flavored, restrained color"
+      }
+    },
+    {
+      "id": "shot-0-1",
+      "shot_index": 1,
+      "scene_index": 0,
+      "screenplay_element_index": 2,
+      "start_secs": 3.0,
+      "duration_secs": 3.0,
+      "shot_type": "ws",
+      "camera_movement": "push",
+      "camera_side": "right",
+      "subject": "the car",
+      "generation": {
+        "kind": "img2_vid",
+        "still": "still-1.png",
+        "motion_prompt": "ignored",
+        "backend": "fal-kling-o1"
+      },
+      "attributes": {
+        "subject": "a 1968 Porsche 911 GT3 in racing yellow",
+        "action": "idles, engine off, parked at pit lane",
+        "scene": "on wet asphalt as the sun crests the ridge",
+        "camera": "WS 50mm, low angle, 3/4 front",
+        "lens": "anamorphic, shallow DoF, slight chromatic fringe",
+        "lighting": "backlit by rising sun, mist-diffused",
+        "style": "cinematic, A24-flavored, restrained color"
+      }
+    },
+    {
+      "id": "shot-0-2",
+      "shot_index": 2,
+      "scene_index": 0,
+      "screenplay_element_index": 3,
+      "start_secs": 6.0,
+      "duration_secs": 3.0,
+      "shot_type": "cu",
+      "camera_movement": "static",
+      "camera_side": "right",
+      "subject": "the badge",
+      "generation": {
+        "kind": "txt2_vid",
+        "prompt": "ignored",
+        "backend": "veo"
+      },
+      "attributes": {
+        "subject": "the chrome 911 badge on the rear deck",
+        "action": "catches the first ray of direct sun",
+        "scene": "against deep matte yellow paintwork",
+        "camera": "CU 100mm macro, eye level",
+        "lens": "very shallow DoF, sharp specular falloff",
+        "lighting": "hard rim from camera-right, deep shadow",
+        "style": "cinematic, A24-flavored, restrained color"
+      }
+    },
+    {
+      "id": "shot-0-3",
+      "shot_index": 3,
+      "scene_index": 0,
+      "screenplay_element_index": 4,
+      "start_secs": 9.0,
+      "duration_secs": 3.0,
+      "shot_type": "ecu",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "tire tread",
+      "generation": {
+        "kind": "native",
+        "html": "scene-tire.html"
+      },
+      "attributes": {
+        "subject": "the front tire's slick tread block",
+        "action": "rests on the wet line",
+        "scene": "where rubber meets standing water",
+        "camera": "ECU 60mm macro, ground level",
+        "lens": "ultra-shallow DoF, glassy bokeh",
+        "lighting": "soft fill from above, reflected sky",
+        "style": "cinematic, A24-flavored, restrained color"
+      }
+    }
+  ]
+}

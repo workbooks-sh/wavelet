@@ -1,0 +1,22 @@
+{
+  "name": "@work.books/wavelet-hyperframes",
+  "version": "0.0.0",
+  "description": "HyperFrames authoring SDK for wavelet scenes — typed onReady/onTick helpers, canvas constants, vendored authoring docs.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./ready": "./src/ready.ts",
+    "./canvas": "./src/canvas.ts"
+  },
+  "scripts": {
+    "check": "bunx tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.14",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@work.books/wavelet-runtime": "workspace:*"
+  }
+}

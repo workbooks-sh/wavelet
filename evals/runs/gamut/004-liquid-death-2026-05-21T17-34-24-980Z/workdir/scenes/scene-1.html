@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; }
+  .stage { position: absolute; inset: 0; }
+  .plate {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.85) saturate(0.92);
+  }
+  .ambient-scrim {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 22% 70%, rgba(255, 130, 40, 0.18) 0%, transparent 60%),
+      radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.65) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.55) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.55) 100%);
+  }
+  .product-wrap {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 38%;
+    aspect-ratio: 800 / 1035;
+    animation: handheld-drift 4.2s ease-in-out infinite alternate;
+  }
+  .product-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter:
+      brightness(0.78)
+      contrast(1.05)
+      drop-shadow(0 30px 40px rgba(0,0,0,0.85))
+      drop-shadow(-40px 0px 60px rgba(255, 120, 30, 0.20));
+  }
+  @keyframes handheld-drift {
+    0%   { transform: translate(-50%, -50%)            rotate(-0.18deg); }
+    50%  { transform: translate(-50.3%, -50.1%)         rotate(0.12deg); }
+    100% { transform: translate(-49.7%, -49.85%)        rotate(-0.08deg); }
+  }
+  .candle-warmth {
+    position: absolute;
+    left: 8%; top: 58%;
+    width: 32%; height: 28%;
+    background: radial-gradient(circle, rgba(255, 150, 60, 0.32) 0%, transparent 60%);
+    filter: blur(28px);
+    animation: candle-flicker 1.1s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+  @keyframes candle-flicker {
+    0%   { opacity: 0.85; transform: translate(0, 0) scale(1.00); }
+    35%  { opacity: 1.00; transform: translate(-2px, -1px) scale(1.03); }
+    65%  { opacity: 0.78; transform: translate(1px, 1px) scale(0.98); }
+    100% { opacity: 0.92; transform: translate(0, -2px) scale(1.01); }
+  }
+  .grain {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      radial-gradient(circle at 31% 22%, rgba(255,255,255,0.018), transparent 60%),
+      radial-gradient(circle at 71% 71%, rgba(255,255,255,0.014), transparent 60%);
+    mix-blend-mode: overlay;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <video class="plate" src="../shots/shot-1.mp4" autoplay muted playsinline></video>
+    <div class="ambient-scrim"></div>
+    <div class="candle-warmth"></div>
+    <div class="product-wrap"><img src="../product.png" alt="Liquid Death Mountain Water"/></div>
+    <div class="grain"></div>
+  </div>
+</body>
+</html>

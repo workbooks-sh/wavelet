@@ -1,0 +1,331 @@
+{
+  "width": 1280,
+  "height": 720,
+  "fps": 30,
+  "duration_frames": 319,
+  "scenes": [
+    {
+      "html_path": "scenes/main.html",
+      "start_frame": 0,
+      "duration_frames": 319,
+      "motion": [
+        {
+          "selector": "#title",
+          "props": [
+            [
+              "y",
+              40.0
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.5,
+          "easing": "EaseOutQuart",
+          "start_at_secs": 0.0,
+          "kind": "from"
+        },
+        {
+          "selector": "#subtitle",
+          "props": [
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.4,
+          "easing": "EaseOutCubic",
+          "start_at_secs": 0.3,
+          "kind": "from"
+        },
+        {
+          "selector": "#b0",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 0.034,
+          "kind": "from"
+        },
+        {
+          "selector": "#b1",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 0.661,
+          "kind": "from"
+        },
+        {
+          "selector": "#b2",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 1.277,
+          "kind": "from"
+        },
+        {
+          "selector": "#b3",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 1.904,
+          "kind": "from"
+        },
+        {
+          "selector": "#b4",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 2.38,
+          "kind": "from"
+        },
+        {
+          "selector": "#b5",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 3.157,
+          "kind": "from"
+        },
+        {
+          "selector": "#b6",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 3.773,
+          "kind": "from"
+        },
+        {
+          "selector": "#b7",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 4.249,
+          "kind": "from"
+        },
+        {
+          "selector": "#b8",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 5.038,
+          "kind": "from"
+        },
+        {
+          "selector": "#b9",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 5.34,
+          "kind": "from"
+        },
+        {
+          "selector": "#b10",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 5.839,
+          "kind": "from"
+        },
+        {
+          "selector": "#b11",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 6.582,
+          "kind": "from"
+        },
+        {
+          "selector": "#b12",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 7.198,
+          "kind": "from"
+        },
+        {
+          "selector": "#b13",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 7.848,
+          "kind": "from"
+        },
+        {
+          "selector": "#b14",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 8.463,
+          "kind": "from"
+        },
+        {
+          "selector": "#b15",
+          "props": [
+            [
+              "scale",
+              0.2
+            ],
+            [
+              "opacity",
+              0.0
+            ]
+          ],
+          "duration_secs": 0.18,
+          "easing": "EaseOutBack",
+          "start_at_secs": 9.102,
+          "kind": "from"
+        }
+      ]
+    }
+  ],
+  "audio_cues": [
+    {
+      "asset_path": "music.mp3",
+      "id": "music",
+      "start_frame": 0,
+      "duration_frames": 319,
+      "volume": 0.55,
+      "pan": 0.0,
+      "fade_in_frames": 6,
+      "fade_out_frames": 24,
+      "duck_targets": [],
+      "duck_db": 0.0
+    }
+  ]
+}

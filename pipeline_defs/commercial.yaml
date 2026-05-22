@@ -1,0 +1,204 @@
+name: commercial
+version: "3.0.0"
+description: >
+  Path B v3 — the canonical reference-conditioned AI commercial pipeline
+  from the wavelet-director skill, codified as a declarative spec. Eight
+  stages: research → script → velocity → storyboard → asset → edit →
+  compose → publish. Each stage names the director skill it answers to,
+  the wavelet subcommands it may call, and the structural checks that
+  must pass before the next stage begins.
+  See packages/workbooks/skills/wavelet-director/SKILL.md for the long-form
+  prose this pipeline derives from.
+
+stages:
+  - name: research
+    description: >
+      Pick a concept that fits the AI-commercial sweet spot (single
+      product, no real-people lip-sync, no tight logo demands) and
+      distill the 9-line ad-creative brief
+      (PRODUCT / AUDIENCE / INSIGHT / PROMISE / PROOF / TONE / MUSIC /
+      CALL / RUNTIME). Long-form prose briefs get distilled here —
+      downstream stages assume slot-filled input.
+    required_artifacts_out:
+      - brief.md
+    tools_available:
+      - "brief check"
+    success_criteria:
+      - kind: artifact_exists
+        params: { path: brief.md }
+      - kind: brief_check_passes
+        params: { path: brief.md }
+
+  - name: script
+    description: >
+      Author the Fountain screenplay. 4–6 scenes, mostly action
+      paragraphs; pacing matches the brief's MUSIC energy curve.
+      Validated structurally before velocity gets to look at it.
+    required_artifacts_in:
+      - brief.md
+    required_artifacts_out:
+      - script.fountain
+      - "any:screenplay.json|refs:screenplay-scene"
+    tools_available:
+      - "screenplay parse"
+    success_criteria:
+      - kind: artifact_exists
+        params: { path: script.fountain }
+      - kind: screenplay_parse_clean
+
+  - name: velocity
+    description: >
+      Propose a BPM curve from the screenplay and (once music exists)
+      validate it against the track's detected BPM. The curve drives
+      cut timing in the storyboard stage.
+    required_artifacts_in:
+      - "any:screenplay.json|refs:screenplay-scene"
+    required_artifacts_out:
+      - velocity.json
+    tools_available:
+      - "velocity propose"
+      - "velocity validate"
+    success_criteria:
+      - kind: artifact_exists
+        params: { path: velocity.json }
+
+  - name: storyboard
+    description: >
+      Plan the per-shot storyboard. Runs structural verify + 180°-rule
+      / motion-vector continuity + Fountain transition classification.
+      Must reach 0 errors on every gate before proceeding.
+    required_artifacts_in:
+      - "any:screenplay.json|refs:screenplay-scene"
+      - velocity.json
+    required_artifacts_out:
+      - storyboard.json
+      - transitions.json
+    tools_available:
+      - "storyboard plan"
+      - "storyboard verify"
+      - "continuity check"
+      - "transitions classify"
+      - "director synthesize"
+    success_criteria:
+      - kind: artifact_exists
+        params: { path: storyboard.json }
+      - kind: storyboard_verify_passes
+      - kind: continuity_check_zero_errors
+
+  - name: asset
+    description: >
+      Generate the paid assets. Music first (so velocity can be
+      validated against detected BPM), then one Veo text-to-video
+      clip per scene. Cost-gated by --max-cost. Reviewer skill gates
+      spend between every sub-step. The old image-to-video and
+      multi-ref grab-bag has been retired — txt2vid via Veo is the
+      single curated path.
+    required_artifacts_in:
+      - storyboard.json
+      - velocity.json
+    required_artifacts_out:
+      - "any:music/track.wav|refs:music"
+      - "any:shots/|refs:shot"
+    tools_available:
+      - "music gen"
+      - "shot txt2vid"
+      - "shot upscale"
+    success_criteria:
+      - kind: artifact_exists
+        params: { path: music/track.wav }
+      - kind: cost_below_usd
+        params: { max: 5.0 }
+      - kind: vlm_verify_passes_per_shot
+
+  - name: edit
+    description: >
+      Assemble the rough cut. Snap shot boundaries to detected onsets,
+      handle J/L-cuts and whip-pan transitions, generate the
+      cuts.edl + word-level captions from the VO timestamps.
+    required_artifacts_in:
+      - "any:shots/|refs:shot"
+      - "any:music/track.wav|refs:music"
+      - transitions.json
+    required_artifacts_out:
+      - cuts.edl
+    optional_artifacts_out:
+      - captions.json
+    tools_available:
+      - "query --on-beat"
+      - "captions align"
+      - "dialogue tts"
+    success_criteria:
+      - kind: artifact_exists
+        params: { path: cuts.edl }
+
+  - name: compose
+    description: >
+      Author per-scene HTML files in `scenes/` — full HTML/CSS freedom,
+      no template library. Each scene contains a `<video src="shots/
+      shot-N.mp4">` (or `<img>` for stills) plus any creative overlay
+      markup. Then assemble a single top-level `commercial.html`
+      manifest listing every scene + audio cue. Everything is HTML —
+      JSON compositions are deprecated; do not write comp.json. Verify
+      before render to catch structural problems early.
+    required_artifacts_in:
+      - cuts.edl
+      - captions.json
+    required_artifacts_out:
+      - commercial.html
+    tools_available:
+      - verify
+      - "query"
+    success_criteria:
+      - kind: artifact_exists
+        params: { path: commercial.html }
+      - kind: comp_verify_passes
+        params: { path: commercial.html }
+
+  - name: publish
+    description: >
+      Render the HTML manifest to MP4, mux the sidecar WAV, and sign
+      the result with a C2PA content-credentials manifest. Default
+      flag uses the bundled test cert; production delivery requires a
+      real ES256 cert chain. EU AI Act Article 50 enforcement begins
+      Aug 2026.
+    required_artifacts_in:
+      - commercial.html
+    required_artifacts_out:
+      - commercial.mp4
+    tools_available:
+      - render
+      - "c2pa sign"
+      - "c2pa verify"
+    success_criteria:
+      - kind: artifact_exists
+        params: { path: commercial.mp4 }
+      - kind: c2pa_verify_passes
+        params: { path: commercial.mp4 }
+
+orchestration:
+  budget_default_usd: 15.0
+  max_revisions_per_stage: 3
+  max_send_backs: 2
+  max_wall_time_minutes: 90
+
+reference_input:
+  supported: false
+  analysis_tools: []
+
+tier_policy:
+  # Google-direct defaults (image / video / music). One env var
+  # (GOOGLE_API_KEY) unblocks the full pipeline. TTS stays on
+  # ElevenLabs — Gemini TTS voice quality is currently behind.
+  # Multi-backend overrides (Fal / Replicate / ElevenLabs music) are
+  # still wired via `--backend` flags for power users.
+  draft:
+    i2v: google-veo-3.1-fast
+    still: google-nano-banana-3
+    music: google-lyria-3-clip
+    tts: elevenlabs-tts
+  hero:
+    i2v: google-veo-3.1
+    still: google-nano-banana-3
+    music: google-lyria-3-pro
+    tts: elevenlabs-tts
+    upscale: supir

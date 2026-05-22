@@ -1,0 +1,24 @@
+{
+  "title_page": {
+    "title": "Pour Better",
+    "author": "gamut-director"
+  },
+  "elements": [
+    {
+      "type": "scene_heading",
+      "slugline": "INT. KITCHEN COUNTER - MORNING",
+      "ie": "int",
+      "location": "KITCHEN COUNTER",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "A ceramic pour-over carafe rests on a wooden counter. Steam rises slowly. A hand tilts a gooseneck kettle and a thin stream of water arcs into the bloom of coffee grounds."
+    },
+    {
+      "type": "transition",
+      "text": "FADE OUT.",
+      "kind": "fade_out"
+    }
+  ]
+}

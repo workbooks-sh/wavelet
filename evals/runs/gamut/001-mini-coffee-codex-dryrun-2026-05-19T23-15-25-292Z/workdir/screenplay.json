@@ -1,0 +1,24 @@
+{
+  "title_page": {
+    "title": "Pour Better",
+    "author": "gamut-director"
+  },
+  "elements": [
+    {
+      "type": "scene_heading",
+      "slugline": "INT. QUIET KITCHEN - DAWN",
+      "ie": "int",
+      "location": "QUIET KITCHEN",
+      "time_of_day": "DAWN"
+    },
+    {
+      "type": "action",
+      "text": "A generic ceramic pour-over coffee carafe waits on a linen counter. A hand tips a kettle. A thin stream darkens the bloom, and the carafe is held steady while morning light watches the ritual."
+    },
+    {
+      "type": "transition",
+      "text": "FADE OUT.",
+      "kind": "fade_out"
+    }
+  ]
+}

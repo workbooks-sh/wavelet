@@ -1,0 +1,33 @@
+{
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "transitions": [
+    {
+      "element_index": 2,
+      "source_text": "CUT TO:",
+      "kind": "cut",
+      "t_secs": 13.2,
+      "bpm_at": 90.0,
+      "duration_secs": null,
+      "rationale": "hard cut (Cut) — no duration"
+    },
+    {
+      "element_index": 5,
+      "source_text": "SMASH CUT TO:",
+      "kind": "smash_cut",
+      "t_secs": 26.5,
+      "bpm_at": 90.0,
+      "duration_secs": null,
+      "rationale": "hard cut (SmashCut) — no duration"
+    },
+    {
+      "element_index": 8,
+      "source_text": "CUT TO:",
+      "kind": "cut",
+      "t_secs": 38.6,
+      "bpm_at": 90.0,
+      "duration_secs": null,
+      "rationale": "hard cut (Cut) — no duration"
+    }
+  ]
+}

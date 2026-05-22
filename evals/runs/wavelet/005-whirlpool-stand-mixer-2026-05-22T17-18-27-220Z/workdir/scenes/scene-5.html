@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+    background: linear-gradient(180deg, #1f1410 0%, #0a0608 70%, #050306 100%);
+    font-family: 'Helvetica Neue', Arial, sans-serif; color: #f4ece0; }
+  .vignette { position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.7) 100%); }
+  .copy { position: absolute; left: 0; right: 0; top: 50%;
+    transform: translateY(-50%);
+    text-align: center; }
+  .lead { font-size: 36px; letter-spacing: 0.55em; color: #c9b89b;
+    opacity: 0; animation: fade-in 0.8s ease 0.1s forwards; }
+  .head { margin-top: 36px; font-size: 96px; line-height: 1.08;
+    font-weight: 300; letter-spacing: 0.04em; color: #f7eedf;
+    opacity: 0; animation: head-in 0.9s ease 0.35s forwards; }
+  .head em { font-style: normal; font-weight: 500; color: #fbd6a8; }
+  .rule { width: 0; height: 1px; background: #c9b89b; margin: 40px auto 0;
+    animation: rule-in 1.0s ease 0.9s forwards; }
+  @keyframes rule-in { to { width: 360px; } }
+  .sub { margin-top: 30px; font-size: 26px; letter-spacing: 0.55em; color: #c9b89b;
+    opacity: 0; animation: fade-in 0.8s ease 1.1s forwards; }
+  @keyframes fade-in { to { opacity: 1; } }
+  @keyframes head-in {
+    0%   { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+  <div class="vignette"></div>
+  <div class="copy">
+    <div class="lead">BUILT TO LAST</div>
+    <div class="head">A century in <em>your kitchen.</em></div>
+    <div class="rule"></div>
+    <div class="sub">FROM 1911 TO TOMORROW'S BREAKFAST</div>
+  </div>
+</body>
+</html>

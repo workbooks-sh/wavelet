@@ -1,0 +1,124 @@
+# Freeform palette stress brief
+
+You are the creative director. Use the gamut CLI (already on your PATH)
+to produce a 12-second AI commercial that **deliberately exercises the
+freeform HTML/CSS motion-graphics palette** — clip-path masks, mix-blend
+modes, CSS `@keyframes` animations, the extended ease vocabulary,
+multi-scene composition via a top-level `index.html`, and inline
+`<video>` + `<audio>` elements.
+
+The point of this brief isn't the product — it's whether the agent
+**actually uses** the palette instead of defaulting to AI-default
+bottom-left Inter-88px static lockups.
+
+## Brief (9-line)
+
+PRODUCT: Aesop Marrakech Intense eau de toilette (50ml)
+AUDIENCE: 30-45 luxury-fragrance buyers who already know niche houses
+INSIGHT: Most luxury fragrance ads photograph the bottle as if it's a watch — sterile, lit-on-glass
+PROMISE: Marrakech smells like a place, not a product
+PROOF: Cardamom, neroli, sandalwood, leather — single distillation, room-temperature mix
+TONE: editorial, mid-century print magazine, restrained
+MUSIC: solo cello low drone, sparse, single phrase
+CALL: Find it on aesop.com
+RUNTIME: 12
+
+## Hard constraints
+
+- Total paid backend spend ceiling: **$5.00 USD**. Pass `--max-cost` on every
+  paid call.
+- Live mode required — no `--dry-run` shortcuts. This eval gates on whether
+  the agent produces a *real* output that uses the *real* paint surface.
+- Use the multi-scene `index.html` manifest pattern, not a hand-authored
+  `comp.json`. The agent's authoring surface is HTML files top to bottom.
+
+## Required palette use (mark each off as you go)
+
+The agent's `scenes/*.html` must collectively contain **all of these**:
+
+1. **`clip-path`** — at least one element clipped to a non-rectangle shape
+   (`circle()`, `polygon()`, or `inset()`). Type carved through a video
+   background via a polygon mask is the canonical idiom.
+2. **`mix-blend-mode`** — at least one element compositing onto its
+   backdrop with a non-`normal` mode. `difference` for type-over-video is
+   the canonical idiom.
+3. **CSS `@keyframes`** — at least three distinct animation curves across
+   the spot. Same `slide-in` `@keyframes` reused on every scene is **not
+   acceptable** (that's the AI-default lockup we're stress-testing against).
+4. **Extended easing** — at least two scenes use a `var(--ease-out-back)`
+   / `var(--ease-out-expo)` / `var(--ease-out-quint)` from the
+   `eases.css` table, not just the built-in `ease` / `ease-in-out`.
+5. **`<video>` element** — at least one scene background is a `<video>`
+   reference to a generated shot, not just colored backgrounds.
+6. **`<audio>` element** — the music track is bound via `<audio>` in the
+   top-level `index.html`, not via a sidecar `comp.json` audio cue.
+7. **Typographic variety** — no two adjacent scenes share the same
+   typeface AND size AND position AND motion. Variation across cuts is
+   the design, not decoration.
+
+## Required artifacts
+
+In your working directory:
+
+- `brief.md` — the 9-line above
+- `script.fountain` — Fountain screenplay (3–4 scenes)
+- `velocity.json` — velocity profile
+- `storyboard.json` — full storyboard
+- `music/track.wav` — generated music (one ElevenLabs call)
+- `shots/*.mp4` — per-scene generated footage (Veo / Wan / Kling — pick
+  the cheapest backend that handles the shot)
+- `scenes/*.html` — per-scene HTML files using the freeform palette
+- `eases.css` — copy/paste the extended ease table from
+  `vendor/workbooks/skills/gamut-director/eases.css` so each scene can
+  `@import` it (or paste the `:root` block inline per scene; either works)
+- `index.html` — the multi-scene manifest
+- `commercial.mp4` — the final render via `gamut render index.html -o commercial.mp4`
+
+## Self-check before finishing
+
+Run this validation pass before considering the eval done:
+
+```bash
+# Multi-scene parser worked → final MP4 duration matches sum of scenes
+ffprobe -v error -show_format commercial.mp4 | grep duration
+
+# All eight pipeline stages green
+gamut workflow run commercial --workdir . --text
+
+# Paid spend stayed under ceiling
+jq -s 'map(.cost_estimate_usd // 0) | add' trace.gamut.jsonl  # or wherever trace lives
+```
+
+## Where to learn
+
+The canonical recipe is at
+`vendor/workbooks/skills/gamut-director/SKILL.md` (relative to repo
+root). The ease table is at
+`vendor/workbooks/skills/gamut-director/eases.css`.
+
+`gamut --help` lists every subcommand. Each has its own `--help`.
+
+`gamut pipelines show commercial` prints the eight-stage spec.
+
+## Success criteria
+
+- `commercial.mp4` exists, is non-trivial size (~1 MB+), and plays.
+- `gamut workflow run commercial --workdir .` reports every stage as `complete`.
+- All seven "required palette use" items above are visible in the
+  rendered MP4 (verify by extracting frames at 1s intervals via ffmpeg
+  and inspecting).
+- Total paid spend ≤ $5.00 USD per `trace.gamut.jsonl`.
+- No two adjacent scenes share the same typographic treatment.
+
+## What I'm grading
+
+Per `judge.md` (in the same evals/ directory). The dimension that
+matters most for this brief: **palette use** — did the agent actually
+reach for clip-path, mix-blend-mode, extended eases, `<video>` /
+`<audio>` elements, and varied typography? Or did it default to four
+static `position: absolute; left: 80px; bottom: 80px; font: 900 88px
+Inter` lockups across four scenes?
+
+If it defaulted to the lockup pattern despite SKILL.md and the
+examples telling it otherwise, that's a finding for SKILL.md (the doc
+needs to be more explicit), not necessarily a failure of the agent.

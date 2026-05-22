@@ -1,0 +1,46 @@
+{
+  "width": 1280,
+  "height": 720,
+  "fps": 30,
+  "duration_frames": 360,
+  "scenes": [
+    {
+      "html_path": "scenes/01-rooftop.html",
+      "video_bg": "shots/shot-1-rooftop.mp4",
+      "start_frame": 0,
+      "duration_frames": 90
+    },
+    {
+      "html_path": "scenes/02-souk.html",
+      "video_bg": "shots/shot-2-souk.mp4",
+      "start_frame": 90,
+      "duration_frames": 90
+    },
+    {
+      "html_path": "scenes/03-tannery.html",
+      "video_bg": "shots/shot-3-tannery.mp4",
+      "start_frame": 180,
+      "duration_frames": 90
+    },
+    {
+      "html_path": "scenes/04-alley.html",
+      "video_bg": "shots/shot-4-alley.mp4",
+      "start_frame": 270,
+      "duration_frames": 90
+    }
+  ],
+  "audio_cues": [
+    {
+      "id": "music",
+      "asset_path": "music.wav",
+      "start_frame": 0,
+      "duration_frames": 360,
+      "volume": 0.85,
+      "pan": 0.0,
+      "fade_in_frames": 9,
+      "fade_out_frames": 36,
+      "duck_targets": [],
+      "duck_db": 0.0
+    }
+  ]
+}

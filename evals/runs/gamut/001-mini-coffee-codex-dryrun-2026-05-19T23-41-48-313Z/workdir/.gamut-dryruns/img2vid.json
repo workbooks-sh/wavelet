@@ -1,0 +1,17 @@
+{
+  "mode": "dry-run",
+  "provider": "fal-wan-i2v",
+  "request_hash": "2f3af1377f249fa3",
+  "cached": false,
+  "cost_estimate_usd": 0.10000000149011612,
+  "result": {
+    "provider": "fal-wan-i2v",
+    "video_path": ".gamut-cache/fal-wan-i2v/2f3af1377f249fa3.mp4",
+    "video_bytes": 0,
+    "mime": "video/mp4",
+    "duration_secs": 5.0,
+    "width": 1280,
+    "height": 720,
+    "prompt_sent": "steam rises while the pour remains slow and nearly still, locked-off camera, quiet ritual"
+  }
+}

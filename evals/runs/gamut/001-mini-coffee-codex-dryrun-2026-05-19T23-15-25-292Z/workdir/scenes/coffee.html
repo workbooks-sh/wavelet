@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        background: #201610;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+      }
+
+      .table {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 58px;
+        background: #7b6148;
+      }
+
+      .cone {
+        position: absolute;
+        left: 132px;
+        top: 28px;
+        width: 56px;
+        height: 42px;
+        background: #e8dbc9;
+      }
+
+      .carafe {
+        position: absolute;
+        left: 126px;
+        top: 70px;
+        width: 68px;
+        height: 82px;
+        border: 4px solid #d8c7b2;
+        background: #53321f;
+      }
+
+      .stream {
+        position: absolute;
+        left: 158px;
+        top: 0;
+        width: 3px;
+        height: 96px;
+        background: #d8a45d;
+        animation: pour 5s linear both;
+      }
+
+      .steam {
+        position: absolute;
+        left: 112px;
+        top: 24px;
+        color: #f2dec1;
+        font-size: 22px;
+        opacity: 0.7;
+        animation: steam 5s linear both;
+      }
+
+      .call {
+        position: absolute;
+        left: 16px;
+        bottom: 14px;
+        color: #fff2dc;
+        font-size: 18px;
+        letter-spacing: 0;
+        text-transform: uppercase;
+        opacity: 0;
+        animation: call 5s linear both;
+      }
+
+      @keyframes pour {
+        0% { opacity: 0; }
+        15% { opacity: 1; }
+        85% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+
+      @keyframes steam {
+        from { transform: translateY(16px); opacity: 0; }
+        35% { opacity: 0.7; }
+        to { transform: translateY(-18px); opacity: 0; }
+      }
+
+      @keyframes call {
+        0%, 72% { opacity: 0; }
+        86%, 100% { opacity: 1; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="table"></div>
+    <div class="stream"></div>
+    <div class="cone"></div>
+    <div class="carafe"></div>
+    <div class="steam">~ ~ ~</div>
+    <div class="call">Pour better</div>
+  </body>
+</html>

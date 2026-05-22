@@ -1,0 +1,191 @@
+[package]
+name = "wavelet"
+version = "0.0.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+publish = false
+description = "Wavelet motion-graphics renderer. Blitz for HTML/CSS, Animato for timeline, Vello for rasterization, rsmpeg for encode. Pure Rust, no Chromium. Ships a single `wavelet` CLI with render / verify / query / shader subcommands."
+
+# Workspace pulled to per-crate to keep things simple — one crate, one Cargo.toml.
+# Split into multiple crates only if/when modules start being independently consumable.
+
+[dependencies]
+# HTML + CSS render pipeline (upstream Blitz, crates.io).
+# Using the 0.3.0-alpha track because it aligns with anyrender 0.10 + peniko 0.6
+# + kurbo 0.13 (the 0.2 stable track is on anyrender 0.6 and the ecosystem
+# split). The alpha version is what upstream is actively maintaining; the
+# breaking-version churn settles before 0.3.0-stable.
+blitz-dom = { version = "=0.3.0-alpha.3", default-features = false, features = ["system_fonts", "woff"] }
+blitz-html = { version = "=0.3.0-alpha.3", default-features = false }
+blitz-paint = { version = "=0.3.0-alpha.3", default-features = false }
+blitz-traits = { version = "=0.3.0-alpha.3", default-features = false }
+# Vello renderers. GPU is default (anyrender_vello → wgpu → Metal/Vulkan).
+# CPU is the escape hatch for headless CI runners or systems without a GPU
+# adapter — selected automatically at runtime when wgpu fails to find one,
+# or via `wavelet --cpu`.
+anyrender = "0.10"
+anyrender_vello = "0.10"
+anyrender_vello_cpu = "0.12"
+# Used to probe GPU adapter availability before constructing the Vello
+# renderer (avoids `pollster::block_on` panicking on headless CI).
+# Version pinned to match wgpu_context (transitive via anyrender_vello).
+wgpu = "28"
+# WGSL front-end parser, used to reflect compute-stage `@workgroup_size`
+# during shader-assertion pipeline build. Version pinned to match wgpu's
+# transitive naga so the AST types resolve to the same crate instance.
+naga = { version = "28", features = ["wgsl-in"] }
+pollster = "0.4"
+# Drawing primitives Blitz exposes through paint_scene
+peniko = "0.6"
+kurbo = "0.13"
+
+# Motion graphics timeline kernel — upstream crates.io, NOT vendor/animato/
+
+# wavelet-fx — in-tree fragment-shader DSL + render-graph emit, used to
+# hijack CSS `filter:` and back the (future) `<shader>` element. See
+# packages/wavelet/fx/. Path dep on purpose: fx is a wavelet-internal
+# detail, not a separately consumable crate.
+wavelet-fx = { path = "fx" }
+
+# IR / serde / utilities
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+thiserror = "2"
+anyhow = "1"
+chrono = { version = "0.4", features = ["serde"] }
+ulid = { version = "1", features = ["serde"] }
+
+# PNG output for debug + per-frame snapshot
+png = "0.17"
+
+# IMPORTANT: blitz-dom 0.3.0-alpha.3 depends on `image = { ..., default-features = false }`
+# and never enables any decoder. Every `<img src=…>` decode silently fails.
+# Adding the image crate here with the codec features Cargo unifies them
+# onto blitz-dom's instance. Without this, the offline render shows blank
+# space where images should appear. Pin to 0.25.6 to match blitz-dom's
+# exact version requirement.
+image = { version = "=0.25.6", features = ["jpeg", "png", "webp", "gif"] }
+
+# URL parsing (file:// for scene base URLs, http(s):// would be added if/when
+# we wire up a real net provider). Already a transitive dep of blitz-traits;
+# pinning explicitly so we're not bound by feature-unification surprises.
+url = "2"
+
+# Video encode — rsmpeg bindings to system FFmpeg 8.x (homebrew ffmpeg).
+# Build prereq: `brew install ffmpeg` on macOS, or libavformat/libavcodec
+# dev packages on Linux. link_system_ffmpeg disables the bundled-build path
+# (which has its own toolchain quirks on M-series Macs).
+rsmpeg = { version = "0.18", features = ["ffmpeg8", "link_system_ffmpeg"] }
+
+# Pure-Rust audio decode + resample for the multi-cue mixer (Phase 3).
+# `all` enables every codec — MP3/AAC/FLAC/Opus/Vorbis/WAV. Rubato is the
+# polyphase resampler. The mixer itself is hand-rolled (~250 LOC) and aligns
+# to the video time-base.
+symphonia = { version = "0.5", features = ["all"] }
+rubato = "0.16"
+
+# FFT for spectral-flux onset detection in `wavelet query --on-beat`. Pure
+# Rust, no FFI; matches numpy/librosa's RFFT for our window sizes.
+rustfft = "6"
+
+# bytemuck for wgpu uniform-buffer packing. Used by transitions +
+# the wavelet-fx render-graph driver.
+bytemuck = { version = "1", features = ["derive"] }
+
+# Fountain screenplay parser. Feeds `wavelet screenplay parse` and the
+# downstream velocity / storyboard proposers per the screenplay-to-MP4
+# epic (wb-iv3c). Path-dep — same monorepo.
+fountain = { path = "../fountain" }
+
+# Note on blur: we tried `imageproc::filter::gaussian_blur_f32`, but
+# imageproc ≥0.26 requires `image ^0.25.8` while blitz-dom 0.3.0-alpha.3
+# pins `image = "=0.25.6"`. No version of imageproc resolves under that
+# constraint. Per the rust-wgsl-ecosystem inventory, blur is in the
+# "no clean standalone crate" gap anyway, so we ship a small textbook
+# separable Gaussian in src/shader/blur.rs — canonical algorithm,
+# zero extra dependency surface.
+
+# CLI argument parsing. Used by the single `wavelet` binary for subcommand
+# dispatch (render, verify, query, shader).
+clap = { version = "4", features = ["derive"] }
+
+# Config-cascade defaults (`wavelet.config.toml` in workdir + ~/.wavelet/config.toml).
+# Lets the CLI drop the requirement to pass `--backend …` on every call —
+# defaults resolve from layered config under the tool default. See wb-e90g.
+toml = "0.8"
+
+# Small, fast non-cryptographic hash for FrameSnapshot's `semantic_id` field
+# (stable cross-run node addressing — xxhash64 of role + accessible name +
+# tag-path-from-root). Also used by `backends::cache` for content-addressed
+# request hashing.
+twox-hash = "1"
+
+# SHA-256 for the URL→file asset cache (`backends::cache::cache_url`).
+# Path naming uses the cryptographic hash so on-disk filenames are
+# externally verifiable / collision-resistant when a workbook ships its
+# `.wavelet/cache/assets/` alongside the bundle. Already transitive via
+# c2pa; pinning explicitly so the direct dep is visible.
+sha2 = "0.10"
+
+# Blocking HTTP client for the external-backend adapters in `backends/`
+# (Phase 2/3/5/6 of the screenplay-to-MP4 epic). Pure Rust, rustls by
+# default, no tokio.
+ureq = { version = "2", features = ["json", "tls"] }
+
+# Async runtime + WebSocket server for `wavelet agent serve`. tokio
+# stays opt-in via the `agent` module — every other subsystem in
+# wavelet is synchronous + ureq. We pull in just the multi-thread
+# runtime, the net + io drivers, and signal handling. The orchestrator
+# loop itself runs on the runtime via `block_on` so the existing
+# synchronous Gemini client (ureq) can be reused unchanged.
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "io-util", "sync", "signal", "time"] }
+tokio-tungstenite = { version = "0.21", default-features = false, features = ["connect", "handshake"] }
+futures-util = { version = "0.3", default-features = false, features = ["sink", "std"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+
+# Direct dep on Stylo so the snapshot walker can probe computed
+# `overflow-x|y`, `clip-path`, and `mask-image` for the lint rules
+# (glyph-clip). blitz-dom pulls Stylo transitively but doesn't
+# re-export the property accessors we need.
+stylo = "0.17"
+
+# C2PA content credentials. EU AI Act Article 50 enforcement begins
+# Aug 2026 — any AI-generated commercial deliverable shipped to EU
+# markets after that date must carry a C2PA manifest. We disable the
+# default `openssl` feature and the `default_http` feature (we don't
+# fetch remote manifests; signing is local). `rust_native_crypto`
+# gives us ES256/Ed25519 without OpenSSL. `file_io` enables the
+# stream-based sign/verify path used by Builder::sign + Reader::with_stream.
+c2pa = { version = "0.84", default-features = false, features = ["rust_native_crypto", "file_io"] }
+
+[[bin]]
+name = "wavelet"
+path = "src/bin/wavelet.rs"
+
+[dev-dependencies]
+tempfile = "3"
+
+# Vendored blitz-paint — we own the paint pass and patch coverage gaps
+# (clip-path, mix-blend-mode, filter, background-clip:text, text-shadow,
+# backdrop-filter) on top of the published 0.3.0-alpha.3 source.
+# Tracked at wb-e8jh.
+[patch.crates-io]
+blitz-paint = { path = "../../vendor/blitz-paint" }
+
+# Vendored stylo — we patch properties/longhands.toml to unblock two
+# Servo-side gates (wb-3v87 backdrop-filter, wb-e8jh.7 background-clip:
+# text). The crate names below are the published-to-crates.io names;
+# the directories use stylo's own workspace member names (e.g. the
+# `stylo` crate lives at vendor/stylo/style).
+stylo                  = { path = "../../vendor/stylo/style" }
+stylo_traits           = { path = "../../vendor/stylo/style_traits" }
+stylo_atoms            = { path = "../../vendor/stylo/stylo_atoms" }
+stylo_dom              = { path = "../../vendor/stylo/stylo_dom" }
+stylo_static_prefs     = { path = "../../vendor/stylo/stylo_static_prefs" }
+stylo_malloc_size_of   = { path = "../../vendor/stylo/malloc_size_of" }
+stylo_derive           = { path = "../../vendor/stylo/style_derive" }
+selectors              = { path = "../../vendor/stylo/selectors" }
+servo_arc              = { path = "../../vendor/stylo/servo_arc" }
+to_shmem               = { path = "../../vendor/stylo/to_shmem" }
+to_shmem_derive        = { path = "../../vendor/stylo/to_shmem_derive" }

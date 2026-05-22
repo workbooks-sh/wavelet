@@ -1,0 +1,79 @@
+{
+  "pipeline": "commercial",
+  "workdir": "/Users/shinyobjectz/Apps/workbooks/packages/gamut/evals/runs/2026-05-19-tree-runner-real-paid/workdir",
+  "next_stage": null,
+  "complete": true,
+  "stages": [
+    {
+      "name": "research",
+      "tools": [
+        "brief check"
+      ],
+      "status": "complete"
+    },
+    {
+      "name": "script",
+      "tools": [
+        "screenplay parse"
+      ],
+      "status": "complete"
+    },
+    {
+      "name": "velocity",
+      "tools": [
+        "velocity propose",
+        "velocity validate"
+      ],
+      "status": "complete"
+    },
+    {
+      "name": "storyboard",
+      "tools": [
+        "storyboard plan",
+        "storyboard verify",
+        "continuity check",
+        "transitions classify",
+        "director synthesize"
+      ],
+      "status": "complete"
+    },
+    {
+      "name": "asset",
+      "tools": [
+        "music gen",
+        "image scene-still",
+        "shot img2vid",
+        "shot txt2vid",
+        "shot refine-face",
+        "shot upscale"
+      ],
+      "status": "complete"
+    },
+    {
+      "name": "edit",
+      "tools": [
+        "query --on-beat",
+        "captions align",
+        "dialogue tts"
+      ],
+      "status": "complete"
+    },
+    {
+      "name": "compose",
+      "tools": [
+        "verify",
+        "query"
+      ],
+      "status": "complete"
+    },
+    {
+      "name": "publish",
+      "tools": [
+        "render",
+        "c2pa sign",
+        "c2pa verify"
+      ],
+      "status": "complete"
+    }
+  ]
+}

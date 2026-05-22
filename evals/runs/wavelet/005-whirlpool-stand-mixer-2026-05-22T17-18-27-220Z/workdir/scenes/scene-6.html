@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+    background: radial-gradient(ellipse 70% 55% at 50% 45%, #1f1612 0%, #06040a 80%);
+    font-family: 'Helvetica Neue', Arial, sans-serif; color: #f4ece0; }
+  .vignette { position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.7) 100%); }
+  .lockup { position: absolute; left: 0; right: 0; top: 44%;
+    transform: translateY(-50%); text-align: center; }
+  .crest { width: 120px; height: 120px; margin: 0 auto 36px;
+    opacity: 0; animation: fade-in 0.9s ease 0.05s forwards; }
+  .crest svg { width: 100%; height: 100%; display: block; }
+  .wordmark { font-size: 108px; letter-spacing: 0.34em; font-weight: 300; color: #f7eedf;
+    opacity: 0; animation: word-in 1.0s ease 0.25s forwards; }
+  @keyframes word-in {
+    0%   { opacity: 0; transform: scale(0.97); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .rule { width: 0; height: 1px; background: #c9b89b; margin: 30px auto 0;
+    animation: rule-in 0.9s ease 0.9s forwards; }
+  @keyframes rule-in { to { width: 320px; } }
+  .tag { margin-top: 28px; font-size: 26px; letter-spacing: 0.55em; color: #c9b89b;
+    opacity: 0; animation: fade-in 0.9s ease 1.1s forwards; }
+  @keyframes fade-in { to { opacity: 1; } }
+  .cta { position: absolute; left: 0; right: 0; bottom: 11%;
+    text-align: center; font-size: 22px; letter-spacing: 0.5em; color: #ece0c6;
+    opacity: 0; animation: fade-in 0.9s ease 1.4s forwards; }
+</style>
+</head>
+<body>
+  <div class="vignette"></div>
+  <div class="lockup">
+    <div class="crest">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="60" r="54" fill="none" stroke="#c9a06a" stroke-width="2"/>
+        <path d="M 30 50 Q 60 30 90 50 Q 75 64 60 56 Q 45 64 30 50 Z" fill="none" stroke="#c9a06a" stroke-width="2.5"/>
+        <path d="M 30 64 Q 60 44 90 64 Q 75 78 60 70 Q 45 78 30 64 Z" fill="none" stroke="#b89160" stroke-width="2.5"/>
+        <path d="M 30 78 Q 60 58 90 78 Q 75 92 60 84 Q 45 92 30 78 Z" fill="none" stroke="#a8814f" stroke-width="2.5"/>
+      </svg>
+    </div>
+    <div class="wordmark">WHIRLPOOL</div>
+    <div class="rule"></div>
+    <div class="tag">AT THE HEART OF HOME</div>
+  </div>
+  <div class="cta">WHIRLPOOL.COM/STAND-MIXER</div>
+</body>
+</html>

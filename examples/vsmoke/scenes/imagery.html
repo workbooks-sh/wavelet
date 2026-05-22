@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head><style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
+  body {
+    background: #0f1116;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+  #bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  #scrim {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(15,17,22,0.2) 0%, rgba(15,17,22,0.85) 100%);
+  }
+  #lockup {
+    position: absolute;
+    left: 64px;
+    bottom: 64px;
+    color: #fff;
+  }
+  #kicker {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 12px;
+  }
+  #headline {
+    font-size: 64px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+  }
+  #caption {
+    font-size: 18px;
+    color: #cbd5e1;
+    margin-top: 12px;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.7);
+  }
+</style></head>
+<body>
+  <img id="bg" src="../assets/forest.jpg" alt="" />
+  <div id="scrim"></div>
+  <div id="lockup">
+    <div id="kicker">Real assets, real layout</div>
+    <div id="headline">Blitz renders &lt;img&gt;.</div>
+    <div id="caption">Stock image from Pexels, composited via Vello.</div>
+  </div>
+</body>
+</html>

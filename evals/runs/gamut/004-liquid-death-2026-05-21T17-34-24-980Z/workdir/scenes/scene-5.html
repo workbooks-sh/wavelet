@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #141414; overflow: hidden; }
+  .stage {
+    position: absolute; inset: 0;
+    background: #141414;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 64px;
+  }
+  .wordmark {
+    font-family: "UnifrakturCook", "Pirata One", "Times New Roman", serif;
+    font-weight: 900;
+    font-size: 160px;
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    color: #f5f5f5;
+    text-align: center;
+    text-shadow:
+      0 4px 28px rgba(255,255,255,0.06),
+      0 0 60px rgba(255,255,255,0.03);
+    transform: scale(1.0);
+    animation: wordmark-impact 0.22s cubic-bezier(0.2, 0.0, 0.2, 1.0) forwards;
+  }
+  .wordmark .line-2 {
+    display: block;
+    margin-top: 4px;
+  }
+  @keyframes wordmark-impact {
+    0%   { transform: scale(1.08); opacity: 0; }
+    40%  { transform: scale(0.98); opacity: 1.0; }
+    100% { transform: scale(1.00); opacity: 1.0; }
+  }
+  .cta-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    opacity: 0;
+    animation: cta-in 0.18s 1.2s cubic-bezier(0.2, 0.0, 0.2, 1.0) forwards;
+  }
+  @keyframes cta-in {
+    0%   { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .cta-main {
+    font-family: "Acumin Pro", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 800;
+    font-size: 64px;
+    color: #f5f5f5;
+    letter-spacing: 0.18em;
+    text-align: center;
+  }
+  .cta-url {
+    font-family: "Acumin Pro", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    font-size: 28px;
+    color: #8486ba;
+    letter-spacing: 0.16em;
+    text-align: center;
+  }
+  .scanline-grain {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      radial-gradient(circle at 35% 30%, rgba(255,255,255,0.012), transparent 60%),
+      radial-gradient(circle at 65% 70%, rgba(255,255,255,0.010), transparent 60%);
+    mix-blend-mode: overlay;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="wordmark">
+      <span class="line-1">Liquid</span>
+      <span class="line-2">Death</span>
+    </div>
+    <div class="cta-block">
+      <div class="cta-main">MURDER YOUR THIRST</div>
+      <div class="cta-url">LIQUIDDEATH.COM</div>
+    </div>
+    <div class="scanline-grain"></div>
+  </div>
+</body>
+</html>

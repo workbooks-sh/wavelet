@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "duration_secs": 3.0340207,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "INT. KITCHEN COUNTER - MORNING",
+      "first_shot": 0,
+      "shot_count": 2
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-0-est",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 0,
+      "start_secs": 0.0,
+      "duration_secs": 1.5,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN COUNTER",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN COUNTER",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-1-0",
+      "shot_index": 1,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 1.5,
+      "duration_secs": 1.5340207,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "ceramic pour-over carafe rests wooden",
+      "generation": {
+        "kind": "stock_search",
+        "query": "ceramic pour-over carafe rests wooden",
+        "orientation": "landscape"
+      }
+    }
+  ]
+}

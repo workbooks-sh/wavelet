@@ -1,0 +1,17 @@
+{
+  "mode": "dry-run",
+  "provider": "fal-wan-t2v",
+  "request_hash": "9102b815c17e685f",
+  "cached": false,
+  "cost_estimate_usd": 0.10000000149011612,
+  "result": {
+    "provider": "fal-wan-t2v",
+    "video_path": ".gamut-cache/fal-wan-t2v/9102b815c17e685f.mp4",
+    "video_bytes": 0,
+    "mime": "video/mp4",
+    "duration_secs": 5.0,
+    "width": 1280,
+    "height": 720,
+    "prompt_sent": "locked-off 16mm observational product shot of a generic ceramic pour-over coffee carafe, hand-held kettle pouring water slowly over grounds, steam drifting in morning window light, shallow depth, no brand, no text"
+  }
+}

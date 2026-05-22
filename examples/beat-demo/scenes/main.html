@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head><style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
+  body {
+    background: #0f1116;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 64px;
+  }
+  .lockup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  #title {
+    font-size: 72px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  #subtitle {
+    font-size: 22px;
+    color: #94a3b8;
+    line-height: 1;
+  }
+  .row {
+    display: flex;
+    gap: 24px;
+  }
+  .pulse {
+    width: 38px;
+    height: 38px;
+    border-radius: 19px;
+    background: #6366f1;
+  }
+  /* Distinct colors so beats stay visually distinguishable as they accumulate. */
+  #b0  { background: #6366f1; }
+  #b1  { background: #818cf8; }
+  #b2  { background: #a78bfa; }
+  #b3  { background: #c084fc; }
+  #b4  { background: #e879f9; }
+  #b5  { background: #ec4899; }
+  #b6  { background: #f43f5e; }
+  #b7  { background: #fb7185; }
+  #b8  { background: #f97316; }
+  #b9  { background: #fbbf24; }
+  #b10 { background: #84cc16; }
+  #b11 { background: #22c55e; }
+  #b12 { background: #14b8a6; }
+  #b13 { background: #06b6d4; }
+  #b14 { background: #0ea5e9; }
+  #b15 { background: #3b82f6; }
+</style></head>
+<body>
+  <div class="lockup">
+    <div id="title">beat aligned</div>
+    <div id="subtitle">16 dots, one per detected onset · Carefree (CC-BY)</div>
+  </div>
+  <div class="row">
+    <div id="b0" class="pulse"></div>
+    <div id="b1" class="pulse"></div>
+    <div id="b2" class="pulse"></div>
+    <div id="b3" class="pulse"></div>
+    <div id="b4" class="pulse"></div>
+    <div id="b5" class="pulse"></div>
+    <div id="b6" class="pulse"></div>
+    <div id="b7" class="pulse"></div>
+    <div id="b8" class="pulse"></div>
+    <div id="b9" class="pulse"></div>
+    <div id="b10" class="pulse"></div>
+    <div id="b11" class="pulse"></div>
+    <div id="b12" class="pulse"></div>
+    <div id="b13" class="pulse"></div>
+    <div id="b14" class="pulse"></div>
+    <div id="b15" class="pulse"></div>
+  </div>
+</body>
+</html>

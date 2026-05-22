@@ -1,0 +1,64 @@
+{"ts":"2026-05-21T16:34:52Z","argv":["gamut","--help"],"duration_ms":85,"exit":0,"stdout_bytes":5221,"stderr_bytes":0}
+{"ts":"2026-05-21T16:34:55Z","argv":["gamut","pipelines","show","commercial"],"duration_ms":66,"exit":0,"stdout_bytes":6218,"stderr_bytes":0}
+{"ts":"2026-05-21T16:37:01Z","argv":["gamut","brief","--help"],"duration_ms":75,"exit":0,"stdout_bytes":699,"stderr_bytes":0}
+{"ts":"2026-05-21T16:37:02Z","argv":["gamut","workflow","--help"],"duration_ms":46,"exit":0,"stdout_bytes":657,"stderr_bytes":0}
+{"ts":"2026-05-21T16:37:06Z","argv":["gamut","workflow","run","--help"],"duration_ms":49,"exit":0,"stdout_bytes":775,"stderr_bytes":0}
+{"ts":"2026-05-21T16:37:06Z","argv":["gamut","brief","check","--help"],"duration_ms":47,"exit":0,"stdout_bytes":589,"stderr_bytes":0}
+{"ts":"2026-05-21T16:37:08Z","argv":["gamut","workflow","run","commercial","--workdir",".","--text"],"duration_ms":75,"exit":0,"stdout_bytes":621,"stderr_bytes":0}
+{"ts":"2026-05-21T16:37:14Z","argv":["gamut","brief","check","brief.md"],"duration_ms":50,"exit":1,"stdout_bytes":0,"stderr_bytes":71}
+{"ts":"2026-05-21T16:38:03Z","argv":["gamut","brief","check","--help"],"duration_ms":75,"exit":0,"stdout_bytes":589,"stderr_bytes":0}
+{"ts":"2026-05-21T16:38:03Z","argv":["gamut","brief"],"duration_ms":42,"exit":2,"stdout_bytes":0,"stderr_bytes":699}
+{"ts":"2026-05-21T16:38:27Z","argv":["gamut","brief","check","brief.md"],"duration_ms":79,"exit":1,"stdout_bytes":0,"stderr_bytes":95}
+{"ts":"2026-05-21T16:38:38Z","argv":["gamut","brief","check","brief.md"],"duration_ms":49,"exit":0,"stdout_bytes":3,"stderr_bytes":0}
+{"ts":"2026-05-21T16:39:23Z","argv":["gamut","screenplay","--help"],"duration_ms":71,"exit":0,"stdout_bytes":741,"stderr_bytes":0}
+{"ts":"2026-05-21T16:39:23Z","argv":["gamut","velocity","--help"],"duration_ms":48,"exit":0,"stdout_bytes":1032,"stderr_bytes":0}
+{"ts":"2026-05-21T16:39:41Z","argv":["gamut","screenplay","parse","script.fountain","--legacy-json","-o","screenplay.json"],"duration_ms":87,"exit":2,"stdout_bytes":0,"stderr_bytes":61}
+{"ts":"2026-05-21T16:39:44Z","argv":["gamut","screenplay","parse","--help"],"duration_ms":46,"exit":0,"stdout_bytes":958,"stderr_bytes":0}
+{"ts":"2026-05-21T16:39:53Z","argv":["gamut","screenplay","parse","script.fountain","--legacy-json","--pretty","-o","screenplay.json"],"duration_ms":50,"exit":0,"stdout_bytes":0,"stderr_bytes":22}
+{"ts":"2026-05-21T16:39:57Z","argv":["gamut","velocity","propose","script.fountain","-o","velocity.json"],"duration_ms":57,"exit":0,"stdout_bytes":0,"stderr_bytes":20}
+{"ts":"2026-05-21T16:40:18Z","argv":["gamut","workflow","run","commercial","--workdir",".","--text"],"duration_ms":90,"exit":0,"stdout_bytes":452,"stderr_bytes":0}
+{"ts":"2026-05-21T16:40:21Z","argv":["gamut","storyboard","--help"],"duration_ms":46,"exit":0,"stdout_bytes":1570,"stderr_bytes":0}
+{"ts":"2026-05-21T16:40:24Z","argv":["gamut","storyboard","plan","--help"],"duration_ms":44,"exit":0,"stdout_bytes":1827,"stderr_bytes":0}
+{"ts":"2026-05-21T16:40:24Z","argv":["gamut","transitions","--help"],"duration_ms":41,"exit":0,"stdout_bytes":566,"stderr_bytes":0}
+{"ts":"2026-05-21T16:40:28Z","argv":["gamut","storyboard","plan","script.fountain","--velocity","velocity.json","--aspect","9:16","--pretty","--match-runtime","12","-o","storyboard.json"],"duration_ms":56,"exit":0,"stdout_bytes":0,"stderr_bytes":51}
+{"ts":"2026-05-21T16:40:48Z","argv":["gamut","storyboard","verify","--help"],"duration_ms":73,"exit":0,"stdout_bytes":514,"stderr_bytes":0}
+{"ts":"2026-05-21T16:40:48Z","argv":["gamut","director","--help"],"duration_ms":41,"exit":0,"stdout_bytes":1209,"stderr_bytes":0}
+{"ts":"2026-05-21T16:40:53Z","argv":["gamut","storyboard","verify","storyboard.json"],"duration_ms":57,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-21T16:41:53Z","argv":["gamut","storyboard","verify","storyboard.json"],"duration_ms":84,"exit":2,"stdout_bytes":0,"stderr_bytes":155}
+{"ts":"2026-05-21T16:41:58Z","argv":["gamut","storyboard","verify","storyboard.json"],"duration_ms":53,"exit":2,"stdout_bytes":0,"stderr_bytes":150}
+{"ts":"2026-05-21T16:42:02Z","argv":["gamut","storyboard","verify","storyboard.json"],"duration_ms":53,"exit":2,"stdout_bytes":0,"stderr_bytes":65}
+{"ts":"2026-05-21T16:42:07Z","argv":["gamut","shot","--help"],"duration_ms":47,"exit":0,"stdout_bytes":3932,"stderr_bytes":0}
+{"ts":"2026-05-21T16:42:07Z","argv":["gamut","shot","img2vid","--help"],"duration_ms":42,"exit":0,"stdout_bytes":3077,"stderr_bytes":0}
+{"ts":"2026-05-21T16:42:21Z","argv":["gamut","storyboard","verify","storyboard.json"],"duration_ms":95,"exit":2,"stdout_bytes":0,"stderr_bytes":67}
+{"ts":"2026-05-21T16:42:26Z","argv":["gamut","storyboard","verify","storyboard.json"],"duration_ms":46,"exit":2,"stdout_bytes":0,"stderr_bytes":65}
+{"ts":"2026-05-21T16:42:30Z","argv":["gamut","storyboard","verify","storyboard.json"],"duration_ms":48,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-21T16:42:33Z","argv":["gamut","continuity","--help"],"duration_ms":47,"exit":0,"stdout_bytes":545,"stderr_bytes":0}
+{"ts":"2026-05-21T16:42:33Z","argv":["gamut","transitions","classify","--help"],"duration_ms":42,"exit":0,"stdout_bytes":652,"stderr_bytes":0}
+{"ts":"2026-05-21T16:42:37Z","argv":["gamut","continuity","check","storyboard.json"],"duration_ms":77,"exit":0,"stdout_bytes":244,"stderr_bytes":0}
+{"ts":"2026-05-21T16:42:37Z","argv":["gamut","transitions","classify","script.fountain","--velocity","velocity.json","--pretty","-o","transitions.json"],"duration_ms":49,"exit":0,"stdout_bytes":0,"stderr_bytes":54}
+{"ts":"2026-05-21T16:42:49Z","argv":["gamut","music","--help"],"duration_ms":45,"exit":0,"stdout_bytes":801,"stderr_bytes":0}
+{"ts":"2026-05-21T16:42:49Z","argv":["gamut","music","gen","--help"],"duration_ms":41,"exit":0,"stdout_bytes":1872,"stderr_bytes":0}
+{"ts":"2026-05-21T16:42:54Z","argv":["gamut","music","gen","--prompt","Doom-metal pulse at 90 BPM, sub-bass drone, slow tape-warble synth, single tom hit at 9 seconds, no vocals, ominous cinematic mock-horror trailer cue","--duration","12","--bpm","90","--backend","google-lyria-3-pro","--max-cost","1.50","-o","music/track.wav"],"duration_ms":22994,"exit":0,"stdout_bytes":515,"stderr_bytes":0}
+{"ts":"2026-05-21T16:43:37Z","argv":["gamut","shot","img2vid","--help"],"duration_ms":80,"exit":0,"stdout_bytes":3077,"stderr_bytes":0}
+{"ts":"2026-05-21T16:43:40Z","argv":["gamut","shot","img2vid","--help"],"duration_ms":46,"exit":0,"stdout_bytes":3077,"stderr_bytes":0}
+{"ts":"2026-05-21T16:43:47Z","argv":["gamut","shot","txt2vid","--help"],"duration_ms":44,"exit":0,"stdout_bytes":2327,"stderr_bytes":0}
+{"ts":"2026-05-21T16:43:55Z","argv":["gamut","shot","txt2vid","test","--aspect","9:16","--duration","4","--dry-run"],"duration_ms":72,"exit":0,"stdout_bytes":320,"stderr_bytes":0}
+{"ts":"2026-05-21T16:44:00Z","argv":["gamut","shot","txt2vid","test","--aspect","9:16","--duration","4","--backend","google-veo-3.1-fast","--dry-run"],"duration_ms":49,"exit":0,"stdout_bytes":335,"stderr_bytes":0}
+{"ts":"2026-05-21T16:44:08Z","argv":["gamut","shot","img2vid","assets/product.png","test motion","--aspect","9:16","--duration","4","--backend","google-veo-3.1-fast","--dry-run"],"duration_ms":61,"exit":0,"stdout_bytes":342,"stderr_bytes":0}
+{"ts":"2026-05-21T16:44:25Z","argv":["gamut","shot","img2vid","assets/product.png","Vertical 9:16 mock-horror VHS commercial. The matte-black Liquid Death tallboy aluminum can sits unopened on a dusty wooden floor in an abandoned room. A single dim tungsten desk lamp throws a hard amber sidelight onto the can; the rest of the frame is in deep shadow. Behind the can, a dead CRT television flickers cold blue static, pulsing on and off. The camera is locked off and very slowly pushes in toward the can. VHS register: heavy chromatic aberration on the highlights, fine horizontal scanlines, mild frame jitter, low-fi color, soft tape grain. No people, no other logos. Cinematic, dread-soaked, no humor. Audio: silent.","--aspect","9:16","--duration","4","--backend","google-veo-3.1-fast","--max-cost","1.20","-o","shots/shot-1.mp4"],"duration_ms":40437,"exit":0,"stdout_bytes":968,"stderr_bytes":0}
+{"ts":"2026-05-21T16:44:25Z","argv":["gamut","shot","img2vid","assets/product.png","Vertical 9:16 mock-horror VHS commercial. The matte-black Liquid Death tallboy aluminum can levitates dead-center in a pitch black void. A single hard tungsten sidelight from camera-right rakes across the can. The can slowly rotates about its vertical axis, revealing the white chiseled metal-band LIQUID DEATH wordmark. Faint grey smoke curls upward from the base of the can. The camera is locked off. VHS register: heavy chromatic aberration on the highlights, fine horizontal scanlines, mild frame jitter, low-fi color, soft tape grain. Same tungsten color temperature as the previous shots. Audio: silent.","--aspect","9:16","--duration","4","--backend","google-veo-3.1-fast","--max-cost","1.20","-o","shots/shot-3.mp4"],"duration_ms":41510,"exit":0,"stdout_bytes":943,"stderr_bytes":0}
+{"ts":"2026-05-21T16:44:25Z","argv":["gamut","shot","img2vid","assets/product.png","Vertical 9:16 mock-horror VHS commercial. Extreme macro on the matte-black Liquid Death tallboy aluminum can; the white chiseled metal-band LIQUID DEATH wordmark fills the right half of the frame. A single hard tungsten sidelight from camera-right rakes across the matte surface; the left side falls into deep shadow. A single bead of condensation slides slowly down the aluminum. The camera is locked off, no movement. VHS register: heavy chromatic aberration on the highlights, fine horizontal scanlines, mild frame jitter, low-fi color, soft tape grain. Same tungsten color temperature as the previous shot. Audio: silent.","--aspect","9:16","--duration","4","--backend","google-veo-3.1-fast","--max-cost","1.20","-o","shots/shot-2.mp4"],"duration_ms":45140,"exit":0,"stdout_bytes":958,"stderr_bytes":0}
+{"ts":"2026-05-21T16:45:23Z","argv":["gamut","workflow","run","commercial","--workdir",".","--text"],"duration_ms":60,"exit":0,"stdout_bytes":300,"stderr_bytes":0}
+{"ts":"2026-05-21T16:45:42Z","argv":["gamut","workflow","run","commercial","--workdir",".","--text"],"duration_ms":50,"exit":0,"stdout_bytes":269,"stderr_bytes":0}
+{"ts":"2026-05-21T16:45:42Z","argv":["gamut","render","--help"],"duration_ms":42,"exit":0,"stdout_bytes":1880,"stderr_bytes":0}
+{"ts":"2026-05-21T16:45:45Z","argv":["gamut","verify","--help"],"duration_ms":47,"exit":0,"stdout_bytes":446,"stderr_bytes":0}
+{"ts":"2026-05-21T16:45:54Z","argv":["gamut","--version"],"duration_ms":109,"exit":0,"stdout_bytes":12,"stderr_bytes":0}
+{"ts":"2026-05-21T16:45:55Z","argv":["gamut","verify","shots/shot-1.mp4"],"duration_ms":64,"exit":3,"stdout_bytes":0,"stderr_bytes":77}
+{"ts":"2026-05-21T16:45:58Z","argv":["gamut","verify","/tmp/test.html"],"duration_ms":49,"exit":3,"stdout_bytes":0,"stderr_bytes":74}
+{"ts":"2026-05-21T16:46:03Z","argv":["gamut","render","/tmp/test.html","-o","/tmp/out.mp4"],"duration_ms":61,"exit":2,"stdout_bytes":0,"stderr_bytes":68}
+{"ts":"2026-05-21T16:46:07Z","argv":["gamut","render","/tmp/test.html","-o","/tmp/out.mp4"],"duration_ms":422,"exit":0,"stdout_bytes":137,"stderr_bytes":675}
+{"ts":"2026-05-21T16:50:43Z","argv":["gamut","verify","commercial.html"],"duration_ms":50,"exit":3,"stdout_bytes":0,"stderr_bytes":75}
+{"ts":"2026-05-21T16:46:45Z","argv":["gamut","render","/Users/shinyobjectz/Apps/workbooks/packages/gamut/examples/clip-ref-arizona/index.html","-o","/tmp/arizona.mp4"],"duration_ms":554706,"exit":2,"stdout_bytes":173,"stderr_bytes":1480}
+{"ts":"2026-05-21T16:57:30Z","argv":["gamut","workflow","run","commercial","--workdir","."],"duration_ms":58,"exit":0,"stdout_bytes":1407,"stderr_bytes":0}
+{"ts":"2026-05-21T16:57:36Z","argv":["gamut","workflow","run","commercial","--workdir","."],"duration_ms":48,"exit":0,"stdout_bytes":1407,"stderr_bytes":0}
+{"ts":"2026-05-21T16:50:48Z","argv":["gamut","render","commercial.html","-o","commercial.mp4"],"duration_ms":579981,"exit":143,"stdout_bytes":101,"stderr_bytes":420}

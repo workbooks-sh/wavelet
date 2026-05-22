@@ -1,0 +1,62 @@
+<!doctype html>
+<html><head>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap");
+
+  :root {
+    --ease-out-circ: cubic-bezier(0, 0.55, 0.45, 1);
+  }
+
+  html, body { margin: 0; padding: 0; background: transparent; width: 100%; height: 100%; overflow: hidden; }
+
+  #bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  /* Hexagonal viewing port carved into the scene via clip-path, lighten-blended */
+  .port {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 62vw;
+    aspect-ratio: 16 / 7;
+    transform: translate(-50%, -50%);
+    background: #1c0a04;
+    clip-path: polygon(8% 0, 92% 0, 100% 50%, 92% 100%, 8% 100%, 0% 50%);
+    mix-blend-mode: lighten;
+  }
+
+  @keyframes iris {
+    from { clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%); }
+    to   { clip-path: polygon(8% 0,   92% 0,   100% 50%, 92% 100%, 8% 100%, 0% 50%); }
+  }
+  .port { animation: iris 0.9s var(--ease-out-circ) 0.1s both; }
+
+  .hud {
+    position: absolute; inset: 0;
+    padding: 26px 32px;
+    color: #f0e6d4;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+  .key { color: #f0e6d480; }
+  .row { display: flex; gap: 1.2em; align-items: baseline; }
+  .tl { position: absolute; top: 26px; left: 32px; }
+  .tr { position: absolute; top: 26px; right: 32px; text-align: right; }
+  .bl { position: absolute; bottom: 26px; left: 32px; }
+  .br { position: absolute; bottom: 26px; right: 32px; text-align: right; }
+
+  @keyframes hud-flicker {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.55; }
+  }
+  .live { animation: hud-flicker 0.9s steps(2, jump-end) infinite; }
+</style></head>
+<body>
+  <video id="bg" src="../shots/shot-2-souk.mp4" muted></video>
+  <div class="port"></div>
+  <div class="hud">
+    <div class="tl"><div class="row"><span class="key">NOTE 01</span> CARDAMOM</div></div>
+    <div class="tr"><div class="row"><span class="key">NOTE 02</span> NEROLI</div></div>
+    <div class="bl"><div class="row"><span class="key">NOTE 03</span> SANDALWOOD</div></div>
+    <div class="br"><span class="live">● single distillation</span></div>
+  </div>
+</body></html>

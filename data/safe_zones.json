@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "reference_canvas": { "width": 1080, "height": 1920 },
+  "platforms": {
+    "tiktok":                  { "top_px": 108, "bottom_px": 320, "left_px": 60,  "right_px": 120 },
+    "instagram_reels":         { "top_px": 200, "bottom_px": 250, "left_px": 50,  "right_px": 50  },
+    "instagram_reels_boosted": { "top_px": 220, "bottom_px": 420, "left_px": 50,  "right_px": 50  },
+    "youtube_shorts":          { "top_px": 380, "bottom_px": 380, "left_px": 60,  "right_px": 120 },
+    "facebook_reels":          { "top_px": 150, "bottom_px": 350, "left_px": 60,  "right_px": 60  },
+    "instagram_feed":          { "top_px": 40,  "bottom_px": 40,  "left_px": 20,  "right_px": 20  },
+    "linkedin":                { "top_px": 40,  "bottom_px": 40,  "left_px": 20,  "right_px": 20  },
+    "youtube":                 null,
+    "vimeo":                   null
+  }
+}

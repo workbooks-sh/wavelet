@@ -1,0 +1,72 @@
+{
+  "title_page": {
+    "title": "Every Day, Care",
+    "author": "agent-claude",
+    "credit": "Whirlpool / KitchenAid Artisan",
+    "other": {
+      "format": "9:16 Â· 12s Â· Meta Reels"
+    }
+  },
+  "elements": [
+    {
+      "type": "scene_heading",
+      "slugline": "INT. STUDIO Ã¢ÂÂ CREAM SEAMLESS Ã¢ÂÂ DUSK KEY",
+      "ie": "int",
+      "location": "STUDIO Ã¢ÂÂ CREAM SEAMLESS Ã¢ÂÂ DUSK KEY"
+    },
+    {
+      "type": "action",
+      "text": "Black. A single warm key fades up. The silhouette of a tilt-head stand mixer emerges Ã¢ÂÂ empire red, polished chrome, motionless. The camera holds."
+    },
+    {
+      "type": "transition",
+      "text": "SMASH CUT TO:",
+      "kind": "smash_cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. STUDIO Ã¢ÂÂ CREAM SEAMLESS Ã¢ÂÂ CONTINUOUS",
+      "ie": "int",
+      "location": "STUDIO Ã¢ÂÂ CREAM SEAMLESS Ã¢ÂÂ CONTINUOUS"
+    },
+    {
+      "type": "action",
+      "text": "The mixer slowly comes alive. The dough hook descends. White flour catches the light as it drifts down through the warm key. The whole frame breathes Ã¢ÂÂ slow push-in, locked register, no cuts inside the shot."
+    },
+    {
+      "type": "transition",
+      "text": "MATCH CUT TO:",
+      "kind": "match_cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. STUDIO Ã¢ÂÂ CREAM SEAMLESS Ã¢ÂÂ RESULT",
+      "ie": "int",
+      "location": "STUDIO Ã¢ÂÂ CREAM SEAMLESS Ã¢ÂÂ RESULT"
+    },
+    {
+      "type": "action",
+      "text": "A single perfect loaf sits where the mixer was. Same key, same seamless, same scale. A hand enters frame, places a folded linen beside it. Holds."
+    },
+    {
+      "type": "transition",
+      "text": "FADE TO:",
+      "kind": "other"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. CARD Ã¢ÂÂ CREAM ON BLACK Ã¢ÂÂ END",
+      "ie": "int",
+      "location": "CARD Ã¢ÂÂ CREAM ON BLACK Ã¢ÂÂ END"
+    },
+    {
+      "type": "action",
+      "text": "WHIRLPOOL wordmark fades up. Underneath, smaller: KitchenAid ÃÂ· Since 1919. Under that, smaller still: Every day, care."
+    },
+    {
+      "type": "transition",
+      "text": "FADE OUT.",
+      "kind": "fade_out"
+    }
+  ]
+}

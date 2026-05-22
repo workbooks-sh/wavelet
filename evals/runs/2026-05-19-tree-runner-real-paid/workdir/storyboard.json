@@ -1,0 +1,184 @@
+{
+  "version": 1,
+  "duration_secs": 13.36616,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "EXT. MARRAKECH ROOFTOP - GOLDEN HOUR",
+      "first_shot": 0,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 1,
+      "slugline": "INT. SOUK CORRIDOR - DAY",
+      "first_shot": 2,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 2,
+      "slugline": "INT. TANNERY COURTYARD - LATE AFTERNOON",
+      "first_shot": 4,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 3,
+      "slugline": "EXT. ARCHED ALLEY - DUSK",
+      "first_shot": 6,
+      "shot_count": 2
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-0-est",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 0,
+      "start_secs": 0.0,
+      "duration_secs": 1.5,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "MARRAKECH ROOFTOP",
+      "generation": {
+        "kind": "stock_search",
+        "query": "MARRAKECH ROOFTOP",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-1-0",
+      "shot_index": 1,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 1.5,
+      "duration_secs": 1.548387,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "breeze pushes dust across the",
+      "generation": {
+        "kind": "stock_search",
+        "query": "breeze pushes dust across the",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-1-est",
+      "shot_index": 2,
+      "scene_index": 1,
+      "screenplay_element_index": 3,
+      "start_secs": 3.048387,
+      "duration_secs": 1.6220393,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "SOUK CORRIDOR",
+      "generation": {
+        "kind": "stock_search",
+        "query": "SOUK CORRIDOR",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-1-act-4-0",
+      "shot_index": 3,
+      "scene_index": 1,
+      "screenplay_element_index": 4,
+      "start_secs": 4.6704264,
+      "duration_secs": 1.707104,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Light shafts through wooden lattice.",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Light shafts through wooden lattice.",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-2-est",
+      "shot_index": 4,
+      "scene_index": 2,
+      "screenplay_element_index": 6,
+      "start_secs": 6.37753,
+      "duration_secs": 1.8068289,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "TANNERY COURTYARD",
+      "generation": {
+        "kind": "stock_search",
+        "query": "TANNERY COURTYARD",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-2-act-7-0",
+      "shot_index": 5,
+      "scene_index": 2,
+      "screenplay_element_index": 7,
+      "start_secs": 8.184359,
+      "duration_secs": 1.9259079,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Stacked leathers saffron, ochre, oxblood.",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Stacked leathers saffron, ochre, oxblood.",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-3-est",
+      "shot_index": 6,
+      "scene_index": 3,
+      "screenplay_element_index": 9,
+      "start_secs": 10.110267,
+      "duration_secs": 1.6003424,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "ARCHED ALLEY",
+      "generation": {
+        "kind": "stock_search",
+        "query": "ARCHED ALLEY",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-3-act-10-0",
+      "shot_index": 7,
+      "scene_index": 3,
+      "screenplay_element_index": 10,
+      "start_secs": 11.710609,
+      "duration_secs": 1.655551,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "still, narrow alley framed terracotta",
+      "generation": {
+        "kind": "stock_search",
+        "query": "still, narrow alley framed terracotta",
+        "orientation": "landscape"
+      }
+    }
+  ]
+}

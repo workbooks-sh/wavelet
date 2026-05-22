@@ -1,0 +1,28 @@
+{
+  "title_page": {
+    "title": "Pour Better",
+    "author": "gamut-director"
+  },
+  "elements": [
+    {
+      "type": "scene_heading",
+      "slugline": "INT. QUIET KITCHEN - MORNING",
+      "ie": "int",
+      "location": "QUIET KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "A generic ceramic pour-over coffee carafe sits on a linen counter in soft window light. A hand-held kettle pours one narrow circle of water. Steam lifts slowly while the dark coffee gathers drop by drop."
+    },
+    {
+      "type": "action",
+      "text": "SUPER: Pour better"
+    },
+    {
+      "type": "transition",
+      "text": "FADE OUT.",
+      "kind": "fade_out"
+    }
+  ]
+}

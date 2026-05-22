@@ -1,0 +1,72 @@
+{
+  "title_page": {
+    "title": "Marrakech Intense",
+    "author": "gamut-director"
+  },
+  "elements": [
+    {
+      "type": "scene_heading",
+      "slugline": "EXT. MARRAKECH ROOFTOP - GOLDEN HOUR",
+      "ie": "ext",
+      "location": "MARRAKECH ROOFTOP",
+      "time_of_day": "GOLDEN HOUR"
+    },
+    {
+      "type": "action",
+      "text": "A breeze pushes dust across the tiled rooftop. The medina hums in the distance, the city is rust-colored against a fading sky."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. SOUK CORRIDOR - DAY",
+      "ie": "int",
+      "location": "SOUK CORRIDOR",
+      "time_of_day": "DAY"
+    },
+    {
+      "type": "action",
+      "text": "Light shafts through a wooden lattice. Cardamom pods, dried neroli, and crumbled sandalwood rest in shallow brass dishes. A hand passes across the spices."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. TANNERY COURTYARD - LATE AFTERNOON",
+      "ie": "int",
+      "location": "TANNERY COURTYARD",
+      "time_of_day": "LATE AFTERNOON"
+    },
+    {
+      "type": "action",
+      "text": "Stacked leathers in saffron, ochre, oxblood. Steam drifts from a copper vat. The colors saturate as the camera drifts closer."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "EXT. ARCHED ALLEY - DUSK",
+      "ie": "ext",
+      "location": "ARCHED ALLEY",
+      "time_of_day": "DUSK"
+    },
+    {
+      "type": "action",
+      "text": "A still, narrow alley framed by terracotta walls. A single doorway sits at the vanishing point. The city quiets."
+    },
+    {
+      "type": "transition",
+      "text": "FADE OUT.",
+      "kind": "fade_out"
+    }
+  ]
+}

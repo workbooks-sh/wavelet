@@ -1,0 +1,28 @@
+{
+  "width": 640,
+  "height": 360,
+  "fps": 15,
+  "duration_frames": 75,
+  "aspect": "16:9",
+  "scenes": [
+    {
+      "html_path": "scenes/01-pour.html",
+      "start_frame": 0,
+      "duration_frames": 75
+    }
+  ],
+  "audio_cues": [
+    {
+      "id": "music",
+      "asset_path": "music/track.wav",
+      "start_frame": 0,
+      "duration_frames": 75,
+      "volume": 0.45,
+      "pan": 0.0,
+      "fade_in_frames": 9,
+      "fade_out_frames": 18,
+      "duck_targets": [],
+      "duck_db": 0.0
+    }
+  ]
+}

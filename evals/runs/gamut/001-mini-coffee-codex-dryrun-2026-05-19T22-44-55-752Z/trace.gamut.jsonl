@@ -1,0 +1,43 @@
+{"ts":"2026-05-19T22:45:13Z","argv":["gamut","--help"],"duration_ms":3855,"exit":0,"stdout_bytes":4395,"stderr_bytes":0}
+{"ts":"2026-05-19T22:45:34Z","argv":["gamut","screenplay","parse","--help"],"duration_ms":801,"exit":0,"stdout_bytes":516,"stderr_bytes":0}
+{"ts":"2026-05-19T22:45:36Z","argv":["gamut","velocity","propose","--help"],"duration_ms":671,"exit":0,"stdout_bytes":590,"stderr_bytes":0}
+{"ts":"2026-05-19T22:45:37Z","argv":["gamut","storyboard","plan","--help"],"duration_ms":929,"exit":0,"stdout_bytes":1827,"stderr_bytes":0}
+{"ts":"2026-05-19T22:45:56Z","argv":["gamut","shot","txt2vid","--help"],"duration_ms":362,"exit":0,"stdout_bytes":2237,"stderr_bytes":0}
+{"ts":"2026-05-19T22:45:56Z","argv":["gamut","render","--help"],"duration_ms":365,"exit":0,"stdout_bytes":1880,"stderr_bytes":0}
+{"ts":"2026-05-19T22:45:57Z","argv":["gamut","verify","--help"],"duration_ms":420,"exit":0,"stdout_bytes":446,"stderr_bytes":0}
+{"ts":"2026-05-19T22:45:57Z","argv":["gamut","music","gen","--help"],"duration_ms":424,"exit":0,"stdout_bytes":1825,"stderr_bytes":0}
+{"ts":"2026-05-19T22:45:58Z","argv":["gamut","workflow","run","--help"],"duration_ms":601,"exit":0,"stdout_bytes":775,"stderr_bytes":0}
+{"ts":"2026-05-19T22:45:58Z","argv":["gamut","image","scene-still","--help"],"duration_ms":729,"exit":0,"stdout_bytes":3111,"stderr_bytes":0}
+{"ts":"2026-05-19T22:46:15Z","argv":["gamut","pipelines","show","commercial"],"duration_ms":147,"exit":0,"stdout_bytes":5815,"stderr_bytes":0}
+{"ts":"2026-05-19T22:46:15Z","argv":["gamut","workflow","run","commercial","--workdir",".","--text"],"duration_ms":102,"exit":0,"stdout_bytes":508,"stderr_bytes":0}
+{"ts":"2026-05-19T22:46:33Z","argv":["gamut","brief","check","--help"],"duration_ms":263,"exit":0,"stdout_bytes":589,"stderr_bytes":0}
+{"ts":"2026-05-19T22:46:34Z","argv":["gamut","storyboard","verify","--help"],"duration_ms":254,"exit":0,"stdout_bytes":514,"stderr_bytes":0}
+{"ts":"2026-05-19T22:46:35Z","argv":["gamut","continuity","check","--help"],"duration_ms":316,"exit":0,"stdout_bytes":453,"stderr_bytes":0}
+{"ts":"2026-05-19T22:46:36Z","argv":["gamut","transitions","classify","--help"],"duration_ms":288,"exit":0,"stdout_bytes":652,"stderr_bytes":0}
+{"ts":"2026-05-19T22:47:37Z","argv":["gamut","music","gen","--velocity","velocity.json","--style","ambient piano, single quiet phrase, sparse room tone","--duration","5","--dry-run","--max-cost","0.10","--pretty"],"duration_ms":124,"exit":2,"stdout_bytes":0,"stderr_bytes":59}
+{"ts":"2026-05-19T22:47:37Z","argv":["gamut","brief","check","brief.md"],"duration_ms":132,"exit":0,"stdout_bytes":3,"stderr_bytes":0}
+{"ts":"2026-05-19T22:47:37Z","argv":["gamut","shot","txt2vid","A generic ceramic pour-over coffee carafe on linen counter, hand pouring water in a slow circle, steam in soft morning window light, still observational A24 product shot, shallow depth of field, no brand, no text","--duration","5","--aspect","16:9","--dry-run","--max-cost","0.20","--pretty"],"duration_ms":73,"exit":0,"stdout_bytes":616,"stderr_bytes":0}
+{"ts":"2026-05-19T22:47:37Z","argv":["gamut","screenplay","parse","script.fountain","--pretty","-o","screenplay.json"],"duration_ms":177,"exit":0,"stdout_bytes":0,"stderr_bytes":22}
+{"ts":"2026-05-19T22:47:37Z","argv":["gamut","velocity","propose","script.fountain","--pretty","-o","velocity.json"],"duration_ms":115,"exit":0,"stdout_bytes":0,"stderr_bytes":20}
+{"ts":"2026-05-19T22:47:37Z","argv":["gamut","storyboard","plan","script.fountain","--velocity","velocity.json","--match-runtime","5","--pretty","-o","storyboard.json"],"duration_ms":86,"exit":0,"stdout_bytes":0,"stderr_bytes":50}
+{"ts":"2026-05-19T22:47:38Z","argv":["gamut","storyboard","verify","storyboard.json"],"duration_ms":252,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-19T22:47:38Z","argv":["gamut","continuity","check","storyboard.json"],"duration_ms":288,"exit":0,"stdout_bytes":38,"stderr_bytes":0}
+{"ts":"2026-05-19T22:47:39Z","argv":["gamut","transitions","classify","script.fountain","--velocity","velocity.json","--pretty","-o","transitions.json"],"duration_ms":413,"exit":0,"stdout_bytes":0,"stderr_bytes":54}
+{"ts":"2026-05-19T22:48:03Z","argv":["gamut","music","gen","--velocity","velocity.json","--style","ambient piano, single quiet phrase, sparse room tone","--duration","5","--dry-run","--max-cost","0.10","--pretty"],"duration_ms":289,"exit":0,"stdout_bytes":558,"stderr_bytes":0}
+{"ts":"2026-05-19T22:48:15Z","argv":["gamut","verify","comp.json"],"duration_ms":397,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-19T22:50:51Z","argv":["gamut","verify","comp.json"],"duration_ms":875,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-19T22:52:10Z","argv":["gamut","verify","comp.json"],"duration_ms":975,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-19T22:53:44Z","argv":["gamut","verify","comp.json"],"duration_ms":2386,"exit":0,"stdout_bytes":33,"stderr_bytes":0}
+{"ts":"2026-05-19T22:53:47Z","argv":["gamut","render","--cpu","comp.json","-o","commercial.mp4"],"duration_ms":22483,"exit":0,"stdout_bytes":153,"stderr_bytes":673}
+{"ts":"2026-05-19T22:54:26Z","argv":["gamut","c2pa","verify","--help"],"duration_ms":712,"exit":0,"stdout_bytes":504,"stderr_bytes":0}
+{"ts":"2026-05-19T22:54:26Z","argv":["gamut","workflow","run","commercial","--workdir",".","--text"],"duration_ms":835,"exit":0,"stdout_bytes":210,"stderr_bytes":0}
+{"ts":"2026-05-19T22:54:49Z","argv":["gamut","c2pa","--help"],"duration_ms":306,"exit":0,"stdout_bytes":787,"stderr_bytes":0}
+{"ts":"2026-05-19T22:54:49Z","argv":["gamut","c2pa","sign","--help"],"duration_ms":269,"exit":0,"stdout_bytes":1207,"stderr_bytes":0}
+{"ts":"2026-05-19T22:54:57Z","argv":["gamut","c2pa","sign","commercial.mp4","--comp","comp.json","--title","Pour Better","--author","gamut-director","-o","commercial.signed.mp4"],"duration_ms":413,"exit":0,"stdout_bytes":161,"stderr_bytes":0}
+{"ts":"2026-05-19T22:54:58Z","argv":["gamut","c2pa","verify","commercial.mp4"],"duration_ms":392,"exit":0,"stdout_bytes":223,"stderr_bytes":0}
+{"ts":"2026-05-19T22:55:13Z","argv":["gamut","workflow","run","commercial","--workdir",".","--text"],"duration_ms":297,"exit":0,"stdout_bytes":210,"stderr_bytes":0}
+{"ts":"2026-05-19T22:55:22Z","argv":["gamut","image","scene-still","--prompt","A generic ceramic pour-over coffee carafe on linen counter in soft morning window light, no brand, no text, observational A24 still life","--image-size","landscape_16_9","--dry-run","--max-cost","0.05","--pretty"],"duration_ms":212,"exit":3,"stdout_bytes":0,"stderr_bytes":78}
+{"ts":"2026-05-19T22:55:29Z","argv":["gamut","image","scene-still","--refs","https://images.unsplash.com/photo-1495474472287-4d71bcdd2085","--prompt","A generic ceramic pour-over coffee carafe on linen counter in soft morning window light, no brand, no text, observational A24 still life","--image-size","landscape_16_9","--dry-run","--max-cost","0.05","--pretty"],"duration_ms":258,"exit":0,"stdout_bytes":380,"stderr_bytes":62}
+{"ts":"2026-05-19T22:56:58Z","argv":["gamut","workflow","run","commercial","--workdir",".","--text"],"duration_ms":388,"exit":0,"stdout_bytes":210,"stderr_bytes":0}
+{"ts":"2026-05-19T22:57:30Z","argv":["gamut","c2pa","verify","commercial.mp4"],"duration_ms":272,"exit":0,"stdout_bytes":223,"stderr_bytes":0}
+{"ts":"2026-05-19T22:57:30Z","argv":["gamut","workflow","run","commercial","--workdir",".","--text"],"duration_ms":91,"exit":0,"stdout_bytes":210,"stderr_bytes":0}

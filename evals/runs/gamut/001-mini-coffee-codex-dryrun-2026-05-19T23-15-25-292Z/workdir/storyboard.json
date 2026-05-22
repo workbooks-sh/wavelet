@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "duration_secs": 5.0,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "INT. QUIET KITCHEN - DAWN",
+      "first_shot": 0,
+      "shot_count": 2
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-0-est",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 0,
+      "start_secs": 0.0,
+      "duration_secs": 2.4744663,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "QUIET KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "QUIET KITCHEN",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-1-0",
+      "shot_index": 1,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 2.4744663,
+      "duration_secs": 2.525534,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "generic ceramic pour-over coffee carafe",
+      "generation": {
+        "kind": "stock_search",
+        "query": "generic ceramic pour-over coffee carafe",
+        "orientation": "landscape"
+      }
+    }
+  ]
+}

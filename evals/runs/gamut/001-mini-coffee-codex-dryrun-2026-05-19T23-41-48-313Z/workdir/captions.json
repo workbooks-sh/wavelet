@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "language": "en",
+  "style": "minimal",
+  "words": [
+    { "word": "Pour", "start": 3.8, "end": 4.2 },
+    { "word": "better", "start": 4.2, "end": 4.8 }
+  ]
+}
