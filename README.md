@@ -1,18 +1,47 @@
 # wavelet
 
-A clean-room composition substrate for agent-authored video. Two groups under one umbrella:
+**A composition substrate for agent-authored video.** Write a video
+timeline as plain HTML. The browser is the renderer; the DOM is the
+intermediate representation.
 
-- **`runtime/`** (`@work.books/wavelet-runtime`) — HTML Web Components that schedule and composite a video timeline. Authors write a single `.html` file with `<gm-doc>` / `<gm-timeline>` / `<gm-track>` / `<gm-clip>` / `<gm-scene>` / `<gm-audio>` / `<gm-shader>` / `<gm-adjustment>` / `<gm-include>` elements. Animation lives inside `<gm-scene>` via the agent's HTML/CSS/JS (GSAP or anything else). The runtime registers the custom-element family with the browser; the DOM is the IR.
+Most "AI video" tools either generate finished MP4s from a prompt (no
+hand-off, no edits) or hide behind a proprietary timeline format
+(opaque, untoolable). wavelet does neither: an agent writes a single
+`.html` file with composition elements, a scene-side script does the
+animation in regular HTML/CSS/JS (GSAP or anything else), and a
+headless browser composites the result. The IR is inspectable, the
+animation is debuggable, and every operation on the timeline is a CLI
+command.
 
-- **`cli/`** (`@work.books/wavelet-cli`, binary `wavelet`) — Imperative editing operations the agent can use without touching the composition HTML: `wavelet trim`, `wavelet split`, `wavelet cut`, `wavelet concat`, `wavelet move`, `wavelet inspect`, `wavelet lint`, `wavelet verify`, `wavelet preview`, `wavelet transcribe`, `wavelet render`.
+## What ships
 
-- **`hyperframes/`** (`@work.books/wavelet-hyperframes`) — Vendored HyperFrames authoring docs + a tiny scene-side helper (`onReady`, canvas constants) for scripts inside `<gm-scene>`.
+- **`runtime/`** — `@work.books/wavelet-runtime`. HTML Web Components
+  that schedule and composite a video timeline. Authors write
+  `<gm-doc>` / `<gm-timeline>` / `<gm-track>` / `<gm-clip>` /
+  `<gm-scene>` / `<gm-audio>` / `<gm-shader>` / `<gm-adjustment>` /
+  `<gm-include>`. Animation lives inside `<gm-scene>` via regular
+  HTML/CSS/JS — GSAP, vanilla, whatever the agent picks.
+- **`cli/`** — `@work.books/wavelet-cli`, binary `wavelet`. Imperative
+  edits the agent can run without rewriting the composition HTML:
+  `wavelet trim`, `split`, `cut`, `concat`, `move`, `inspect`, `lint`,
+  `verify`, `preview`, `transcribe`, `render`.
+- **`hyperframes/`** — `@work.books/wavelet-hyperframes`. Authoring
+  docs + a tiny scene-side helper (`onReady`, canvas constants) for
+  scripts inside `<gm-scene>`.
 
-## Why a new package
+## Design principles
 
-The previous CW XML format (vendored at `packages/workbooks/packages/cw-xml/`) baked in enum-driven templates that substituted behavior for missing fields — `intent="reveal"` selected a tween recipe, `kind="fade"` selected a transition, `mode="word-highlight"` selected a caption renderer. The agent thought it specified motion; the runtime invented it. Every "reveal" looked the same. The format had no honest server-side counterpart.
-
-wavelet is the rebuild. No recipes. No enums. No fallbacks. The XML carries schedule + composition; the HTML scene carries animation. Guardrails come from a linter (structural checks) and a render-query verifier (RVST-style; loads the comp in a headless browser and reports what's actually visible). Every required attribute is required — missing fields are errors, never substituted defaults.
+- **No recipes, no enums, no fallbacks.** Every required attribute is
+  required — missing fields are errors, never substituted defaults.
+  The XML carries schedule and composition; the HTML scene carries
+  animation. An agent that thinks it specified motion actually did,
+  because nothing was invented behind its back.
+- **Guardrails come from observation, not constraint.** A linter does
+  structural checks. A render-query verifier loads the comp in a
+  headless browser and reports what's actually visible — so the agent
+  can self-correct against ground truth.
+- **The composition is the source.** No build step turns the HTML
+  into a different IR. What you write is what the runtime sees.
 
 ## Format at a glance
 
@@ -62,28 +91,29 @@ wavelet is the rebuild. No recipes. No enums. No fallbacks. The XML carries sche
 </html>
 ```
 
-See the [plan file](/Users/shinyobjectz/.claude/plans/composed-fluttering-lovelace.md) for the full architecture and phase plan.
+## Componentized assets — clip-refs
 
-## Componentized assets: clip-refs
-
-Every generated asset (shot, still, music, dialogue, screenplay scene) is paired with a `.clip.html` file under `<workdir>/refs/<kind>/`. The file carries YAML front matter with lineage metadata and an HTML body that previews the asset in any browser. The compose pre-pass substitutes `<wavelet-clip src="…">` elements with the asset element implied by the clip-ref's `kind` before Blitz sees the DOM.
-
-Filesystem layout:
+Every generated asset (shot, still, music, dialogue, screenplay scene)
+is paired with a `.clip.html` file under `<workdir>/refs/<kind>/`.
+The file carries YAML front matter with lineage metadata and an HTML
+body that previews the asset in any browser. The compose pre-pass
+substitutes `<wavelet-clip src="…">` with the asset element implied
+by the clip-ref's `kind` before the renderer sees the DOM.
 
 ```
 <workdir>/
   refs/
-    shot/             — generated video clips
-    still/            — generated images
-    scene-still/      — scene-scoped stills
-    music/            — generated music
-    tts/              — text-to-speech audio
-    caption/          — caption tracks
-    screenplay-scene/ — one per scene of the source fountain
-    overlay/          — hand-authored HTML/CSS overlays
+    shot/             generated video clips
+    still/            generated images
+    scene-still/      scene-scoped stills
+    music/            generated music
+    tts/              text-to-speech audio
+    caption/          caption tracks
+    screenplay-scene/ one per scene of the source fountain
+    overlay/          hand-authored HTML/CSS overlays
 ```
 
-Schema (one example):
+Example:
 
 ```yaml
 ---
@@ -103,6 +133,11 @@ tags: ["hero"]
 <video controls src="../../cache/google/abc123.mp4"></video>
 ```
 
-Edit chains are represented via `parent` + `edit-kind` (`refine-face`, `upscale`, `nano-banana-edit`, `regenerate`, `manual`). Hand-authored clip-refs are syntactically indistinguishable from procedurally-generated ones — the agent doesn't need to know which is which.
+Edit chains are represented via `parent` + `edit-kind` (`refine-face`,
+`upscale`, `nano-banana-edit`, `regenerate`, `manual`). Hand-authored
+clip-refs are syntactically indistinguishable from procedurally
+generated ones — the agent doesn't need to know which is which.
 
-Inspect with `wavelet clip ls`, `wavelet clip show <short-id>`, `wavelet clip lineage <short-id>`. Backfill an existing workdir with `wavelet clip import`.
+Inspect with `wavelet clip ls`, `wavelet clip show <short-id>`,
+`wavelet clip lineage <short-id>`. Backfill an existing workdir with
+`wavelet clip import`.
