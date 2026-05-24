@@ -30,10 +30,14 @@
 
 pub mod agent;
 pub mod aspect;
+/// Depth estimation for background/foreground discrimination.
+/// Gated behind the `depth` Cargo feature.
+pub mod depth;
 pub mod audio;
 pub mod backends;
 #[path = "c2pa/mod.rs"]
 pub mod c2pa_credentials;
+pub mod clip;
 pub mod clipref;
 pub mod compose;
 pub mod config;
@@ -47,12 +51,16 @@ pub mod handlers;
 pub mod image_analysis;
 /// `wavelet lint` rules + report types.
 pub mod lint;
+/// ONNX-based OCR engine. Requires `--features ocr` to activate inference;
+/// compiles to a no-op stub when the feature is absent.
+pub mod ocr;
 pub mod inline_video;
 pub mod pipelines;
 pub mod prompts;
 pub mod query;
 pub mod render;
 pub mod render_offline;
+pub mod screenplay;
 pub mod shader;
 pub mod storyboard;
 pub mod variants;

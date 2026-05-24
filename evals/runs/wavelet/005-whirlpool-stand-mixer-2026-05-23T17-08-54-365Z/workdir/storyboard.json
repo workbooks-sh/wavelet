@@ -1,0 +1,313 @@
+{
+  "version": 1,
+  "duration_secs": 24.383615,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "INT. KITCHEN COUNTER - MORNING",
+      "first_shot": 0,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 1,
+      "slugline": "INT. KITCHEN COUNTER - MORNING",
+      "first_shot": 2,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 2,
+      "slugline": "INT. KITCHEN COUNTER - MORNING",
+      "first_shot": 4,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 3,
+      "slugline": "INT. KITCHEN COUNTER - MORNING",
+      "first_shot": 6,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 4,
+      "slugline": "INT. KITCHEN COUNTER - MORNING",
+      "first_shot": 8,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 5,
+      "slugline": "INT. KITCHEN OVEN - MORNING",
+      "first_shot": 10,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 6,
+      "slugline": "INT. KITCHEN COUNTER - MORNING",
+      "first_shot": 12,
+      "shot_count": 2
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-0-est",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 0,
+      "start_secs": 0.0,
+      "duration_secs": 1.5,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN COUNTER",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN COUNTER",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-1-0",
+      "shot_index": 1,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 1.5,
+      "duration_secs": 1.553398,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Soft dough drops into the",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Soft dough drops into the",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-1-est",
+      "shot_index": 2,
+      "scene_index": 1,
+      "screenplay_element_index": 3,
+      "start_secs": 3.0533981,
+      "duration_secs": 1.6356238,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN COUNTER",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN COUNTER",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-1-act-4-0",
+      "shot_index": 3,
+      "scene_index": 1,
+      "screenplay_element_index": 4,
+      "start_secs": 4.689022,
+      "duration_secs": 1.7321656,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "hand pulls the chrome lever",
+      "generation": {
+        "kind": "stock_search",
+        "query": "hand pulls the chrome lever",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-2-est",
+      "shot_index": 4,
+      "scene_index": 2,
+      "screenplay_element_index": 6,
+      "start_secs": 6.4211874,
+      "duration_secs": 1.8476596,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN COUNTER",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN COUNTER",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-2-act-7-0",
+      "shot_index": 5,
+      "scene_index": 2,
+      "screenplay_element_index": 7,
+      "start_secs": 8.2688465,
+      "duration_secs": 1.98913,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Macro: the spiral dough hook",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Macro: the spiral dough hook",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-3-est",
+      "shot_index": 6,
+      "scene_index": 3,
+      "screenplay_element_index": 9,
+      "start_secs": 10.257977,
+      "duration_secs": 1.6373461,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN COUNTER",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN COUNTER",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-3-act-10-0",
+      "shot_index": 7,
+      "scene_index": 3,
+      "screenplay_element_index": 10,
+      "start_secs": 11.895323,
+      "duration_secs": 1.7053814,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Wide reveal: the empire-red Artisan",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Wide reveal: the empire-red Artisan",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-4-est",
+      "shot_index": 8,
+      "scene_index": 4,
+      "screenplay_element_index": 12,
+      "start_secs": 13.600704,
+      "duration_secs": 1.7825267,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN COUNTER",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN COUNTER",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-4-act-13-0",
+      "shot_index": 9,
+      "scene_index": 4,
+      "screenplay_element_index": 13,
+      "start_secs": 15.383231,
+      "duration_secs": 1.8709924,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Hands shape proofed dough flour-dusted",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Hands shape proofed dough flour-dusted",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-5-est",
+      "shot_index": 10,
+      "scene_index": 5,
+      "screenplay_element_index": 15,
+      "start_secs": 17.254223,
+      "duration_secs": 1.9738132,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN OVEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN OVEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-5-act-16-0",
+      "shot_index": 11,
+      "scene_index": 5,
+      "screenplay_element_index": 16,
+      "start_secs": 19.228037,
+      "duration_secs": 1.6301109,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "finished crusty loaf pulled from",
+      "generation": {
+        "kind": "stock_search",
+        "query": "finished crusty loaf pulled from",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-6-est",
+      "shot_index": 12,
+      "scene_index": 6,
+      "screenplay_element_index": 18,
+      "start_secs": 20.858149,
+      "duration_secs": 1.7138258,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN COUNTER",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN COUNTER",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-6-act-19-0",
+      "shot_index": 13,
+      "scene_index": 6,
+      "screenplay_element_index": 19,
+      "start_secs": 22.571974,
+      "duration_secs": 1.811641,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "clean white card with the",
+      "generation": {
+        "kind": "stock_search",
+        "query": "clean white card with the",
+        "orientation": "landscape"
+      }
+    }
+  ]
+}

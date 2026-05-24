@@ -87,7 +87,7 @@ turns:
           ## 2. tool_discovery
 
           - Pass-if (2-3): `transcript.log` shows the agent ran
-            `wavelet --help` AND `adalign --help` BEFORE the first
+            `wavelet --help` AND `brandwork --help` BEFORE the first
             paid backend call. Agent also inspected
             `wavelet pipelines show commercial` (or equivalent) to
             understand the stage shape.
@@ -217,7 +217,7 @@ turns:
 Maximally-adversarial commercial eval. The agent receives one
 paragraph of natural language — no brief.md, no SKILL.md, no
 pipeline.yaml, no skills pre-loaded. Just the user prompt and the
-`wavelet` + `adalign` CLIs on PATH.
+`wavelet` + `brandwork` CLIs on PATH.
 
 Modern Gents is a deliberately-chosen **niche DTC brand** the model
 will not have strong priors about — moderngents.com sells men's
@@ -226,7 +226,7 @@ specifically tests against:
 
 - agent invents a generic "Modern Gents" product line (shaving /
   cologne / suiting) that has nothing to do with the real catalog
-- agent skips `adalign brand.brief` entirely and works from training-
+- agent skips `brandwork brand.brief` entirely and works from training-
   data hallucinations
 - agent leans into "masculine" with the cheesy register the prompt
   explicitly warned against (chrome fonts, blood, flame effects)

@@ -35,6 +35,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use ulid::Ulid;
 
+pub mod character;
 mod path;
 pub mod screenplay;
 mod types;

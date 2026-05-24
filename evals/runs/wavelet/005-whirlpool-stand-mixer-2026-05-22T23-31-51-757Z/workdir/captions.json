@@ -1,0 +1,8 @@
+{
+  "format": "word-level",
+  "captions": [
+    {"text": "Slow. By design.", "start": 3.0, "end": 4.7, "style": "whisper-italic"},
+    {"text": "Built to outlast the kitchen it lives in.", "start": 8.0, "end": 10.0, "style": "headline"},
+    {"text": "Whirlpool — the iconic stand mixer.", "start": 10.0, "end": 12.0, "style": "wordmark"}
+  ]
+}

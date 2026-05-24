@@ -265,7 +265,7 @@ Once upon a time.
 
     #[test]
     fn anchors_are_monotonic_in_time() {
-        let src = include_str!("../../../fountain/tests/fixtures/big_fish_excerpt.fountain");
+        let src = include_str!("../../crates/fountain/tests/fixtures/big_fish_excerpt.fountain");
         let s = parse(src).unwrap();
         let v = propose_from_screenplay(&s);
         for w in v.anchors.windows(2) {

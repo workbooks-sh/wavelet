@@ -17,7 +17,9 @@ pub mod plan;
 pub mod verify;
 
 pub use attributes::{ShotAttributes, ValidationError};
-pub use plan::{plan_from_screenplay, plan_from_screenplay_with_onsets};
+pub use plan::{
+    plan_from_screenplay, plan_from_screenplay_full, plan_from_screenplay_with_onsets,
+};
 pub use verify::{verify_storyboard, StoryboardFinding, StoryboardLevel};
 
 /// Top-level storyboard. Holds refs to upstream artifacts (screenplay,
@@ -153,6 +155,22 @@ pub struct Shot {
     /// JSON keeps working unchanged.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attributes: Option<ShotAttributes>,
+    /// Canonical character name (matches `fountain::CharacterEntry::canonical`)
+    /// keyed into this shot. Set by the storyboard planner when a Dialogue
+    /// scene's CHARACTER cue matches a defined character ref under
+    /// `<workdir>/refs/character/`. The shot dispatcher routes shots with
+    /// `character_ref = Some(_)` through `fal-veo3-ref` instead of plain
+    /// txt2vid / stock-search. Authored by `wavelet character define`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub character_ref: Option<String>,
+    /// Which `CharacterType` bundle the planner selected for this shot
+    /// (wb-jwnk). Lets the verifier check whether an ECU-hands cutaway
+    /// actually got a hands-type ref instead of falling back to the
+    /// full-body bundle (which would leak face features into the
+    /// conditioning signal). Always `None` for shots that aren't
+    /// reference-conditioned.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub character_ref_type: Option<crate::clipref::character::CharacterType>,
 }
 
 /// Shot-type vocabulary. Matches industry convention.
@@ -281,6 +299,28 @@ pub enum Generation {
     Native {
         /// Path to the scene's HTML file.
         html: String,
+    },
+    /// Reference-image-conditioned generation (Fal Veo 3.1 ref). The
+    /// planner emits this variant when a Dialogue scene's CHARACTER cue
+    /// matches a loaded `CharacterRef`. `character_ref` is the canonical
+    /// name keyed back into the loaded refs map; the shot dispatcher
+    /// resolves it to the actual reference image list at execution time.
+    RefConditioned {
+        /// Canonical character name — key into the `CharacterRef` map.
+        character_ref: String,
+        /// Generation prompt. Same shape as `Txt2Vid::prompt` so the
+        /// dispatcher can hand it straight to the Fal Veo 3.1 ref
+        /// adapter alongside the resolved reference images.
+        prompt: String,
+        /// Backend identifier. Defaults to `fal-veo3-ref` (Standard
+        /// tier). Set to `fal-veo3-ref-fast` for the cheap tier.
+        backend: String,
+        /// Random seed.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        seed: Option<u64>,
+        /// Resolved output path after gen runs.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        resolved_path: Option<String>,
     },
 }
 
@@ -414,6 +454,8 @@ mod tests {
                 ],
                 prev_shot_id: None,
                 attributes: None,
+                character_ref: None,
+                character_ref_type: None,
             }],
         };
 
@@ -551,9 +593,44 @@ mod tests {
                 resolved_path: None,
             },
             Generation::Native { html: "scene.html".into() },
+            Generation::RefConditioned {
+                character_ref: "ALEX".into(),
+                prompt: "alex sips coffee".into(),
+                backend: "fal-veo3-ref".into(),
+                seed: None,
+                resolved_path: None,
+            },
         ] {
             let json = serde_json::to_string(&g).unwrap();
             let _: Generation = serde_json::from_str(&json).unwrap();
         }
+    }
+
+    #[test]
+    fn character_ref_round_trips_on_shot() {
+        let body = r#"{
+            "id": "shot-0-dlg",
+            "shot_index": 0,
+            "scene_index": 0,
+            "screenplay_element_index": 1,
+            "start_secs": 0.0,
+            "duration_secs": 3.0,
+            "shot_type": "cu",
+            "camera_movement": "static",
+            "camera_side": "left",
+            "subject": "DANA",
+            "generation": {"kind": "ref_conditioned", "character_ref": "DANA", "prompt": "dana smiles", "backend": "fal-veo3-ref"},
+            "character_ref": "DANA"
+        }"#;
+        let shot: Shot = serde_json::from_str(body).unwrap();
+        assert_eq!(shot.character_ref.as_deref(), Some("DANA"));
+        match &shot.generation {
+            Generation::RefConditioned { character_ref, .. } => {
+                assert_eq!(character_ref, "DANA");
+            }
+            _ => panic!("expected RefConditioned"),
+        }
+        let json = serde_json::to_string(&shot).unwrap();
+        assert!(json.contains("\"character_ref\":\"DANA\""));
     }
 }

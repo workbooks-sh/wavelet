@@ -29,7 +29,9 @@ pub fn run_shot(op: ShotOp) -> ExitCode {
             cache,
             out,
             pretty,
-        } => run_shot_txt2vid(prompt, backend, duration, aspect, negative, no_default_negatives, seed, variants, select, max_variants_cost, dry_run, max_cost, cache, out, pretty),
+            no_trim_static,
+            references,
+        } => run_shot_txt2vid(prompt, backend, duration, aspect, negative, no_default_negatives, seed, variants, select, max_variants_cost, dry_run, max_cost, cache, out, pretty, no_trim_static, references),
         ShotOp::Still {
             prompt,
             backend,

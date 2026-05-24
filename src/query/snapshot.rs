@@ -13,6 +13,7 @@
 //!     today — wb-b53k — so we compute the "spec-correct" cumulative
 //!     transform here for queries that want to compare against painter output)
 
+use crate::query::glyph_run::GlyphRunData;
 use crate::render::load_html_with_base;
 use crate::render_offline::{Composition, SceneSpec};
 use blitz_dom::{BaseDocument, Node};
@@ -55,6 +56,17 @@ impl Rect {
             && self.y < other.y + other.h
             && other.y < self.y + self.h
     }
+}
+
+/// Resolved flex main axis. `RowReverse` collapses to `Row` and
+/// `ColumnReverse` to `Column` — for layout-axis coherence lints we
+/// only care which axis the author chose, not the visual ordering.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum FlexAxis {
+    /// `flex-direction: row | row-reverse` — children laid out along X.
+    Row,
+    /// `flex-direction: column | column-reverse` — children laid out along Y.
+    Column,
 }
 
 /// Why an element is or isn't visible at the queried time. Structured so an
@@ -123,25 +135,51 @@ pub struct NodeSnapshot {
     pub classes: Vec<String>,
     /// Layout-space bbox in document coordinates. Pre-CSS-transform.
     pub bbox: Rect,
-    /// True when this element has a non-identity CSS transform set
-    /// (via `transform`, `translate`, `rotate`, or `scale`). Used by
-    /// `transform_inherits` to detect the wb-b53k bug pattern without
-    /// needing access to Servo's `style` crate (Stylo isn't on crates.io).
-    pub has_own_transform: bool,
+    /// Resolved 2D affine for this element's own CSS transform, in
+    /// kurbo-style column-major coefficient order [a, b, c, d, tx, ty]
+    /// (augmented matrix [[a,c,tx],[b,d,ty],[0,0,1]]). None = identity.
+    /// `transform-origin` is already baked in by Blitz/Stylo's resolver,
+    /// matching what the painter applies — to apply at a query site,
+    /// translate the point to be relative to the element's bbox origin,
+    /// multiply, then translate back.
+    pub transform: Option<[f32; 6]>,
     /// True when this node's computed style clips its descendants —
     /// `overflow-x|y: hidden|clip`, OR `clip-path` set to anything other
     /// than `none`, OR a non-`none` `mask-image`. Consumers (e.g. the
     /// `glyph-clip` lint rule) treat this as "this node's bbox is a
     /// clip rectangle for everything beneath it."
     pub clips_overflow: bool,
+    /// Declared layout axis for this node, if it is a flex container.
+    /// `Some(Column)` for `display: flex; flex-direction: column` (and
+    /// `column-reverse`); `Some(Row)` for `row` / `row-reverse`. `None`
+    /// when the element is not a flex container, so layout-axis lints
+    /// can skip non-flex nodes cheaply. Captured here (rather than via
+    /// computed-style queries inside the rule) because Stylo state
+    /// isn't carried in `FrameSnapshot` — only this resolved summary.
+    #[serde(default)]
+    pub flex_axis: Option<FlexAxis>,
     /// Computed `opacity` rolled up through ancestors.
     pub computed_opacity: f32,
+    /// Computed font-size in CSS px (= device px at 1.0 DPR, which our
+    /// render path uses). 0.0 when the element has no font-size cascade
+    /// (root inheritor, etc.); skip in lint.
+    pub computed_font_size_px: f32,
     /// Concatenated text content of any direct text children, trimmed.
     pub text: Option<String>,
     /// Child node ids — see `FrameSnapshot.nodes_by_id` to resolve.
     pub children: Vec<usize>,
     /// Parent node id, if any (root has none).
     pub parent: Option<usize>,
+    /// Per-element shaped-glyph ink data, captured from Parley's
+    /// inline-layout output. `None` when the element has no
+    /// `inline_layout_data` (non-inline-root, or text routed through a
+    /// non-Parley path). Coordinates are element-local (relative to
+    /// the element's content-box origin, which the lint rule treats as
+    /// the bbox origin). Skipped from serde because the data is bulky,
+    /// embedded-rendered, and only used by in-process consumers
+    /// (`glyph-clip` lint).
+    #[serde(skip)]
+    pub glyph_run: Option<GlyphRunData>,
 }
 
 /// The whole scene graph captured at one frame of one composition.
@@ -290,12 +328,12 @@ fn capture_scene(
     out
 }
 
-/// Depth-first walk; captures the layout-space bbox, cumulative opacity, and
-/// stable `semantic_id` for every element. CSS transform composition is
-/// represented by `has_own_transform` (a boolean per node) rather than a
-/// cumulative matrix — Servo's `style` crate isn't on crates.io so we can't
-/// call `resolve_2d_transform` directly. The boolean is enough for Phase 1's
-/// transform-propagation check.
+/// Depth-first walk; captures the layout-space bbox, cumulative opacity,
+/// per-node CSS transform matrix, and stable `semantic_id` for every
+/// element. The transform is the element's own resolved 2D affine
+/// (matching `blitz_dom::resolve_2d_transform` — the function the
+/// painter uses); callers that need cumulative ancestor-chain
+/// composition do it at the query site.
 fn walk_node(
     doc: &BaseDocument,
     node_id: usize,
@@ -324,8 +362,10 @@ fn walk_node(
         h: layout.size.height,
     };
 
-    let has_own_transform = node_has_transform(node);
+    let transform = node_transform(node);
     let clips_overflow = node_clips_overflow(node);
+    let computed_font_size_px = node_computed_font_size_px(node);
+    let flex_axis = node_flex_axis(node);
 
     let own_opacity = node
         .primary_styles()
@@ -341,6 +381,11 @@ fn walk_node(
         .unwrap_or_default();
 
     let text = collect_direct_text(doc, node);
+
+    let glyph_run = element_data
+        .inline_layout_data
+        .as_ref()
+        .and_then(|tl| GlyphRunData::from_layout(&tl.layout));
 
     let semantic_id = compute_semantic_id(parent_semantic, &tag, element_id.as_deref(), &classes);
 
@@ -360,12 +405,15 @@ fn walk_node(
         element_id,
         classes,
         bbox,
-        has_own_transform,
+        transform,
         clips_overflow,
         computed_opacity,
+        computed_font_size_px,
         text,
         children: child_ids.clone(),
         parent,
+        glyph_run,
+        flex_axis,
     });
 
     for c in child_ids {
@@ -387,34 +435,36 @@ fn absolute_position(doc: &BaseDocument, node_id: usize) -> (f32, f32) {
     (x, y)
 }
 
-/// True when this node has a non-default `transform`, `translate`, `rotate`,
-/// or `scale` set. We probe the computed style without computing the actual
-/// affine — that would require Servo's `style` crate which isn't on
-/// crates.io. The boolean is sufficient for Phase 1's wb-b53k detection.
-fn node_has_transform(node: &Node) -> bool {
-    let Some(styles) = node.primary_styles() else {
-        return false;
-    };
-    let box_ = styles.get_box();
-    // The shorthand `transform` is a `Transform(Vec<TransformOperation>)`.
-    if !box_.transform.0.is_empty() {
-        return true;
-    }
-    // Individual properties via stringly-typed Debug — opaque to us without
-    // the `style` crate, but the `None` variant has a stable Debug repr.
-    let translate_str = format!("{:?}", box_.translate);
-    if !translate_str.contains("None") {
-        return true;
-    }
-    let rotate_str = format!("{:?}", box_.rotate);
-    if !rotate_str.contains("None") {
-        return true;
-    }
-    let scale_str = format!("{:?}", box_.scale);
-    if !scale_str.contains("None") {
-        return true;
-    }
-    false
+/// Resolved 2D affine for this node's own CSS transform, in kurbo-style
+/// column-major coefficient order `[a, b, c, d, tx, ty]`. Returns `None`
+/// when the node has no styles or the resolved transform is identity.
+/// Delegates to `blitz_dom::resolve_2d_transform` — the exact API the
+/// Blitz painter calls (vendor/blitz-paint/src/render.rs:578) — so the
+/// matrix we expose matches what the renderer paints with. The reference
+/// box uses the element's `final_layout.size` at scale 1.0 (offline
+/// render path is DPR 1.0); `transform-origin` is baked into the returned
+/// affine by the resolver.
+fn node_transform(node: &Node) -> Option<[f32; 6]> {
+    use style::values::computed::CSSPixelLength;
+    let styles = node.primary_styles()?;
+    let size = node.final_layout.size;
+    let reference_box = euclid::default::Rect::new(
+        euclid::default::Point2D::new(CSSPixelLength::new(0.0), CSSPixelLength::new(0.0)),
+        euclid::default::Size2D::new(
+            CSSPixelLength::new(size.width),
+            CSSPixelLength::new(size.height),
+        ),
+    );
+    let affine = blitz_dom::resolve_2d_transform(styles.get_box(), reference_box, 1.0)?;
+    let c = affine.as_coeffs();
+    Some([
+        c[0] as f32,
+        c[1] as f32,
+        c[2] as f32,
+        c[3] as f32,
+        c[4] as f32,
+        c[5] as f32,
+    ])
 }
 
 /// True when this node clips its descendants — `overflow-x|y: hidden`
@@ -438,17 +488,51 @@ fn node_clips_overflow(node: &Node) -> bool {
     if styles.get_svg().clip_path != ClipPath::None {
         return true;
     }
+    // Stylo prints unset mask-image as `OwnedList([none])` (lowercase)
+    // — earlier match-on-"None" logic was inverted. Be explicit: a mask
+    // clips when the Debug repr contains any concrete image variant
+    // (Url, Gradient, ImageSet, CrossFade, LightDark).
     let mask_debug = format!("{:?}", styles.get_svg().mask_image);
-    let only_none = mask_debug.matches("None").count() > 0
-        && !mask_debug.contains("Url")
-        && !mask_debug.contains("Gradient")
-        && !mask_debug.contains("ImageSet")
-        && !mask_debug.contains("CrossFade")
-        && !mask_debug.contains("LightDark");
-    if !only_none {
+    if mask_debug.contains("Url")
+        || mask_debug.contains("Gradient")
+        || mask_debug.contains("ImageSet")
+        || mask_debug.contains("CrossFade")
+        || mask_debug.contains("LightDark")
+    {
         return true;
     }
     false
+}
+
+/// Resolved flex axis for `node`. `Some(Row | Column)` when the node's
+/// computed `display` is a flex container (`flex` / `inline-flex`),
+/// reflecting `flex-direction` (with reverse collapsed onto the base
+/// axis). `None` for any non-flex display (including grid, block, etc.)
+/// — those don't carry a single dominant child-flow axis we can
+/// validate against in the `layout-axis-coherence` lint.
+fn node_flex_axis(node: &Node) -> Option<FlexAxis> {
+    use style::properties::longhands::flex_direction::computed_value::T as FlexDirection;
+    use style::values::specified::box_::DisplayInside;
+    let styles = node.primary_styles()?;
+    let display = styles.get_box().clone_display();
+    if !matches!(display.inside(), DisplayInside::Flex) {
+        return None;
+    }
+    let dir = styles.clone_flex_direction();
+    Some(match dir {
+        FlexDirection::Row | FlexDirection::RowReverse => FlexAxis::Row,
+        FlexDirection::Column | FlexDirection::ColumnReverse => FlexAxis::Column,
+    })
+}
+
+/// Computed font-size in CSS px. Returns 0.0 when the element has no
+/// primary styles (no cascade ran). At 1.0 DPR — which the offline
+/// render path uses — CSS px equals device px.
+fn node_computed_font_size_px(node: &Node) -> f32 {
+    let Some(styles) = node.primary_styles() else {
+        return 0.0;
+    };
+    styles.get_font().clone_font_size().computed_size().px()
 }
 
 /// Collect the trimmed concatenation of any direct text-node children.

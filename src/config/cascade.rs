@@ -110,8 +110,16 @@ static PROCESS_CONFIG: LazyLock<ResolvedConfig> = LazyLock::new(|| {
     load_from(&cwd, dirs_home())
 });
 
+// wb-uory.12: `WAVELET_HOME` overrides `HOME` for config-cascade resolution
+// only. Lets eval runners isolate wavelet config (and any future
+// home-relative state wavelet itself writes) per-run without touching
+// global HOME — which is load-bearing for agent-CLI auth (claude reads
+// ~/.claude.json, codex reads ~/.codex/, etc.). The earlier HOME-sandbox
+// approach broke those CLIs; this surgical override does not.
 fn dirs_home() -> Option<PathBuf> {
-    std::env::var_os("HOME").map(PathBuf::from)
+    std::env::var_os("WAVELET_HOME")
+        .or_else(|| std::env::var_os("HOME"))
+        .map(PathBuf::from)
 }
 
 /// Build a `ResolvedConfig` by walking from `workdir` upward for
@@ -336,6 +344,87 @@ mod tests {
             None => resolve_backend_from(BackendKind::Video, &cfg),
         };
         assert_eq!(chosen, "fal-wan-t2v");
+    }
+
+    // wb-uory.12 — WAVELET_HOME overrides HOME for cascade resolution.
+    // Test serializes on its own env vars by setting + unsetting in the
+    // same body; pair with #[serial] if more env-touching tests land.
+    #[test]
+    fn wavelet_home_overrides_home_in_dirs_home() {
+        let real_home = tempdir().unwrap();
+        let wavelet_home = tempdir().unwrap();
+
+        // Write a config under WAVELET_HOME that should win.
+        fs::create_dir_all(wavelet_home.path().join(".wavelet")).unwrap();
+        fs::write(
+            wavelet_home.path().join(".wavelet").join("config.toml"),
+            "[defaults]\nvideo_backend = \"from-wavelet-home\"\n",
+        )
+        .unwrap();
+
+        // And one under real HOME that must NOT be picked up.
+        fs::create_dir_all(real_home.path().join(".wavelet")).unwrap();
+        fs::write(
+            real_home.path().join(".wavelet").join("config.toml"),
+            "[defaults]\nvideo_backend = \"from-real-home\"\n",
+        )
+        .unwrap();
+
+        let prev_home = std::env::var_os("HOME");
+        let prev_wavelet_home = std::env::var_os("WAVELET_HOME");
+
+        // SAFETY: tests in this module aren't run in parallel with anything
+        // else that mutates these env vars; toggling here is acceptable.
+        unsafe {
+            std::env::set_var("HOME", real_home.path());
+            std::env::set_var("WAVELET_HOME", wavelet_home.path());
+        }
+
+        let h = dirs_home();
+        assert_eq!(h.as_deref(), Some(wavelet_home.path()));
+
+        let cfg = load_from(tempdir().unwrap().path(), h);
+        assert_eq!(
+            resolve_backend_from(BackendKind::Video, &cfg),
+            "from-wavelet-home"
+        );
+
+        // Restore env so subsequent tests aren't polluted.
+        unsafe {
+            match prev_home {
+                Some(v) => std::env::set_var("HOME", v),
+                None => std::env::remove_var("HOME"),
+            }
+            match prev_wavelet_home {
+                Some(v) => std::env::set_var("WAVELET_HOME", v),
+                None => std::env::remove_var("WAVELET_HOME"),
+            }
+        }
+    }
+
+    #[test]
+    fn dirs_home_falls_back_to_home_when_wavelet_home_unset() {
+        let real_home = tempdir().unwrap();
+
+        let prev_home = std::env::var_os("HOME");
+        let prev_wavelet_home = std::env::var_os("WAVELET_HOME");
+
+        unsafe {
+            std::env::set_var("HOME", real_home.path());
+            std::env::remove_var("WAVELET_HOME");
+        }
+
+        assert_eq!(dirs_home().as_deref(), Some(real_home.path()));
+
+        unsafe {
+            match prev_home {
+                Some(v) => std::env::set_var("HOME", v),
+                None => std::env::remove_var("HOME"),
+            }
+            if let Some(v) = prev_wavelet_home {
+                std::env::set_var("WAVELET_HOME", v);
+            }
+        }
     }
 
     #[test]

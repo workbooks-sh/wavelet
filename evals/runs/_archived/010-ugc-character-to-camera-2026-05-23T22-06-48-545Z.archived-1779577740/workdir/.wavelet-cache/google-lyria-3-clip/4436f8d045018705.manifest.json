@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "provider": "google-lyria-3-clip",
+  "cluster": "music_ref_conditioned",
+  "request_hash": "4436f8d045018705",
+  "request": {
+    "prompt": "soft ambient room tone, gentle airy pad, very minimal, low energy, no drums, no melody, just warm air and a hint of synth, intimate bedroom feel",
+    "duration_secs": 18.0
+  },
+  "response": {
+    "provider": "google-lyria-3-clip",
+    "audio_path": ".wavelet-cache/google-lyria-3-clip/4436f8d045018705.mp3",
+    "audio_bytes": 715770,
+    "mime": "audio/mpeg",
+    "model_variant": "lyria-3-clip-preview",
+    "prompt_sent": "18 second soft ambient room tone, gentle airy pad, very minimal, low energy, no drums, no melody, just warm air and a hint of synth, intimate bedroom feel",
+    "duration_secs": 18.0
+  },
+  "cost_estimate_usd": 0.0072,
+  "asset_path": ".wavelet-cache/google-lyria-3-clip/4436f8d045018705.mp3",
+  "created_at": "2026-05-23T22:18:49Z"
+}

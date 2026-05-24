@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "provider": "google-veo-3.1-fast",
+  "cluster": "video_txt2vid",
+  "request_hash": "a42e4b3789c3d749",
+  "request": {
+    "prompt": "A graphite matte stand mixer with a polished stainless mixing bowl sits centered on a white marble countertop in a luxury kitchen at dawn. Cool blue light pours through tall windows from the right, catching a faint warm rim on the mixer's curved body. Slow gentle dolly push-in, low static angle. Vertical 9:16 framing. 35mm cinematic, soft directional light, dust motes drifting in the beam, deep velvet shadows. A24-flavored color grade, restrained, hushed, reverent. No text, no logos.",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16",
+    "seed": 42
+  },
+  "response": {
+    "provider": "google-veo-3.1-fast",
+    "video_path": ".wavelet-cache/google-veo-3.1-fast/a42e4b3789c3d749.mp4",
+    "video_bytes": 698546,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "A graphite matte stand mixer with a polished stainless mixing bowl sits centered on a white marble countertop in a luxury kitchen at dawn. Cool blue light pours through tall windows from the right, catching a faint warm rim on the mixer's curved body. Slow gentle dolly push-in, low static angle. Vertical 9:16 framing. 35mm cinematic, soft directional light, dust motes drifting in the beam, deep velvet shadows. A24-flavored color grade, restrained, hushed, reverent. No text, no logos.",
+    "seed_used": 42
+  },
+  "cost_estimate_usd": 1.0,
+  "asset_path": ".wavelet-cache/google-veo-3.1-fast/a42e4b3789c3d749.mp4",
+  "created_at": "2026-05-22T18:49:56Z"
+}

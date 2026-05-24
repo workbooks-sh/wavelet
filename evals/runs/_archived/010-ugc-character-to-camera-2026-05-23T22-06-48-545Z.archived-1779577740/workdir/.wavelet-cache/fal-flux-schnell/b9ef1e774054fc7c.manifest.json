@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "provider": "fal-flux-schnell",
+  "cluster": "image_txt2img",
+  "request_hash": "b9ef1e774054fc7c",
+  "request": {
+    "prompt": "portrait of a 28 year old woman with light olive skin, freckles scattered across her cheekbones and nose, glossy collarbone-length brunette hair tucked behind one ear, soft natural eye makeup, wearing a cream ribbed cotton tank top, standing in a sunlit bathroom by a frosted window, soft warm morning light from camera-left, friendly half-smile, looking straight at the camera, vertical iPhone selfie composition, head and shoulders framing, sharp focus on her eyes, slightly overexposed highlights, Apple HDR camera-native color, 9:16 portrait",
+    "image_size": "portrait_4_3",
+    "seed": 7711
+  },
+  "response": {
+    "provider": "fal-flux-schnell",
+    "image_path": ".wavelet-cache/fal-flux-schnell/b9ef1e774054fc7c.jpg",
+    "image_bytes": 199492,
+    "width": 768,
+    "height": 1024,
+    "mime": "image/jpeg"
+  },
+  "cost_estimate_usd": 0.005,
+  "asset_path": ".wavelet-cache/fal-flux-schnell/b9ef1e774054fc7c.jpg",
+  "created_at": "2026-05-23T22:09:45Z"
+}

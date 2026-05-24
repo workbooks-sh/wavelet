@@ -1,0 +1,20 @@
+<!doctype html>
+<html><head><style>
+  html, body { margin: 0; padding: 0; background: transparent; width: 100%; height: 100%; overflow: hidden; }
+
+  .vignette {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 90% at 50% 55%, transparent 0%, transparent 45%, rgba(20, 12, 6, 0.28) 75%, rgba(15, 9, 4, 0.55) 100%);
+    opacity: 0;
+    animation: vignette-in 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+  }
+
+  @keyframes vignette-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+</style></head>
+<body>
+  <div class="vignette"></div>
+</body></html>

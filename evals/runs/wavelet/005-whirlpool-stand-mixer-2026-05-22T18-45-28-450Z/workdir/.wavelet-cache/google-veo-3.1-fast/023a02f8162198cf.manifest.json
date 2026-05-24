@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "google-veo-3.1-fast",
+  "cluster": "video_txt2vid",
+  "request_hash": "023a02f8162198cf",
+  "request": {
+    "prompt": "Medium close shot of a graphite stand mixer's tilt head lowering, the wire whisk descending into a polished stainless bowl half-filled with pale, soft dough. The whisk begins to rotate, drawing the dough into a slow glossy spiral. A delicate cloud of flour lifts and drifts through a shaft of late-morning window light. Shallow depth of field, 50mm macro feel, anamorphic flare on the chrome. Color grade is warm-neutral, A24-flavored, no garish saturation. Vertical 9:16.",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "google-veo-3.1-fast",
+    "video_path": ".wavelet-cache/google-veo-3.1-fast/023a02f8162198cf.mp4",
+    "video_bytes": 1020585,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "Medium close shot of a graphite stand mixer's tilt head lowering, the wire whisk descending into a polished stainless bowl half-filled with pale, soft dough. The whisk begins to rotate, drawing the dough into a slow glossy spiral. A delicate cloud of flour lifts and drifts through a shaft of late-morning window light. Shallow depth of field, 50mm macro feel, anamorphic flare on the chrome. Color grade is warm-neutral, A24-flavored, no garish saturation. Vertical 9:16."
+  },
+  "cost_estimate_usd": 1.0,
+  "asset_path": ".wavelet-cache/google-veo-3.1-fast/023a02f8162198cf.mp4",
+  "created_at": "2026-05-22T18:48:39Z"
+}

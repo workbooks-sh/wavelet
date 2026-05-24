@@ -5,7 +5,7 @@ use std::process::ExitCode;
 
 use wavelet::backends::elevenlabs::{ElevenLabsClient, ElevenLabsTtsAdapter};
 use wavelet::backends::tts::{TtsRequest, VoiceIdTtsBackend};
-use wavelet::backends::{BackendError, RunMode};
+use wavelet::backends::{exit_for_backend_error, BackendError, RunMode};
 
 use super::super::DialogueOp;
 
@@ -104,7 +104,7 @@ fn run_tts(
                         if let BackendError::MissingCredential(name) = &e {
                             eprintln!("set {name} or pass --dry-run to preview.");
                         }
-                        return ExitCode::from(2);
+                        return exit_for_backend_error(&e);
                     }
                 }
             };
@@ -123,7 +123,7 @@ fn run_tts(
                         if let BackendError::MissingCredential(name) = &e {
                             eprintln!("set {name} or pass --dry-run to preview.");
                         }
-                        return ExitCode::from(2);
+                        return exit_for_backend_error(&e);
                     }
                 }
             };
@@ -142,7 +142,7 @@ fn run_tts(
                         if let BackendError::MissingCredential(name) = &e {
                             eprintln!("set {name} or pass --dry-run to preview.");
                         }
-                        return ExitCode::from(2);
+                        return exit_for_backend_error(&e);
                     }
                 }
             };
@@ -165,7 +165,8 @@ fn run_tts(
                             outcome.response.audio_path.display(),
                             dest.display()
                         );
-                        return ExitCode::from(2);
+                        // Generic runtime I/O failure → 1, not 2.
+                        return ExitCode::from(1);
                     }
                 }
             }
@@ -190,7 +191,7 @@ fn run_tts(
         }
         Err(e) => {
             eprintln!("dialogue tts: {e}");
-            ExitCode::from(2)
+            exit_for_backend_error(&e)
         }
     }
 }
@@ -234,7 +235,7 @@ fn run_captions(
                         if let BackendError::MissingCredential(name) = &e {
                             eprintln!("set {name} or pass --dry-run to preview.");
                         }
-                        return ExitCode::from(2);
+                        return exit_for_backend_error(&e);
                     }
                 }
             };
@@ -268,7 +269,8 @@ fn run_captions(
             if let Some(path) = out.as_ref() {
                 if let Err(e) = std::fs::write(path, &text) {
                     eprintln!("write {}: {e}", path.display());
-                    return ExitCode::from(2);
+                    // Generic runtime I/O failure → 1, not 2.
+                    return ExitCode::from(1);
                 }
             } else {
                 println!("{text}");
@@ -277,7 +279,7 @@ fn run_captions(
         }
         Err(e) => {
             eprintln!("dialogue captions: {e}");
-            ExitCode::from(2)
+            exit_for_backend_error(&e)
         }
     }
 }

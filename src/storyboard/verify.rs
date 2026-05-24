@@ -9,8 +9,9 @@
 //! `expected_checks`) is intentionally separate — that pass lives
 //! downstream once the shot assets exist.
 
+use crate::clipref::character::CharacterType;
 use crate::storyboard::{
-    ActionLine, CameraSide, ExpectedCheck, ShotTransition, Storyboard,
+    ActionLine, CameraSide, ExpectedCheck, ShotTransition, ShotType, Storyboard,
 };
 use fountain::TransitionKind;
 use serde::{Deserialize, Serialize};
@@ -71,6 +72,7 @@ pub fn verify_storyboard(sb: &Storyboard) -> Vec<StoryboardFinding> {
     check_motion_continuity(sb, &mut findings);
     check_generation_manifests(sb, &mut findings);
     check_expected_check_targets(sb, &mut findings);
+    check_ecu_hand_ref_type(sb, &mut findings);
 
     findings
 }
@@ -384,6 +386,39 @@ fn check_generation_manifests(sb: &Storyboard, findings: &mut Vec<StoryboardFind
                     findings.push(err(&shot.id, "native html path is empty"));
                 }
             }
+            crate::storyboard::Generation::RefConditioned {
+                character_ref,
+                prompt,
+                backend,
+                ..
+            } => {
+                if character_ref.trim().is_empty() {
+                    findings.push(err(&shot.id, "ref-conditioned character_ref is empty"));
+                }
+                if prompt.trim().is_empty() {
+                    findings.push(err(&shot.id, "ref-conditioned prompt is empty"));
+                }
+                if backend.trim().is_empty() {
+                    findings.push(err(&shot.id, "ref-conditioned backend is empty"));
+                }
+                // The shot-level `character_ref` field should agree with the
+                // generation payload — both come from the same matched
+                // CharacterRef. Drift between them means the planner / agent
+                // edited one without the other.
+                if let Some(shot_key) = shot.character_ref.as_deref() {
+                    if shot_key != character_ref {
+                        findings.push(err(
+                            &shot.id,
+                            "ref-conditioned character_ref disagrees with shot.character_ref",
+                        ));
+                    }
+                } else {
+                    findings.push(warn(
+                        &shot.id,
+                        "ref-conditioned generation but shot.character_ref is unset",
+                    ));
+                }
+            }
         }
     }
 }
@@ -430,6 +465,34 @@ fn check_expected_check_targets(sb: &Storyboard, findings: &mut Vec<StoryboardFi
     }
 }
 
+/// Wb-jwnk verifier rule: an ECU shot with a `FullBody` character ref
+/// (or no `character_ref_type` despite a `character_ref` being set)
+/// emits a WARN — the planner fell back from a hands ref to the
+/// face/body ref because the author didn't define a hands bundle, and
+/// face features will leak into the conditioning signal. The fix is
+/// to run `wavelet character define <NAME> --type hands ...`.
+fn check_ecu_hand_ref_type(sb: &Storyboard, findings: &mut Vec<StoryboardFinding>) {
+    for shot in &sb.shots {
+        if shot.shot_type != ShotType::Ecu {
+            continue;
+        }
+        let Some(name) = shot.character_ref.as_deref() else {
+            continue;
+        };
+        match shot.character_ref_type {
+            Some(CharacterType::Hands) | Some(CharacterType::ProductHands) => {}
+            _ => {
+                findings.push(warn(
+                    &shot.id,
+                    format!(
+                        "ECU cutaway routed to {name}'s full-body ref — face features may leak into the conditioning signal; define a hands-type ref with `wavelet character define {name} --type hands ...`",
+                    ),
+                ));
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -460,6 +523,8 @@ mod tests {
             expected_checks: vec![],
             prev_shot_id: None,
             attributes: None,
+            character_ref: None,
+            character_ref_type: None,
         }
     }
 
@@ -588,6 +653,53 @@ mod tests {
         sb.scenes[0].shot_count = 2;
         let f = verify_storyboard(&sb);
         assert!(!f.iter().any(|x| x.message.contains("discontinuity")));
+    }
+
+    /// Wb-jwnk: an ECU shot with `character_ref=Some(_)` but
+    /// `character_ref_type=Some(FullBody)` should produce a WARN —
+    /// the planner fell back to face ref because no hands ref was
+    /// defined for that character. Test exercises the load-bearing
+    /// verifier signal that drives the eval-010 hand_shot_separate
+    /// dimension.
+    #[test]
+    fn ecu_with_full_body_ref_warns_face_leak() {
+        let mut sb = empty_storyboard();
+        sb.shots[0].shot_type = ShotType::Ecu;
+        sb.shots[0].character_ref = Some("DANA".into());
+        sb.shots[0].character_ref_type = Some(CharacterType::FullBody);
+        sb.shots[0].generation = Generation::RefConditioned {
+            character_ref: "DANA".into(),
+            prompt: "dana hands twist the cap".into(),
+            backend: "fal-veo3-ref".into(),
+            seed: None,
+            resolved_path: None,
+        };
+        let f = verify_storyboard(&sb);
+        let warn = f
+            .iter()
+            .find(|x| x.level == StoryboardLevel::Warning && x.message.contains("face features may leak"))
+            .unwrap_or_else(|| panic!("expected face-leak warning, got {f:?}"));
+        assert!(warn.message.contains("DANA"));
+    }
+
+    #[test]
+    fn ecu_with_hands_ref_is_clean() {
+        let mut sb = empty_storyboard();
+        sb.shots[0].shot_type = ShotType::Ecu;
+        sb.shots[0].character_ref = Some("DANA".into());
+        sb.shots[0].character_ref_type = Some(CharacterType::Hands);
+        sb.shots[0].generation = Generation::RefConditioned {
+            character_ref: "DANA".into(),
+            prompt: "dana hands twist the cap".into(),
+            backend: "fal-veo3-ref".into(),
+            seed: None,
+            resolved_path: None,
+        };
+        let f = verify_storyboard(&sb);
+        assert!(
+            !f.iter().any(|x| x.message.contains("face features may leak")),
+            "hands ref should not warn: {f:?}",
+        );
     }
 
     #[test]

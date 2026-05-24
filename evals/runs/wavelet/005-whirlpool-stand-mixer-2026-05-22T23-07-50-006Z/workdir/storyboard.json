@@ -1,0 +1,184 @@
+{
+  "version": 1,
+  "duration_secs": 13.606982,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "INT. MODERN FARMHOUSE KITCHEN - DAWN",
+      "first_shot": 0,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 1,
+      "slugline": "INT. MIXER BOWL - CONTINUOUS",
+      "first_shot": 2,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 2,
+      "slugline": "INT. KITCHEN COUNTER - CONTINUOUS",
+      "first_shot": 4,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 3,
+      "slugline": "INT. KITCHEN - GOLDEN HOUR",
+      "first_shot": 6,
+      "shot_count": 2
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-0-est",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 0,
+      "start_secs": 0.0,
+      "duration_secs": 1.5,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "MODERN FARMHOUSE KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "MODERN FARMHOUSE KITCHEN",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-1-0",
+      "shot_index": 1,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 1.5,
+      "duration_secs": 1.5377575,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Warm morning light spills across",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Warm morning light spills across",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-1-est",
+      "shot_index": 2,
+      "scene_index": 1,
+      "screenplay_element_index": 3,
+      "start_secs": 3.0377574,
+      "duration_secs": 1.5938431,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "MIXER BOWL",
+      "generation": {
+        "kind": "stock_search",
+        "query": "MIXER BOWL",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-1-act-4-0",
+      "shot_index": 3,
+      "scene_index": 1,
+      "screenplay_element_index": 4,
+      "start_secs": 4.6316004,
+      "duration_secs": 1.6564616,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Macro the spiral hook turning",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Macro the spiral hook turning",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-2-est",
+      "shot_index": 4,
+      "scene_index": 2,
+      "screenplay_element_index": 6,
+      "start_secs": 6.288062,
+      "duration_secs": 1.7269764,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN COUNTER",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN COUNTER",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-2-act-7-0",
+      "shot_index": 5,
+      "scene_index": 2,
+      "screenplay_element_index": 7,
+      "start_secs": 8.0150385,
+      "duration_secs": 1.8071822,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "baker's hands, flour-dusted, crack brown",
+      "generation": {
+        "kind": "stock_search",
+        "query": "baker's hands, flour-dusted, crack brown",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-3-est",
+      "shot_index": 6,
+      "scene_index": 3,
+      "screenplay_element_index": 9,
+      "start_secs": 9.822221,
+      "duration_secs": 1.8994974,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-3-act-10-0",
+      "shot_index": 7,
+      "scene_index": 3,
+      "screenplay_element_index": 10,
+      "start_secs": 11.721718,
+      "duration_secs": 1.8852644,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Slow pull back. The Empire",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Slow pull back. The Empire",
+        "orientation": "landscape"
+      }
+    }
+  ]
+}

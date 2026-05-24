@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+# eval-watch — stream curated telemetry from a running wavelet eval.
+#
+# Usage: eval-watch <short-name>
+#
+# Reads the workdir path from `evals/runs/_logs/<short>.workdir` and
+# tails `.wavelet-trace.jsonl`, emitting one line per "interesting"
+# event: failures (any exit ≠ 0), paid generations (shot txt2vid,
+# music gen), state transitions (render, screenplay validate,
+# workflow run, verify), and every Nth lint call.
+#
+# Designed to be wrapped by Claude's Monitor tool — one notification
+# per emitted line. Filter is aggressive enough to avoid spam but
+# wide enough to catch every failure signal.
+
+set -uo pipefail
+
+if [[ $# -ne 1 ]]; then
+  echo "usage: $0 <short-name>" >&2
+  exit 2
+fi
+
+SHORT="$1"
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+WORKDIR_FILE="$ROOT/evals/runs/_logs/${SHORT}.workdir"
+PID_FILE="$ROOT/evals/runs/_logs/${SHORT}.pid"
+
+if [[ ! -f "$WORKDIR_FILE" ]]; then
+  echo "eval-watch: workdir handle not found at $WORKDIR_FILE" >&2
+  exit 2
+fi
+
+WORKDIR=$(cat "$WORKDIR_FILE")
+TRACE="$WORKDIR/.wavelet-trace.jsonl"
+
+# If trace file doesn't exist yet, wait for it
+for _ in $(seq 1 30); do
+  [[ -f "$TRACE" ]] && break
+  sleep 1
+done
+
+if [[ ! -f "$TRACE" ]]; then
+  echo "eval-watch: trace file never appeared at $TRACE" >&2
+  exit 2
+fi
+
+PID=$(cat "$PID_FILE" 2>/dev/null || echo "")
+
+# macOS `tail -F` line-buffers output when piped (verified on Darwin
+# 24.6). `stdbuf` isn't available out of the box on macOS, so we
+# don't force-buffer here. Python is invoked with -u for unbuffered
+# stdout so notifications arrive as lines are produced.
+exec tail -F -n 0 "$TRACE" 2>/dev/null | python3 -u -c '
+import json, sys, time, os
+last_ts = time.time()
+lint_streak = 0
+last_lint_exit = None
+shot_spend_count = 0
+for line in sys.stdin:
+    try:
+        r = json.loads(line)
+        argv = r.get("argv", [])
+        if len(argv) < 2:
+            continue
+        verb = argv[1]
+        subverb = argv[2] if len(argv) > 2 else ""
+        full = " ".join(argv[1:5])
+        exit_code = r.get("exit", 0)
+        dur_ms = r.get("duration_ms", 0)
+        stderr_b = r.get("stderr_bytes", 0)
+        now = time.time()
+        gap = int(now - last_ts)
+        # Decide whether to emit.
+        emit = False
+        if exit_code != 0:
+            emit = True
+        elif verb == "shot" and subverb == "txt2vid":
+            shot_spend_count += 1
+            emit = True
+        elif verb == "render":
+            emit = True
+        elif verb == "verify":
+            emit = True
+        elif verb == "screenplay" and subverb == "validate":
+            emit = True
+        elif verb == "music" and subverb == "gen":
+            emit = True
+        elif verb == "workflow":
+            emit = True
+        elif verb == "lint":
+            lint_streak += 1
+            if last_lint_exit != exit_code or lint_streak % 5 == 0 or gap > 60:
+                emit = True
+                last_lint_exit = exit_code
+        if not emit:
+            last_ts = now
+            continue
+        mark = "OK " if exit_code == 0 else f"x{exit_code}"
+        if len(full) > 90:
+            full = full[:87] + "..."
+        ts_short = r.get("ts", "")[-9:-1]
+        print(f"{ts_short} +{gap:>3}s {mark} {dur_ms:>6}ms  {full}", flush=True)
+        last_ts = now
+    except Exception:
+        pass
+'

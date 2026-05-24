@@ -1,0 +1,71 @@
+<!doctype html>
+<html><head>
+<style>
+  html, body { margin: 0; padding: 0; background: #111; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif; color: #fff; }
+
+  .stage { position: absolute; inset: 0; }
+
+  .bg {
+    position: absolute; inset: 0;
+    background: url("../refs/character/dana-face.jpg") center/cover no-repeat;
+  }
+
+  /* Lower-left UGC sticker — looks like a creator's caption, not a brand bug. */
+  .sticker {
+    position: absolute;
+    left: 5.5%;
+    bottom: 14%;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 22px 14px 18px;
+    background: rgba(20, 22, 28, 0.62);
+    border-radius: 999px;
+    opacity: 0;
+    animation: sticker-in 0.6s ease-out 1.6s forwards;
+  }
+
+  .drop {
+    width: 22px; height: 22px;
+    display: inline-block;
+  }
+
+  .lockup {
+    display: flex; flex-direction: column;
+    line-height: 1.02;
+  }
+  .lockup .top {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: #ffffff;
+  }
+  .lockup .bot {
+    font-size: 12.5px;
+    font-weight: 400;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.78);
+    margin-top: 3px;
+  }
+
+  @keyframes sticker-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+</style></head>
+<body>
+  <div class="stage">
+    <div class="bg"></div>
+    <div class="sticker">
+      <svg class="drop" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2.5 C 12 2.5, 4.5 11, 4.5 16 C 4.5 20.1, 7.9 23, 12 23 C 16.1 23, 19.5 20.1, 19.5 16 C 19.5 11, 12 2.5, 12 2.5 Z" fill="#bfe2ff"/>
+      </svg>
+      <div class="lockup">
+        <span class="top">Dew Drop</span>
+        <span class="bot">Hydrating Serum</span>
+      </div>
+    </div>
+  </div>
+</body></html>

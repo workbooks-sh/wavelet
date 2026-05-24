@@ -1,0 +1,33 @@
+<!doctype html>
+<html><head>
+<style>
+  html, body { margin: 0; padding: 0; background: transparent; width: 100%; height: 100%; overflow: hidden; }
+  .frame {
+    position: absolute; inset: 0;
+    display: grid; grid-template-rows: auto 1fr;
+    padding: 8vh 9vw 9vh;
+  }
+  .line {
+    grid-row: 1;
+    font-family: "Cormorant Garamond", "Didot", serif;
+    font-weight: 400;
+    font-size: 7.6vw;
+    line-height: 1.04;
+    color: #f7f0e4;
+    letter-spacing: -0.005em;
+    margin: 0;
+    max-width: 11ch;
+    text-shadow: 0 2px 22px rgba(0,0,0,0.35);
+  }
+  .line em { font-style: italic; font-weight: 500; color: #fff5e4; }
+  @keyframes rise {
+    from { transform: translateY(24px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+  .line { animation: rise 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both; }
+</style></head>
+<body>
+  <div class="frame">
+    <h1 class="line">Built to <em>outlast</em> the kitchen it lives in.</h1>
+  </div>
+</body></html>

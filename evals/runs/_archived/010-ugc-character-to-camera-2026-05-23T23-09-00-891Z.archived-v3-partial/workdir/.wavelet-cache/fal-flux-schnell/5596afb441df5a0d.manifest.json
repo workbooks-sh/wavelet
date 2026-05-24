@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "provider": "fal-flux-schnell",
+  "cluster": "image_txt2img",
+  "request_hash": "5596afb441df5a0d",
+  "request": {
+    "prompt": "hands isolated against neutral grey backdrop, a young woman's hands with short clean unpainted nails and light olive skin holding a small frosted-glass dropper bottle with a black rubber bulb, one drop of clear serum on a fingertip, soft diffuse light, no environment, no scene context, macro framing, sharp focus, 9:16 portrait, photorealistic",
+    "image_size": "landscape_16_9"
+  },
+  "response": {
+    "provider": "fal-flux-schnell",
+    "image_path": ".wavelet-cache/fal-flux-schnell/5596afb441df5a0d.jpg",
+    "image_bytes": 73751,
+    "width": 1024,
+    "height": 576,
+    "mime": "image/jpeg"
+  },
+  "cost_estimate_usd": 0.005,
+  "asset_path": ".wavelet-cache/fal-flux-schnell/5596afb441df5a0d.jpg",
+  "created_at": "2026-05-23T23:10:30Z"
+}

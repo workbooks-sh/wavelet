@@ -13,13 +13,15 @@ pub struct Render;
 impl Tool for Render {
     fn name(&self) -> &str { "wavelet.render" }
     fn description(&self) -> &str {
-        "Render an HTML composition manifest to MP4. The manifest is a single \
-         top-level `commercial.html` (or `index.html`) listing scenes + audio. \
-         Each `<section data-scene-href=\"...\" data-duration=\"5s\">` is one scene; \
-         each `<audio src=\"...\" data-spans=\"all\">` is an audio cue. Per-scene \
-         HTML files contain `<video src=\"shots/shot-N.mp4\">` (or `<img>` for \
-         stills) plus any creative overlay markup. DO NOT write comp.json — the \
-         JSON composition path is deprecated; everything is HTML now. \
+        "Render a `commercial.html` composition manifest to MP4. The \
+         manifest is a single top-level `commercial.html` (or `index.html`) \
+         listing scenes + audio. Each `<section data-scene-href=\"...\" \
+         data-duration=\"5s\">` is one scene; each \
+         `<audio src=\"...\" data-spans=\"all\">` is an audio cue. Per-scene \
+         HTML files contain `<video src=\"shots/shot-N.mp4\">` (or `<img>` \
+         for stills) plus any creative overlay markup. HTML is the only \
+         accepted input — JSON inputs are rejected at exit 3 with no \
+         fallback path. \
          Example manifest: \
          `<!doctype html><html><head><meta name=\"resolution\" content=\"1920x1080\">\
          <meta name=\"fps\" content=\"30\"><meta name=\"duration\" content=\"15s\">\

@@ -23,7 +23,70 @@ pub fn run(op: ClipOp) -> ExitCode {
         ClipOp::Import { workdir, cache, dry_run } => {
             super::clip_import::run(workdir, cache, dry_run)
         }
+        ClipOp::TrimStatic { input, out, noise_db, min_freeze_secs, pretty } => {
+            run_trim_static(input, out, noise_db, min_freeze_secs, pretty)
+        }
     }
+}
+
+fn run_trim_static(
+    input: PathBuf,
+    out: Option<PathBuf>,
+    noise_db: f32,
+    min_freeze_secs: f32,
+    pretty: bool,
+) -> ExitCode {
+    use wavelet::clip::trim_static::{analyze, apply_trim, DetectParams};
+    let params = DetectParams { noise_db, min_freeze_secs };
+    let report = match analyze(&input, params) {
+        Ok(r) => r,
+        Err(e) => {
+            eprintln!("wavelet clip trim-static: {e}");
+            return ExitCode::from(2);
+        }
+    };
+    let json = if pretty {
+        serde_json::to_string_pretty(&report)
+    } else {
+        serde_json::to_string(&report)
+    };
+    match json {
+        Ok(s) => println!("{s}"),
+        Err(e) => {
+            eprintln!("serialize: {e}");
+            return ExitCode::from(2);
+        }
+    }
+    // Only write the trimmed output when --out is set AND the clip is
+    // not unusable AND the trim is non-trivial (at least 50ms of static
+    // detected). Otherwise the trim is a no-op and we'd just re-encode
+    // a copy of the input.
+    if let Some(out_path) = out.as_ref() {
+        if report.unusable {
+            eprintln!(
+                "wavelet clip trim-static: motion span {:.2}s < {:.2}s minimum — refusing to \
+                 write degenerate trim; re-roll the clip",
+                report.motion_duration_s,
+                wavelet::clip::trim_static::MIN_MOTION_SECS
+            );
+            return ExitCode::from(3);
+        }
+        let trim_amount = report.leading_freeze_s + report.trailing_freeze_s;
+        if trim_amount < 0.05 {
+            // No static detected → copy input to out unchanged (so
+            // downstream tools have a stable filename to read).
+            if let Err(e) = std::fs::copy(&input, out_path) {
+                eprintln!("wavelet clip trim-static: copy passthrough: {e}");
+                return ExitCode::from(2);
+            }
+        } else if let Err(e) =
+            apply_trim(&input, out_path, report.trim_start_s, report.trim_end_s)
+        {
+            eprintln!("wavelet clip trim-static: {e}");
+            return ExitCode::from(2);
+        }
+    }
+    ExitCode::SUCCESS
 }
 
 fn run_ls(

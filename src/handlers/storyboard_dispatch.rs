@@ -5,7 +5,7 @@ use crate::handlers::util::parse_resolution;
 /// (auto-generated placeholder)
 pub fn run_storyboard(op: StoryboardOp) -> ExitCode {
     use crate::storyboard::{
-        plan_from_screenplay_with_onsets, verify_storyboard, StoryboardLevel,
+        plan_from_screenplay_full, verify_storyboard, StoryboardLevel,
     };
     match op {
         StoryboardOp::Plan {
@@ -19,6 +19,8 @@ pub fn run_storyboard(op: StoryboardOp) -> ExitCode {
             onsets,
             no_snap,
             match_runtime,
+            workdir,
+            no_characters,
         } => {
             let src = match std::fs::read_to_string(&screenplay) {
                 Ok(s) => s,
@@ -83,7 +85,37 @@ pub fn run_storyboard(op: StoryboardOp) -> ExitCode {
                 }
                 _ => None,
             };
-            let mut sb = plan_from_screenplay_with_onsets(
+            // Auto-load character refs from <workdir>/refs/character/.
+            // Workdir defaults to the screenplay's parent directory so
+            // legacy callers don't need to pass `--workdir` explicitly.
+            let resolved_workdir = workdir.clone().or_else(|| {
+                screenplay.parent().map(|p| p.to_path_buf())
+            });
+            let characters = if no_characters {
+                None
+            } else {
+                resolved_workdir.as_ref().and_then(|wd| {
+                    match crate::clipref::character::load_characters(wd) {
+                        Ok(map) if !map.is_empty() => {
+                            eprintln!(
+                                "loaded {} character ref(s) from {}",
+                                map.len(),
+                                wd.join("refs/character").display(),
+                            );
+                            Some(map)
+                        }
+                        Ok(_) => None,
+                        Err(e) => {
+                            eprintln!(
+                                "warn: failed to load character refs from {}: {e}",
+                                wd.display(),
+                            );
+                            None
+                        }
+                    }
+                })
+            };
+            let mut sb = plan_from_screenplay_full(
                 &s,
                 &v,
                 screenplay.display().to_string(),
@@ -91,6 +123,7 @@ pub fn run_storyboard(op: StoryboardOp) -> ExitCode {
                 fps,
                 res,
                 onset_times.as_deref(),
+                characters.as_ref(),
             );
             if let Some(target) = match_runtime {
                 crate::storyboard::plan::match_runtime(&mut sb, target);

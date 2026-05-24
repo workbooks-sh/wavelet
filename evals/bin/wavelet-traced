@@ -40,6 +40,22 @@ if [[ -f "$WAVELET_ENV_FILE" ]]; then
   done < "$WAVELET_ENV_FILE"
 fi
 
+# Force HTML-first composition path during eval runs. The legacy
+# `wavelet render comp.json` path bypasses the lint coverage we wire
+# into commercial.html (post-render --mp4 halo contrast, the lint
+# rules that walk scene HTML). Setting WAVELET_STRICT_HTML=1 makes
+# `wavelet render` reject comp.json outright — the agent gets a clear
+# error and is forced to write the canonical manifest. See render.rs
+# for the gate.
+export WAVELET_STRICT_HTML=1
+
+# ORT (ONNX Runtime) for the depth + OCR features. The ort crate built
+# with `load-dynamic` defers loading libonnxruntime.dylib to runtime
+# and reads this env var to locate it. macOS path via Homebrew bottle:
+if [[ -z "${ORT_DYLIB_PATH:-}" && -f /opt/homebrew/lib/libonnxruntime.dylib ]]; then
+  export ORT_DYLIB_PATH=/opt/homebrew/lib/libonnxruntime.dylib
+fi
+
 ts_start=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 ms_start=$(/usr/bin/python3 -c 'import time; print(int(time.time()*1000))')
 

@@ -37,6 +37,20 @@ fn run_workflow(
     let report = compute_report(&pipeline, &workdir);
 
     if text {
+        // Lead with a one-line all-complete banner when every stage
+        // has passed. The 005 v5 post-mortem showed the agent calling
+        // `workflow run` four times in a row after gates passed
+        // because the "pipeline complete" line was buried at the
+        // bottom under per-stage rows. With the banner up top the
+        // agent reads ONE line and stops re-querying.
+        let all_complete = report
+            .stages
+            .iter()
+            .all(|s| matches!(s.status, StageStatus::Complete));
+        if all_complete && !report.stages.is_empty() {
+            println!("✓ ALL GATES PASSED — pipeline `{}` complete. No further `workflow run` calls needed.", report.pipeline);
+            println!();
+        }
         println!("pipeline: {}  workdir: {}", report.pipeline, report.workdir);
         for stage in &report.stages {
             match &stage.status {
@@ -48,6 +62,17 @@ fn run_workflow(
                         "  [ready]   {}  → produce: {}",
                         stage.name,
                         missing_outputs.join(", ")
+                    );
+                }
+                StageStatus::CriteriaFailed { failed_criteria } => {
+                    let summary: Vec<String> = failed_criteria
+                        .iter()
+                        .map(|f| format!("{}:{}", f.kind, f.reason))
+                        .collect();
+                    println!(
+                        "  [gated]   {}  ✗ criteria: {}",
+                        stage.name,
+                        summary.join(", ")
                     );
                 }
                 StageStatus::Blocked { missing_inputs } => {

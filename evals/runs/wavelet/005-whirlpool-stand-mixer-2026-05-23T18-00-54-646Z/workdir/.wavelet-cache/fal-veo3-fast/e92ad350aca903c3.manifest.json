@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "fal-veo3-fast",
+  "cluster": "video_txt2vid",
+  "request_hash": "e92ad350aca903c3",
+  "request": {
+    "prompt": "Macro shot inside a heavy cream-white ceramic mixing bowl: a glistening pat of golden butter and a slow cascade of pure white granulated sugar drop from above into the bowl, a polished stainless steel flat beater begins to rotate slowly catching warm sunlight, sugar crystals glint in the air, no text, no logos, 50mm full-frame, medium-close framing, warm morning window light camera-left at 3200K, deep brown-and-cream palette, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "fal-veo3-fast",
+    "video_path": ".wavelet-cache/fal-veo3-fast/e92ad350aca903c3.mp4",
+    "video_bytes": 2100551,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "Macro shot inside a heavy cream-white ceramic mixing bowl: a glistening pat of golden butter and a slow cascade of pure white granulated sugar drop from above into the bowl, a polished stainless steel flat beater begins to rotate slowly catching warm sunlight, sugar crystals glint in the air, no text, no logos, 50mm full-frame, medium-close framing, warm morning window light camera-left at 3200K, deep brown-and-cream palette, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait"
+  },
+  "cost_estimate_usd": 1.0,
+  "asset_path": ".wavelet-cache/fal-veo3-fast/e92ad350aca903c3.mp4",
+  "created_at": "2026-05-23T18:06:45Z"
+}

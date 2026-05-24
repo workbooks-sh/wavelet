@@ -67,10 +67,28 @@ pub struct NegativeSpaceReport {
 }
 
 /// Score every cell and return them ranked by descending `score`.
+///
+/// When `use_depth` is `true`, depth-map background likelihood is
+/// blended into the per-cell score. The depth model is run via
+/// [`crate::depth::depth_anything::estimate_depth`]; this requires the
+/// `depth` Cargo feature at compile time and downloads the Depth
+/// Anything V2 Small model (~25 MB) on first use. When the feature is
+/// absent or the model fails to load, a warning is printed and scoring
+/// falls back to the standard 2D heuristic.
 pub fn analyze(
     image_path: &Path,
     rows: u32,
     cols: u32,
+) -> Result<NegativeSpaceReport, AnalysisError> {
+    analyze_with_depth(image_path, rows, cols, false)
+}
+
+/// Like [`analyze`] but with an explicit `use_depth` switch.
+pub fn analyze_with_depth(
+    image_path: &Path,
+    rows: u32,
+    cols: u32,
+    use_depth: bool,
 ) -> Result<NegativeSpaceReport, AnalysisError> {
     if rows == 0 || cols == 0 {
         return Err(AnalysisError::InvalidArgument(
@@ -86,6 +104,25 @@ pub fn analyze(
     }
     let luma = img.to_luma8();
     let mag = sobel_magnitude(&luma);
+
+    // Optionally fetch the depth grid for the whole image. We map the
+    // GRID_SIZE × GRID_SIZE depth cells onto the rows × cols analysis
+    // grid by sampling the depth cell whose centre is closest to the
+    // analysis cell centre.
+    let depth_grid: Option<crate::depth::depth_anything::DepthGrid> = if use_depth {
+        match crate::depth::depth_anything::estimate_depth(image_path) {
+            Ok(g) => Some(g),
+            Err(e) => {
+                eprintln!(
+                    "wavelet image negative-space: depth model unavailable ({e}); \
+                     falling back to 2D heuristic"
+                );
+                None
+            }
+        }
+    } else {
+        None
+    };
 
     let mut cells: Vec<CellScore> = Vec::with_capacity((rows * cols) as usize);
     let mut max_variance = 0.0f32;
@@ -130,7 +167,27 @@ pub fn analyze(
     let denom = if max_variance < 1e-6 { 1.0 } else { max_variance };
 
     for (row, col, bbox, edge_density, mean_l, variance) in raw {
-        let score = (1.0 - edge_density - 0.3 * (variance / denom)).clamp(0.0, 1.0);
+        let base_score = (1.0 - edge_density - 0.3 * (variance / denom)).clamp(0.0, 1.0);
+
+        // When a depth grid is available, blend the cell's background
+        // likelihood into the score. The depth cell is selected by
+        // mapping the analysis-cell centre into the 16×16 depth grid.
+        let score = if let Some(ref grid) = depth_grid {
+            let depth_row = (row as usize * grid.rows) / rows as usize;
+            let depth_col = (col as usize * grid.cols) / cols as usize;
+            let bg_likelihood = grid.cell(depth_row.min(grid.rows - 1),
+                                           depth_col.min(grid.cols - 1));
+            // Weight: pure 2D score × depth background factor.
+            // Foreground cells (bg_likelihood ≈ 0) collapse toward 0;
+            // background cells (bg_likelihood ≈ 1) are barely penalised.
+            // Blend factor is (1 + bg_likelihood) / 2 so a full-subject
+            // cell (bg=0) gets ×0.5 and a full-background cell (bg=1)
+            // gets ×1.0.
+            (base_score * (1.0 + bg_likelihood) / 2.0).clamp(0.0, 1.0)
+        } else {
+            base_score
+        };
+
         let text = if mean_l < 0.5 { Rgb::WHITE } else { Rgb::BLACK };
         let scrim = scrim_opacity_for_target_ratio(mean_l, text, 4.5);
         cells.push(CellScore {

@@ -315,6 +315,8 @@ mod tests {
             expected_checks: vec![],
             prev_shot_id: None,
             attributes: None,
+            character_ref: None,
+            character_ref_type: None,
         }
     }
 

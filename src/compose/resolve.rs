@@ -203,7 +203,8 @@ fn substitute(
             r#"<video src="{asset_str}" autoplay muted playsinline{pass_through}></video>"#
         ),
         ClipKind::Overlay => body,
-        ClipKind::Music | ClipKind::Tts | ClipKind::ScreenplayScene | ClipKind::Caption => {
+        ClipKind::Music | ClipKind::Tts | ClipKind::ScreenplayScene | ClipKind::Caption
+        | ClipKind::CharacterRef => {
             String::new()
         }
     })

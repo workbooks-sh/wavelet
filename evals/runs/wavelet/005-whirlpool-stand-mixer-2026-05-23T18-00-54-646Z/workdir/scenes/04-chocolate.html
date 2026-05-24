@@ -1,0 +1,71 @@
+<!doctype html>
+<html><head>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;1,400&display=swap");
+:root {
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-circ:  cubic-bezier(0, 0.55, 0.45, 1);
+}
+html, body { margin: 0; padding: 0; background: transparent; width: 1080px; height: 1920px; overflow: hidden; color: #fef7e8; }
+.scrim {
+  position: absolute; left: 0; right: 0; top: 0; height: 36%;
+  background: linear-gradient(180deg, rgba(15,8,2,0.75) 0%, rgba(15,8,2,0.0) 100%);
+}
+.frame {
+  position: absolute; inset: 0;
+  padding: 130px 70px 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 30px;
+}
+.row {
+  display: flex; align-items: baseline; gap: 28px;
+  font-family: "Bodoni Moda", "Didot", serif;
+  text-shadow: 0 4px 26px rgba(0,0,0,0.78);
+}
+.row .num {
+  font-weight: 700;
+  font-size: 156px;
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  color: #f7c98a;
+}
+.row .text {
+  font-weight: 400;
+  font-style: italic;
+  font-size: 64px;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: #fdf1d6;
+}
+.kicker {
+  align-self: end; justify-self: end;
+  font: 600 22px/1 "Helvetica Neue", sans-serif;
+  letter-spacing: 0.42em; text-transform: uppercase;
+  color: #fef0c8c0;
+  padding: 0 0 360px 0;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+}
+@keyframes type-in {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.82); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.row .num  { animation: scale-in 0.9s var(--ease-out-quint) 0.05s both; transform-origin: bottom left; }
+.row .text { animation: type-in 1.1s var(--ease-out-circ) 0.35s both; }
+.kicker    { animation: type-in 0.9s var(--ease-out-circ) 0.7s both; }
+.scrim     { animation: scale-in 0.5s ease-out 0s both; }
+</style></head>
+<body>
+  <div class="scrim"></div>
+  <div class="frame">
+    <div class="row">
+      <span class="num">15</span><span class="text">attachments,<br>one hub.</span>
+    </div>
+    <div class="kicker">Pasta · Grinder · Spiralizer · Scoop</div>
+  </div>
+</body></html>

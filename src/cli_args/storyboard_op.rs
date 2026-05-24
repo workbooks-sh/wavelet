@@ -48,6 +48,19 @@ pub enum StoryboardOp {
         /// pacing. Typically set to the brief's RUNTIME value verbatim.
         #[arg(long)]
         match_runtime: Option<f32>,
+        /// Project workdir — used to auto-load character refs from
+        /// `<workdir>/refs/character/`. When a Dialogue scene's
+        /// CHARACTER cue matches a loaded ref, the shot is routed
+        /// through `fal-veo3-ref` instead of stock-search. Defaults to
+        /// the directory containing the screenplay.
+        #[arg(long)]
+        workdir: Option<PathBuf>,
+        /// Disable character-ref auto-loading even when `--workdir`
+        /// resolves a populated `refs/character/` directory. Use when
+        /// you want raw stock-search defaults (e.g. for diffs against
+        /// pre-character-refs baselines).
+        #[arg(long)]
+        no_characters: bool,
     },
     /// Run structural verification gates over a storyboard. Reports
     /// errors + warnings; exit code 1 when any error is found.

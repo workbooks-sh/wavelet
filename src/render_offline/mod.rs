@@ -35,6 +35,7 @@
 //! ```
 
 
+pub mod audio_mux;
 pub mod types;
 pub mod stats;
 pub mod render;

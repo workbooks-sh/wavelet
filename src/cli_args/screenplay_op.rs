@@ -5,6 +5,7 @@ use clap::{Parser, Subcommand, ValueEnum, Args};
 
 
 
+/// Subcommands for `wavelet screenplay`.
 #[derive(Subcommand)]
 pub enum ScreenplayOp {
     /// Parse a `.fountain` screenplay. Emits one `.clip.html` per scene
@@ -35,5 +36,35 @@ pub enum ScreenplayOp {
         /// Output path. Stdout when omitted.
         #[arg(short, long)]
         out: Option<PathBuf>,
+    },
+    /// Validate that the screenplay's copy density fits the declared
+    /// spot duration. Computes VO time + caption dwell + shot floor and
+    /// compares against `--duration`. Exit 0 on `fits` or `under_budget`;
+    /// non-zero exit on `over_budget`. Emits a JSON report on stdout.
+    Validate {
+        /// Path to the Fountain source file.
+        path: PathBuf,
+        /// Declared spot duration in seconds. The verdict is computed
+        /// against this target (with a ±10% tolerance band).
+        #[arg(long)]
+        duration: f32,
+        /// Pretty-print the emitted JSON.
+        #[arg(long)]
+        pretty: bool,
+    },
+    /// Extract the canonical character registry from a Fountain screenplay.
+    /// Characters are deduplicated by normalized name so `ALEX`, `Alex`, and
+    /// `ALEX (V.O.)` collapse into one entry. Outputs a pretty table by
+    /// default; use `--json` for structured JSON or `--pretty` for
+    /// pretty-printed JSON.
+    Characters {
+        /// Path to the Fountain source file.
+        path: PathBuf,
+        /// Emit structured JSON instead of the table.
+        #[arg(long)]
+        json: bool,
+        /// Emit pretty-printed JSON instead of the table.
+        #[arg(long)]
+        pretty: bool,
     },
 }

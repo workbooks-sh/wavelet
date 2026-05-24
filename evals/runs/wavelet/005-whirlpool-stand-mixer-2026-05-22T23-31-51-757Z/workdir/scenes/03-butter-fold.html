@@ -1,0 +1,33 @@
+<!doctype html>
+<html><head>
+<style>
+  html, body { margin: 0; padding: 0; background: transparent; width: 100%; height: 100%; overflow: hidden; }
+  .frame {
+    position: absolute; inset: 0;
+    display: grid; grid-template-rows: 1fr auto;
+    padding: 9vh 9vw;
+  }
+  .whisper {
+    align-self: end;
+    grid-row: 2;
+    font-family: "Cormorant Garamond", "Didot", serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 38px;
+    line-height: 1.18;
+    color: #f5efe6;
+    max-width: 12ch;
+    letter-spacing: 0.005em;
+    text-shadow: 0 2px 18px rgba(0,0,0,0.45);
+  }
+  @keyframes drift-up {
+    from { transform: translateY(14px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+  .whisper { animation: drift-up 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both; }
+</style></head>
+<body>
+  <div class="frame">
+    <div class="whisper">Slow. By&nbsp;design.</div>
+  </div>
+</body></html>

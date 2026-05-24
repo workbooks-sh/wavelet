@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "provider": "google-lyria-3-pro",
+  "cluster": "music_ref_conditioned",
+  "request_hash": "5825daf66a075a0b",
+  "request": {
+    "prompt": "warm acoustic strings with subtle piano, light percussive lift building gently, intimate domestic kitchen mood, no vocals, 80bpm open → 80bpm steady → 60bpm action → 55bpm transition-fadeout, 68 bpm average",
+    "duration_secs": 12.0,
+    "bpm": 68.17594146728516
+  },
+  "response": {
+    "provider": "google-lyria-3-pro",
+    "audio_path": ".wavelet-cache/google-lyria-3-pro/5825daf66a075a0b.mp3",
+    "audio_bytes": 2582794,
+    "mime": "audio/mpeg",
+    "model_variant": "lyria-3-pro-preview",
+    "prompt_sent": "12 second warm acoustic strings with subtle piano, light percussive lift building gently, intimate domestic kitchen mood, no vocals, 80bpm open → 80bpm steady → 60bpm action → 55bpm transition-fadeout, 68 bpm average",
+    "duration_secs": 12.0
+  },
+  "cost_estimate_usd": 0.012,
+  "asset_path": ".wavelet-cache/google-lyria-3-pro/5825daf66a075a0b.mp3",
+  "created_at": "2026-05-23T00:33:51Z"
+}

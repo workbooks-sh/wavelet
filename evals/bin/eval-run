@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+# eval-run — launch a wavelet eval in the background with proper logging.
+#
+# Usage: eval-run <spec.eval.md>
+#
+# Captures three handles for downstream monitoring:
+#   evals/runs/_logs/<short>.pid        — workbench PID
+#   evals/runs/_logs/<short>.log        — workbench stdout/stderr
+#   evals/runs/_logs/<short>.workdir    — path to the run's workdir
+#
+# All three feed eval-watch / eval-status / eval-kill.
+#
+# Prints a one-line summary on stdout: `<short> <pid> <log> <workdir>`.
+
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+  echo "usage: $0 <spec.eval.md>" >&2
+  exit 2
+fi
+
+SPEC="$1"
+if [[ ! -f "$SPEC" ]]; then
+  echo "eval-run: spec not found: $SPEC" >&2
+  exit 2
+fi
+
+# Resolve to repo-anchored layout
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+cd "$ROOT"
+
+# Build the binary if it's missing — runs are useless without it
+if [[ ! -x target/debug/wavelet ]]; then
+  echo "eval-run: building wavelet binary first" >&2
+  cargo build -p wavelet >&2
+fi
+
+# Short name from spec filename (drop .eval.md, then drop leading NNN-)
+SHORT=$(basename "$SPEC" .eval.md)
+TS=$(date -u +%Y%m%dT%H%M%S)
+LOG="evals/runs/_logs/${SHORT}-${TS}.log"
+PID_FILE="evals/runs/_logs/${SHORT}.pid"
+WORKDIR_FILE="evals/runs/_logs/${SHORT}.workdir"
+mkdir -p evals/runs/_logs
+
+# Clear any stale workdir pointer from a prior run BEFORE launching.
+# eval-status / eval-watch / eval-kill use this file as a pointer to
+# the current run's workdir; leaving it populated means a re-launch
+# would briefly point at an old (possibly archived) path. We always
+# generate a fresh workdir below — never read this file as input.
+: > "$WORKDIR_FILE"
+# Capture launch epoch so we can disambiguate freshly-created workdirs
+# from stale matches in `evals/runs/wavelet/${SHORT}-*` (an archived
+# directory left behind by a partial cleanup would otherwise win
+# `ls -dt`'s most-recently-modified race).
+LAUNCH_EPOCH=$(date -u +%s)
+
+# Launch workbench in the background. evals/bin/ is the PATH-shim
+# directory (wavelet-traced, brandwork-traced) — those source the API
+# keys from ~/.config/wavelet/env that claude-code strips.
+WORKBENCH="../../packages/workbooks/packages/workbench/bin/workbench.mjs"
+if [[ ! -f "$WORKBENCH" ]]; then
+  # Try absolute path
+  WORKBENCH="/Users/shinyobjectz/Apps/workbooks/packages/workbooks/packages/workbench/bin/workbench.mjs"
+fi
+
+# Resolve brandwork binary — prefer the monorepo build, fall back to PATH.
+BRANDWORK_BIN=""
+if [[ -x "$PWD/../brandwork/apps/cli/dist/index.js" ]]; then
+  BRANDWORK_BIN="$PWD/../brandwork/apps/cli/dist/index.js"
+elif command -v brandwork &>/dev/null; then
+  BRANDWORK_BIN="$(command -v brandwork)"
+fi
+
+PATH="$PWD/evals/bin:$PATH" \
+  WAVELET_REAL="$PWD/target/debug/wavelet" \
+  BRANDWORK_REAL="${BRANDWORK_BIN:-$(command -v brandwork 2>/dev/null || echo brandwork)}" \
+  node "$WORKBENCH" eval "$SPEC" \
+  > "$LOG" 2>&1 &
+PID=$!
+echo "$PID" > "$PID_FILE"
+
+# Wait briefly, then locate the workdir the workbench created. Workdirs
+# land at evals/runs/wavelet/<short>-<timestamp>/workdir/. We require
+# the dir's mtime to be >= LAUNCH_EPOCH so a stale archived/leftover
+# match never wins — even if `ls -dt` would otherwise return it.
+# Store the ABSOLUTE path so eval-watch / eval-status / eval-kill
+# don't have to know our cwd.
+for _ in $(seq 1 20); do
+  # Iterate newest-first; accept the first dir whose mtime is at or
+  # after the launch epoch and that has a `workdir/` child.
+  WORKDIR=""
+  while IFS= read -r candidate; do
+    [[ -z "$candidate" ]] && continue
+    [[ ! -d "$candidate/workdir" ]] && continue
+    # GNU stat (`-c %Y`) vs BSD stat (`-f %m`) — try both.
+    cand_mtime=$(stat -f %m "$candidate" 2>/dev/null || stat -c %Y "$candidate" 2>/dev/null || echo 0)
+    if [[ "$cand_mtime" -ge "$LAUNCH_EPOCH" ]]; then
+      WORKDIR="$candidate"
+      break
+    fi
+  done < <(ls -dt evals/runs/wavelet/${SHORT}-* 2>/dev/null || true)
+  if [[ -n "$WORKDIR" ]]; then
+    ABS_WORKDIR=$(cd "$WORKDIR/workdir" && pwd)
+    echo "$ABS_WORKDIR" > "$WORKDIR_FILE"
+    break
+  fi
+  sleep 1
+done
+
+echo "$SHORT $PID $LOG $(cat "$WORKDIR_FILE" 2>/dev/null || echo PENDING)"

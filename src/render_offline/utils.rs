@@ -19,9 +19,14 @@ pub(super) fn active_scene(comp: &Composition, frame: u32) -> Option<usize> {
 /// Checked paths:
 /// - `scene.html_path` for each scene
 /// - `scene.video_bg` if Some
-/// - `<video src>` and `<audio src>` inside each scene HTML (resolved
-///   relative to the scene's own directory, matching browser semantics)
-/// - `comp.audio_cues[].asset_path`
+/// - `<video src>` inside each scene HTML (resolved relative to the
+///   scene's own directory, matching browser semantics)
+///
+/// Audio refs are NOT pre-flighted here — a broken `<audio src>` is
+/// caught downstream by the renderer (warn + drop the cue + continue
+/// video-only) and surfaced to the agent by the `audio-presence`
+/// lint. Pre-flight-aborting on audio would block the legitimate
+/// "render video now, fix the broken music ref later" workflow.
 ///
 /// Scene HTML files that fail to read are themselves reported as
 /// missing (they were referenced but unreadable). Inline `src` attributes
@@ -58,7 +63,7 @@ pub(super) fn collect_missing_assets(comp: &Composition, root_dir: &Path) -> Vec
         };
         for el in &elements {
             use crate::compose::ElementKind;
-            if !matches!(el.kind, ElementKind::Video | ElementKind::Audio) {
+            if !matches!(el.kind, ElementKind::Video) {
                 continue;
             }
             let Some(src) = el.attr("src") else { continue };
@@ -71,10 +76,6 @@ pub(super) fn collect_missing_assets(comp: &Composition, root_dir: &Path) -> Vec
             }
             check(&mut missing, scene_dir.join(src));
         }
-    }
-
-    for cue in &comp.audio_cues {
-        check(&mut missing, root_dir.join(&cue.asset_path));
     }
 
     missing
@@ -227,7 +228,7 @@ mod tests {
             audio_cues: vec![],
         };
         let out = tmp.join("out.mp4");
-        let opts = RenderOptions { frame_budget_secs: 0 };
+        let opts = RenderOptions { frame_budget_secs: 0, mux_audio: false };
         let err = render_composition_with_options(&comp, &tmp, &out, &opts)
             .expect_err("render should fail with FrameBudgetExceeded");
         match err {

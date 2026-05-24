@@ -1,0 +1,8 @@
+{"ts":"2026-05-23T17:09:21Z","argv":["adalign","brand.brief","kitchenaid.com"],"duration_ms":96,"exit":1,"stdout_bytes":0,"stderr_bytes":37}
+{"ts":"2026-05-23T17:09:24Z","argv":["adalign","--help"],"duration_ms":86,"exit":0,"stdout_bytes":1659,"stderr_bytes":0}
+{"ts":"2026-05-23T17:09:28Z","argv":["adalign","brand","--help"],"duration_ms":84,"exit":0,"stdout_bytes":315,"stderr_bytes":0}
+{"ts":"2026-05-23T17:09:28Z","argv":["adalign","catalog","--help"],"duration_ms":83,"exit":0,"stdout_bytes":321,"stderr_bytes":0}
+{"ts":"2026-05-23T17:09:29Z","argv":["adalign","ads","--help"],"duration_ms":84,"exit":0,"stdout_bytes":435,"stderr_bytes":0}
+{"ts":"2026-05-23T17:09:32Z","argv":["adalign","init"],"duration_ms":113,"exit":0,"stdout_bytes":222,"stderr_bytes":0}
+{"ts":"2026-05-23T17:09:32Z","argv":["adalign","--json","brief","kitchenaid.com"],"duration_ms":8192,"exit":0,"stdout_bytes":55610,"stderr_bytes":0}
+{"ts":"2026-05-23T17:10:36Z","argv":["adalign","--json","catalog","crawl","kitchenaid.com"],"duration_ms":53827,"exit":0,"stdout_bytes":139,"stderr_bytes":0}

@@ -1,0 +1,33 @@
+{
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "transitions": [
+    {
+      "element_index": 2,
+      "source_text": "CUT TO:",
+      "kind": "cut",
+      "t_secs": 11.599999,
+      "bpm_at": 60.0,
+      "duration_secs": null,
+      "rationale": "hard cut (Cut) — no duration"
+    },
+    {
+      "element_index": 5,
+      "source_text": "CUT TO:",
+      "kind": "cut",
+      "t_secs": 25.3,
+      "bpm_at": 71.60715,
+      "duration_secs": null,
+      "rationale": "hard cut (Cut) — no duration"
+    },
+    {
+      "element_index": 8,
+      "source_text": "FADE OUT.",
+      "kind": "fade_out",
+      "t_secs": 37.0,
+      "bpm_at": 70.64189,
+      "duration_secs": 0.8,
+      "rationale": "fade length set from BPM (70): longer fade at lower tempo"
+    }
+  ]
+}

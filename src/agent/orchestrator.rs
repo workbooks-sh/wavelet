@@ -84,13 +84,18 @@ creative markup). Finally write ONE top-level `commercial.html` \
 manifest listing every scene + audio. Call `wavelet.render` with \
 `comp: \"commercial.html\"` — it ingests HTML directly.
 
-**Composition is HTML, never JSON.** Do not write comp.json — that \
-path is deprecated. The `wavelet.render` tool reads the HTML manifest \
-shape: `<section data-scene-href=\"scenes/01.html\" data-duration=\"5s\">` \
+**Composition is HTML. There is no JSON composition input.** \
+`wavelet.render` accepts an HTML manifest file (name it after the \
+deliverable — `commercial.html`, `trailer.html`, `promo.html`, \
+`index.html`, whatever fits). Any non-HTML input is rejected with \
+exit 3 and no fallback. The manifest shape: \
+`<section data-scene-href=\"scenes/01.html\" data-duration=\"5s\">` \
 per scene, `<audio src=\"music/track.wav\" data-spans=\"all\">` per audio \
 cue, with `<meta name=\"resolution\" content=\"1920x1080\">` / `fps` / \
 `duration` in the `<head>`. The tool's description has a full example — \
-read it before composing.
+read it before composing. If you ever feel tempted to write a JSON \
+composition file, STOP — that is the wrong escape hatch. Diagnose \
+whichever upstream step is sticky and fix THAT instead.
 
 **Cost discipline.** Every paid backend call requires `max_cost` (USD); \
 the default of $0 rejects. A typical Veo 6s shot costs ~$1.25 — budget \

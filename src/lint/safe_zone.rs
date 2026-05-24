@@ -63,6 +63,7 @@ pub fn run(
                         edge_describe(zi, zone)
                     ),
                     fix_hint: fix_hint_for_zone(zi, zone),
+                    subkind: None,
                 });
             }
         }
@@ -175,12 +176,15 @@ mod tests {
             element_id: None,
             classes: classes.iter().map(|s| s.to_string()).collect(),
             bbox,
-            has_own_transform: false,
+            transform: None,
             clips_overflow: false,
             computed_opacity: 1.0,
+            computed_font_size_px: 0.0,
             text: text.map(|s| s.to_string()),
             children: vec![],
             parent: None,
+            glyph_run: None,
+            flex_axis: None,
         }
     }
 

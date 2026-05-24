@@ -1,0 +1,11 @@
+TITLE: AT THE HEART OF HOME — KITCHENAID ARTISAN
+FCM: NON-DROP FRAME
+
+001  shot-1   V     C        00:00:00:00 00:00:04:00 00:00:00:00 00:00:04:00
+* FROM CLIP NAME: shots/shot-1-hero.mp4
+002  shot-2   V     D    012 00:00:00:00 00:00:04:00 00:00:04:00 00:00:08:00
+* FROM CLIP NAME: shots/shot-2-macro.mp4
+003  shot-3   V     D    015 00:00:00:00 00:00:04:00 00:00:08:00 00:00:12:00
+* FROM CLIP NAME: shots/shot-3-pullback.mp4
+004  track    A     C        00:00:00:00 00:00:12:00 00:00:00:00 00:00:12:00
+* FROM CLIP NAME: music/track.wav

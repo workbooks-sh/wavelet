@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "provider": "fal-veo3-fast",
+  "cluster": "video_txt2vid",
+  "request_hash": "1c88c30570523ff6",
+  "request": {
+    "prompt": "a 28 year old woman with light olive skin, freckles scattered across her cheekbones, glossy collarbone-length brunette hair tucked behind one ear, no makeup or minimal makeup, wearing a cream ribbed cotton tank top, standing by a sun-bright apartment window, she holds a small clear glass serum bottle with a black pipette top up near her cheek, gives a knowing little smile at the phone camera, and says in a confident upbeat tone: 'Two drops, morning and night.', window light overexposes her highlights slightly, medium close-up chest-up framing, eye contact with lens, no on-screen text or captions, no logos, no visible label text, handheld iPhone 16 Pro Max at chest height, soft window daylight from camera-left, slightly overexposed in highlights, Apple HDR camera-native color with no film grade, faint rolling-shutter wobble, no anamorphic flare, no film grain, 9:16 portrait, looks like a phone someone is actually holding",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16",
+    "seed": 1002
+  },
+  "response": {
+    "provider": "fal-veo3-fast",
+    "video_path": ".wavelet-cache/fal-veo3-fast/1c88c30570523ff6.mp4",
+    "video_bytes": 1717029,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "a 28 year old woman with light olive skin, freckles scattered across her cheekbones, glossy collarbone-length brunette hair tucked behind one ear, no makeup or minimal makeup, wearing a cream ribbed cotton tank top, standing by a sun-bright apartment window, she holds a small clear glass serum bottle with a black pipette top up near her cheek, gives a knowing little smile at the phone camera, and says in a confident upbeat tone: 'Two drops, morning and night.', window light overexposes her highlights slightly, medium close-up chest-up framing, eye contact with lens, no on-screen text or captions, no logos, no visible label text, handheld iPhone 16 Pro Max at chest height, soft window daylight from camera-left, slightly overexposed in highlights, Apple HDR camera-native color with no film grade, faint rolling-shutter wobble, no anamorphic flare, no film grain, 9:16 portrait, looks like a phone someone is actually holding",
+    "seed_used": 1002
+  },
+  "cost_estimate_usd": 1.0,
+  "asset_path": ".wavelet-cache/fal-veo3-fast/1c88c30570523ff6.mp4",
+  "created_at": "2026-05-23T22:13:56Z"
+}

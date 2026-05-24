@@ -1,0 +1,19 @@
+TITLE: WHIRLPOOL — THE ICONIC STAND MIXER
+FCM: NON-DROP FRAME
+
+001  shot-1   V     C        00:00:00:00 00:00:01:15 00:00:00:00 00:00:01:15
+* FROM CLIP NAME: shots/shot-1-bowl-lock.mp4
+002  shot-2   V     C        00:00:00:00 00:00:01:15 00:00:01:15 00:00:03:00
+* FROM CLIP NAME: shots/shot-2-tilt-head.mp4
+003  shot-3   V     C        00:00:00:00 00:00:01:21 00:00:03:00 00:00:04:21
+* FROM CLIP NAME: shots/shot-3-butter-fold.mp4
+004  shot-4   V     C        00:00:00:00 00:00:01:24 00:00:04:21 00:00:06:15
+* FROM CLIP NAME: shots/shot-4-enamel-hip.mp4
+005  shot-5   V     C        00:00:00:00 00:00:01:15 00:00:06:15 00:00:08:00
+* FROM CLIP NAME: shots/shot-5-flour-cascade.mp4
+006  shot-6   V     C        00:00:00:00 00:00:02:00 00:00:08:00 00:00:10:00
+* FROM CLIP NAME: shots/shot-6-wide-hero.mp4
+007  shot-7   V     D    012 00:00:00:00 00:00:02:00 00:00:10:00 00:00:12:00
+* FROM CLIP NAME: shots/shot-7-studio-cta.mp4
+008  track    A     C        00:00:00:00 00:00:12:00 00:00:00:00 00:00:12:00
+* FROM CLIP NAME: music/track.wav

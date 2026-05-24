@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "google-veo-3.1-lite",
+  "cluster": "video_txt2vid",
+  "request_hash": "4bdf2301cfe3477e",
+  "request": {
+    "prompt": "Close-up: a soft cloud of flour drifts into a stainless mixer bowl, slow gentle motion, intimate kitchen counter, 50 mm full-frame, medium-close framing, warm morning window light from camera left at 3200K, brown-and-cream kitchen palette with KitchenAid signature red as the only saturated note, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "google-veo-3.1-lite",
+    "video_path": ".wavelet-cache/google-veo-3.1-lite/4bdf2301cfe3477e.mp4",
+    "video_bytes": 1282156,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "Close-up: a soft cloud of flour drifts into a stainless mixer bowl, slow gentle motion, intimate kitchen counter, 50 mm full-frame, medium-close framing, warm morning window light from camera left at 3200K, brown-and-cream kitchen palette with KitchenAid signature red as the only saturated note, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait"
+  },
+  "cost_estimate_usd": 0.4,
+  "asset_path": ".wavelet-cache/google-veo-3.1-lite/4bdf2301cfe3477e.mp4",
+  "created_at": "2026-05-23T00:34:47Z"
+}

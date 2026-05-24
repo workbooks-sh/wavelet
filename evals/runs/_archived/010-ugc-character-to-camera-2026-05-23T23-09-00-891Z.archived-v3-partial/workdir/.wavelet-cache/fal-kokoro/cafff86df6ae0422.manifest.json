@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "provider": "fal-kokoro",
+  "cluster": "tts",
+  "request_hash": "cafff86df6ae0422",
+  "request": {
+    "text": "One drop. That's it. The whole bottle lasted me a month.",
+    "voice_id": "af_nicole"
+  },
+  "response": {
+    "provider": "fal-kokoro",
+    "voice_id": "af_nicole",
+    "model": "kokoro",
+    "audio_path": ".wavelet-cache/fal-kokoro/cafff86df6ae0422.wav",
+    "audio_bytes": 280844,
+    "duration_secs_est": 6.382818222045898,
+    "mime": "audio/wav"
+  },
+  "cost_estimate_usd": 0.01,
+  "asset_path": ".wavelet-cache/fal-kokoro/cafff86df6ae0422.wav",
+  "created_at": "2026-05-23T23:12:53Z"
+}

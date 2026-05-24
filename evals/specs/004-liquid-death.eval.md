@@ -199,11 +199,11 @@ Brand-centered Meta Reels eval. Tests the realistic Wavelet deployment
 vibe — Wavelet as a Claude Code extension, NOT as a Workbooks Studio
 feature (see CLAUDE.md "Wavelet ≠ Workbooks Studio"):
 
-> "I have Claude Code, I installed wavelet + adalign, I'm sitting at my
+> "I have Claude Code, I installed wavelet + brandwork, I'm sitting at my
 > terminal, I want to make a video for my brand."
 
 The agent (`claude`) operates as a fresh external user would — only
-the brief, the `wavelet` + `adalign` CLIs on PATH, and whatever skills
+the brief, the `wavelet` + `brandwork` CLIs on PATH, and whatever skills
 Claude Code's discovery loads. No access to monorepo internals, no
 awareness of prior failed runs.
 

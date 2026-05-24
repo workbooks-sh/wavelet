@@ -177,6 +177,19 @@ pub fn render_composition_with_options(
 
     let watchdog_epoch = Instant::now();
 
+    // wb-5w9s.2: progress reporting. Without this, agents see ~100 bytes
+    // of stdout/stderr across a multi-minute render — no way to tell
+    // working from wedged. Emit on stderr every ~10% (or every 30 frames
+    // for very short comps), plus one line at the start so they see SOMETHING
+    // within ~1 frame's worth of wall-clock.
+    let total_frames = comp.duration_frames.max(1);
+    let progress_step_frames = (total_frames / 10).max(1).min(30);
+    let render_epoch = Instant::now();
+    eprintln!(
+        "wavelet render: starting frame 0/{total_frames} ({}x{}@{}fps)",
+        comp.width, comp.height, comp.fps,
+    );
+
     let bg_pixels = vec![0u8; (comp.width * comp.height * 4) as usize];
     for frame in 0..comp.duration_frames {
         if abort.load(Ordering::Relaxed) {
@@ -283,6 +296,18 @@ pub fn render_composition_with_options(
                 last_frame_index: last_pushed_frame.load(Ordering::Relaxed),
             });
         }
+        // wb-5w9s.2: emit progress on completed-frame boundaries that
+        // align with progress_step_frames (every ~10% of total). +1 to
+        // include the final frame in the report.
+        let completed = frame + 1;
+        if completed % progress_step_frames == 0 || completed == total_frames {
+            let pct = (completed * 100) / total_frames;
+            let elapsed_s = render_epoch.elapsed().as_secs_f32();
+            let fps = completed as f32 / elapsed_s.max(0.001);
+            eprintln!(
+                "wavelet render: frame {completed}/{total_frames} ({pct}%) elapsed={elapsed_s:.1}s {fps:.1}fps"
+            );
+        }
     }
     encoder.finalize()?;
     stats.video_frames = comp.duration_frames as u64;
@@ -326,10 +351,12 @@ pub fn render_composition_with_options(
 
     if !combined_cues.is_empty() {
         let mut mixer = AudioMixer::new(48_000, comp.fps);
+        let mut load_errors: Vec<(String, String)> = Vec::new();
+        let mut loaded_cue_count = 0usize;
         for cue in &combined_cues {
             let resolved = root_dir.join(&cue.asset_path);
-            mixer.add_cue(AudioCue {
-                asset_path: resolved,
+            let cue_obj = AudioCue {
+                asset_path: resolved.clone(),
                 id: cue.id.clone(),
                 start_frame: cue.start_frame as u64,
                 duration_frames: cue.duration_frames as u64,
@@ -340,13 +367,43 @@ pub fn render_composition_with_options(
                 duck_targets: cue.duck_targets.clone(),
                 duck_db: cue.duck_db,
                 align_to_beat: cue.align_to_beat,
-            })?;
+            };
+            // A broken <audio src> at this point is a soft-fail: warn
+            // to stderr, drop the cue, continue. The audio-presence
+            // lint surfaces the missing ref to the agent in a single
+            // structured report; failing the render here would be
+            // redundant and worse — it would block a sensible "render
+            // video-only and fix the audio later" workflow.
+            match mixer.add_cue(cue_obj) {
+                Ok(()) => {
+                    loaded_cue_count += 1;
+                }
+                Err(e) => {
+                    load_errors.push((resolved.display().to_string(), e.to_string()));
+                }
+            }
         }
-        let stereo = mixer.render(comp.duration_frames as u64)?;
-        let wav_path = out_path.with_extension("wav");
-        write_stereo_wav(&wav_path, &stereo, 48_000)?;
-        stats.audio_samples_per_channel = (stereo.len() / 2) as u64;
-        stats.wav_bytes = std::fs::metadata(&wav_path).map(|m| m.len()).unwrap_or(0);
+        for (path, err) in &load_errors {
+            eprintln!("wavelet render: audio cue dropped ({path}): {err}");
+        }
+        // If every cue failed to load (typical: agent set a broken
+        // `<audio src>` and the asset doesn't exist yet), skip the
+        // mix entirely. We still want the render to succeed — the
+        // audio-presence lint surfaces the missing ref — but we don't
+        // want a silent AAC stream that misleads downstream tools
+        // ("the mp4 has audio, why is it silent?").
+        if loaded_cue_count > 0 {
+            let stereo = mixer.render(comp.duration_frames as u64)?;
+            let wav_path = out_path.with_extension("wav");
+            write_stereo_wav(&wav_path, &stereo, 48_000)?;
+            stats.audio_samples_per_channel = (stereo.len() / 2) as u64;
+            stats.wav_bytes = std::fs::metadata(&wav_path).map(|m| m.len()).unwrap_or(0);
+
+            if opts.mux_audio && !stereo.is_empty() {
+                super::audio_mux::mux_stereo_into_mp4(out_path, &stereo, 48_000)?;
+                stats.mp4_bytes = std::fs::metadata(out_path).map(|m| m.len()).unwrap_or(stats.mp4_bytes);
+            }
+        }
     }
 
     stats.elapsed_ms = render_start.elapsed().as_millis();

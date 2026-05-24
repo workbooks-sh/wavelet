@@ -1,0 +1,120 @@
+{
+  "title_page": {
+    "title": "KitchenAid Artisan â At the Heart of Home",
+    "author": "wavelet-director"
+  },
+  "elements": [
+    {
+      "type": "scene_heading",
+      "slugline": "INT. KITCHEN - MORNING",
+      "ie": "int",
+      "location": "KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "Flour and dough drop into a stainless bowl. A soft cloud of flour rises and settles."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. KITCHEN - MORNING",
+      "ie": "int",
+      "location": "KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "Hands tilt the iconic head of an Empire Red KitchenAid Artisan downward. The locking lever clicks."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. KITCHEN - MORNING",
+      "ie": "int",
+      "location": "KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "Macro: the spiral dough hook turns, folding glossy dough against the bowl wall in slow, deliberate revolutions."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. KITCHEN - MORNING",
+      "ie": "int",
+      "location": "KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "A red KitchenAid Artisan sits on a butcher-block counter. Warm window light from camera left. A linen towel drapes nearby."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. KITCHEN - MORNING",
+      "ie": "int",
+      "location": "KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "A hand lifts a deep-crusted boule from a cast-iron Dutch oven. Steam curls upward."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. KITCHEN - MORNING",
+      "ie": "int",
+      "location": "KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "A slice of warm bread on a wood board. A pat of butter slides and melts."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. CARD - DAY",
+      "ie": "int",
+      "location": "CARD",
+      "time_of_day": "DAY"
+    },
+    {
+      "type": "action",
+      "text": "CTA card. The KitchenAid wordmark, a tagline, a button, the URL."
+    },
+    {
+      "type": "transition",
+      "text": "FADE OUT.",
+      "kind": "fade_out"
+    }
+  ]
+}

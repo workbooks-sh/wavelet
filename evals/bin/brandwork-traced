@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+# PATH shim around the real `brandwork` binary. Logs every invocation to
+# $BRANDWORK_TRACE as one JSONL record per call, then forwards the call
+# transparently.
+#
+# During the transition window this shim ALSO appends to the legacy
+# .adalign-trace.jsonl path (via $BRANDWORK_TRACE_LEGACY) so old eval
+# workdirs whose brandwork_research_done validator falls back to that file
+# continue to work. Remove the dual-write once migration is complete.
+#
+# Required env (set by workbench wavelet.commercial action):
+#   BRANDWORK_REAL    — absolute path to the real `brandwork` binary
+#   BRANDWORK_TRACE   — absolute path to the trace file (jsonl, appended)
+#
+# Optional env (transition window):
+#   BRANDWORK_TRACE_LEGACY — if set, also append to this path
+#                            (should point to .adalign-trace.jsonl)
+#
+# Optional env (live cost telemetry, wb-fcq2):
+#   BRANDWORK_COST_LOG — absolute path to a JSONL sidecar; every
+#                        `[brandwork-cost] …` line found on the child's
+#                        stderr is parsed into a JSON record and appended
+#                        here. Defaults to "$(dirname $BRANDWORK_TRACE)/.brandwork-cost.jsonl"
+#
+# Backend keys: Claude Code's Bash tool strips API-key-looking env vars
+# before spawning the shell that invokes this shim, so the agent's
+# brandwork calls would otherwise see no credentials. We re-source them
+# from ~/.config/wavelet/env here (same file wavelet-traced sources);
+# the env file is the canonical source. Shell-exported values (if any
+# survive sanitization) win over file values.
+
+set -u
+
+if [[ -z "${BRANDWORK_REAL:-}" ]]; then
+  echo "brandwork-traced: BRANDWORK_REAL not set" >&2
+  exit 127
+fi
+if [[ -z "${BRANDWORK_TRACE:-}" ]]; then
+  echo "brandwork-traced: BRANDWORK_TRACE not set" >&2
+  exit 127
+fi
+
+# Re-source backend keys claude-code's Bash sanitization stripped.
+WAVELET_ENV_FILE="${HOME}/.config/wavelet/env"
+if [[ -f "$WAVELET_ENV_FILE" ]]; then
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    key="${line%%=*}"
+    value="${line#*=}"
+    [[ -z "$key" || "$key" == "$line" ]] && continue
+    if [[ -z "${!key:-}" ]]; then
+      export "$key=$value"
+    fi
+  done < "$WAVELET_ENV_FILE"
+fi
+
+ts_start=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+ms_start=$(/usr/bin/python3 -c 'import time; print(int(time.time()*1000))')
+
+stdout_tmp=$(mktemp)
+stderr_tmp=$(mktemp)
+trap 'rm -f "$stdout_tmp" "$stderr_tmp"' EXIT
+
+"$BRANDWORK_REAL" "$@" > >(tee "$stdout_tmp") 2> >(tee "$stderr_tmp" >&2)
+exit_code=$?
+
+ms_end=$(/usr/bin/python3 -c 'import time; print(int(time.time()*1000))')
+duration_ms=$(( ms_end - ms_start ))
+stdout_bytes=$(wc -c < "$stdout_tmp" | tr -d ' ')
+stderr_bytes=$(wc -c < "$stderr_tmp" | tr -d ' ')
+
+# Build JSON via python so argv quoting is correct without bash gymnastics.
+/usr/bin/python3 - "$ts_start" "$duration_ms" "$exit_code" "$stdout_bytes" "$stderr_bytes" "$@" <<'PY' >> "$BRANDWORK_TRACE"
+import json, sys
+ts, dur, exit_code, sob, seb, *argv = sys.argv[1:]
+print(json.dumps({
+    "ts": ts,
+    "argv": ["brandwork", *argv],
+    "duration_ms": int(dur),
+    "exit": int(exit_code),
+    "stdout_bytes": int(sob),
+    "stderr_bytes": int(seb),
+}, separators=(",", ":")))
+PY
+
+# wb-fcq2: extract any `[brandwork-cost] …` markers the CLI emitted to
+# stderr and append parsed JSON records to the cost sidecar. The audit
+# command (`brandwork audit-trace`) reads this file to bill capabilities
+# from live data rather than a static cost-per-call table.
+BRANDWORK_COST_LOG_RESOLVED="${BRANDWORK_COST_LOG:-$(dirname "$BRANDWORK_TRACE")/.brandwork-cost.jsonl}"
+if grep -q '^\[brandwork-cost\]' "$stderr_tmp" 2>/dev/null; then
+  /usr/bin/python3 - "$ts_start" "$BRANDWORK_COST_LOG_RESOLVED" "$stderr_tmp" "$@" <<'PY'
+import json, re, sys
+ts, cost_log, stderr_path, *argv = sys.argv[1:]
+with open(stderr_path, 'r', encoding='utf-8', errors='replace') as fh:
+    lines = fh.readlines()
+records = []
+for line in lines:
+    line = line.strip()
+    if not line.startswith('[brandwork-cost]'):
+        continue
+    tail = line[len('[brandwork-cost]'):].strip()
+    kv = {}
+    for tok in tail.split():
+        if '=' not in tok:
+            continue
+        k, _, v = tok.partition('=')
+        kv[k] = v
+    if 'capability' not in kv:
+        continue
+    def num(key, default=None):
+        if key not in kv:
+            return default
+        try:
+            return float(kv[key])
+        except ValueError:
+            return default
+    usd_at_cost = num('usd_at_cost', num('usd', 0.0))
+    usd_with_margin = num('usd_with_margin', usd_at_cost)
+    margin = num('margin', 1.0)
+    extras = {k: v for k, v in kv.items()
+              if k not in ('usd', 'usd_at_cost', 'usd_with_margin', 'margin', 'capability')}
+    records.append({
+        'ts': ts,
+        'argv': ['brandwork', *argv],
+        'capability': kv['capability'],
+        'usd_at_cost': usd_at_cost,
+        'usd_with_margin': usd_with_margin,
+        'margin': margin,
+        'extras': extras,
+        'raw': line,
+    })
+if records:
+    with open(cost_log, 'a', encoding='utf-8') as out:
+        for rec in records:
+            out.write(json.dumps(rec, separators=(',', ':')) + '\n')
+PY
+fi
+
+# Transition-window dual-write: also append to the legacy adalign trace
+# path so old eval workdirs using .adalign-trace.jsonl keep working.
+if [[ -n "${BRANDWORK_TRACE_LEGACY:-}" ]]; then
+  /usr/bin/python3 - "$ts_start" "$duration_ms" "$exit_code" "$stdout_bytes" "$stderr_bytes" "$@" <<'PY' >> "$BRANDWORK_TRACE_LEGACY"
+import json, sys
+ts, dur, exit_code, sob, seb, *argv = sys.argv[1:]
+print(json.dumps({
+    "ts": ts,
+    "argv": ["brandwork", *argv],
+    "duration_ms": int(dur),
+    "exit": int(exit_code),
+    "stdout_bytes": int(sob),
+    "stderr_bytes": int(seb),
+}, separators=(",", ":")))
+PY
+fi
+
+exit "$exit_code"

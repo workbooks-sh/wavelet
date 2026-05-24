@@ -1,0 +1,104 @@
+{
+  "mode": "live",
+  "provider": "synthetic-equal-pacing",
+  "request_hash": "5a878d666378acf6",
+  "cached": false,
+  "cost_estimate_usd": 0.0,
+  "style": null,
+  "result": {
+    "provider": "synthetic-equal-pacing",
+    "words": [
+      {
+        "word": "For",
+        "start_ms": 0,
+        "end_ms": 667
+      },
+      {
+        "word": "the",
+        "start_ms": 667,
+        "end_ms": 1333
+      },
+      {
+        "word": "ones",
+        "start_ms": 1333,
+        "end_ms": 2000
+      },
+      {
+        "word": "who",
+        "start_ms": 2000,
+        "end_ms": 2667
+      },
+      {
+        "word": "still",
+        "start_ms": 2667,
+        "end_ms": 3333
+      },
+      {
+        "word": "make",
+        "start_ms": 3333,
+        "end_ms": 4000
+      },
+      {
+        "word": "it",
+        "start_ms": 4000,
+        "end_ms": 4667
+      },
+      {
+        "word": "by",
+        "start_ms": 4667,
+        "end_ms": 5333
+      },
+      {
+        "word": "hand.",
+        "start_ms": 5333,
+        "end_ms": 6000
+      },
+      {
+        "word": "Built",
+        "start_ms": 6000,
+        "end_ms": 6667
+      },
+      {
+        "word": "to",
+        "start_ms": 6667,
+        "end_ms": 7333
+      },
+      {
+        "word": "be",
+        "start_ms": 7333,
+        "end_ms": 8000
+      },
+      {
+        "word": "passed",
+        "start_ms": 8000,
+        "end_ms": 8667
+      },
+      {
+        "word": "down.",
+        "start_ms": 8667,
+        "end_ms": 9333
+      },
+      {
+        "word": "KitchenAid.",
+        "start_ms": 9333,
+        "end_ms": 10000
+      },
+      {
+        "word": "Made",
+        "start_ms": 10000,
+        "end_ms": 10667
+      },
+      {
+        "word": "for",
+        "start_ms": 10667,
+        "end_ms": 11333
+      },
+      {
+        "word": "makers.",
+        "start_ms": 11333,
+        "end_ms": 12000
+      }
+    ],
+    "total_ms": 12000
+  }
+}

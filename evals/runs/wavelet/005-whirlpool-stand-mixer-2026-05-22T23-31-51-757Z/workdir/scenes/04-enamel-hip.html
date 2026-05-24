@@ -1,0 +1,33 @@
+<!doctype html>
+<html><head><style>
+  html, body { margin: 0; padding: 0; background: transparent; width: 100%; height: 100%; overflow: hidden; font-family: "JetBrains Mono", "SF Mono", "Menlo", monospace; }
+  .hud {
+    position: absolute; inset: 0;
+    padding: 6vh 7vw;
+    color: #f5efe6cc;
+    display: grid;
+    grid-template-rows: 1fr auto;
+  }
+  .meta {
+    align-self: end;
+    display: flex; justify-content: space-between;
+    font-size: 13px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+  .meta span:last-child { text-align: right; }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .meta span { animation: fade-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both; }
+  .meta span:last-child { animation-delay: 0.7s; }
+</style></head>
+<body>
+  <div class="hud">
+    <div class="meta">
+      <span>Cast metal &mdash; hand-finished enamel</span>
+      <span>Whirlpool</span>
+    </div>
+  </div>
+</body></html>

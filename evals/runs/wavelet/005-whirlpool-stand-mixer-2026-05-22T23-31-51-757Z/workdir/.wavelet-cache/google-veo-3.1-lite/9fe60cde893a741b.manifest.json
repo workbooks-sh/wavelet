@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "google-veo-3.1-lite",
+  "cluster": "video_txt2vid",
+  "request_hash": "9fe60cde893a741b",
+  "request": {
+    "prompt": "Wide hero shot: a single pearl-white stand mixer sits alone on a warm walnut wood counter in a quiet home kitchen, a stainless loaf pan and one sprig of fresh rosemary nearby, soft warm morning light from the left, otherwise empty kitchen, calm and architectural, no people, no text, no logos, 50 mm full-frame, warm morning window light camera-left at 3200K, deep cream-and-brown palette, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "google-veo-3.1-lite",
+    "video_path": ".wavelet-cache/google-veo-3.1-lite/9fe60cde893a741b.mp4",
+    "video_bytes": 375909,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "Wide hero shot: a single pearl-white stand mixer sits alone on a warm walnut wood counter in a quiet home kitchen, a stainless loaf pan and one sprig of fresh rosemary nearby, soft warm morning light from the left, otherwise empty kitchen, calm and architectural, no people, no text, no logos, 50 mm full-frame, warm morning window light camera-left at 3200K, deep cream-and-brown palette, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait"
+  },
+  "cost_estimate_usd": 0.4,
+  "asset_path": ".wavelet-cache/google-veo-3.1-lite/9fe60cde893a741b.mp4",
+  "created_at": "2026-05-22T23:37:33Z"
+}

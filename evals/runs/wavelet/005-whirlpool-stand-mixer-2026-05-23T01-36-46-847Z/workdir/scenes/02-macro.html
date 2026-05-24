@@ -1,0 +1,56 @@
+<!doctype html>
+<html><head><style>
+  :root {
+    --red: #E0241B;
+    --cream: #F4F0E8;
+    --ink: #1A1614;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html, body { margin:0; padding:0; background: transparent; width:100%; height:100%; overflow:hidden; }
+
+  .vignette {
+    position:absolute; inset:0;
+    background:
+      radial-gradient(120% 80% at 50% 100%, rgba(26,22,20,0.62) 0%, rgba(26,22,20,0.0) 55%),
+      radial-gradient(120% 80% at 50% 0%, rgba(26,22,20,0.25) 0%, rgba(26,22,20,0.0) 60%);
+    pointer-events:none;
+  }
+
+  .headline {
+    position:absolute;
+    left: 8vw; right: 8vw;
+    bottom: 18vh;
+    color: var(--cream);
+    font: italic 500 11.5vw/0.98 "Georgia", "Times New Roman", serif;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-shadow: 0 6px 22px rgba(0,0,0,0.45);
+    opacity: 0;
+    animation:
+      rise 1.3s var(--ease-out-expo) 0.45s forwards,
+      fadeOut 0.5s var(--ease-out-expo) 3.45s forwards;
+  }
+
+  .stop {
+    display:inline-block;
+    width: 0.22em;
+    height: 0.22em;
+    background: var(--red);
+    border-radius: 50%;
+    margin-left: 0.04em;
+    transform: translateY(-0.06em);
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+</style></head>
+<body>
+  <div class="vignette"></div>
+  <h1 class="headline">Built<br/>to be<br/>passed down<span class="stop"></span></h1>
+</body></html>

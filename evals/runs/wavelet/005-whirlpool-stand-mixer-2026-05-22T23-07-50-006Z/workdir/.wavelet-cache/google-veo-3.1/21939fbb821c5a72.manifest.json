@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "google-veo-3.1",
+  "cluster": "video_txt2vid",
+  "request_hash": "21939fbb821c5a72",
+  "request": {
+    "prompt": "Slow steady cinematic pull-back portrait: a vintage tilt-head stand mixer in iconic Empire Red glossy enamel rests at the center of a marble counter in golden hour light, the mixer is surrounded by warm domestic clutter — a glass bowl of risen pale dough proofing under a creased linen towel, a wooden spoon at rest, a small ceramic vase of dried lavender, a worn cookbook lying open, the camera retreats unhurried and reveals the full warm counter, dust motes drift in the warm side light, no people in frame, 50mm full-frame, shallow depth of field, warm golden-hour window light from camera-left at 3000K, deep cream-and-walnut palette with iconic Empire Red accent, gentle film grain, A24 domestic-warm color grade, locked 9:16 portrait",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "google-veo-3.1",
+    "video_path": ".wavelet-cache/google-veo-3.1/21939fbb821c5a72.mp4",
+    "video_bytes": 531500,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "Slow steady cinematic pull-back portrait: a vintage tilt-head stand mixer in iconic Empire Red glossy enamel rests at the center of a marble counter in golden hour light, the mixer is surrounded by warm domestic clutter — a glass bowl of risen pale dough proofing under a creased linen towel, a wooden spoon at rest, a small ceramic vase of dried lavender, a worn cookbook lying open, the camera retreats unhurried and reveals the full warm counter, dust motes drift in the warm side light, no people in frame, 50mm full-frame, shallow depth of field, warm golden-hour window light from camera-left at 3000K, deep cream-and-walnut palette with iconic Empire Red accent, gentle film grain, A24 domestic-warm color grade, locked 9:16 portrait"
+  },
+  "cost_estimate_usd": 2.0,
+  "asset_path": ".wavelet-cache/google-veo-3.1/21939fbb821c5a72.mp4",
+  "created_at": "2026-05-22T23:11:25Z"
+}

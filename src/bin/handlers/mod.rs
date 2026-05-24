@@ -18,6 +18,7 @@ use wavelet::pipelines::{default_search_dir, discover, load_from_path, Pipeline}
 pub mod brief;
 pub mod c2pa;
 pub mod captions;
+pub mod character;
 pub mod clip;
 pub mod clip_import;
 pub mod continuity;

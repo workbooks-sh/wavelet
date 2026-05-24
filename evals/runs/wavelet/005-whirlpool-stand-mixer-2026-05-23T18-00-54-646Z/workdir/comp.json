@@ -1,0 +1,51 @@
+{
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration_frames": 360,
+  "scenes": [
+    {
+      "html_path": "scenes/01-hook.html",
+      "video_bg": "shots/shot-1-butter-sugar.mp4",
+      "start_frame": 0,
+      "duration_frames": 75
+    },
+    {
+      "html_path": "scenes/02-hero.html",
+      "video_bg": "shots/shot-2-hero-tilt.mp4",
+      "start_frame": 75,
+      "duration_frames": 75
+    },
+    {
+      "html_path": "scenes/03-dough.html",
+      "video_bg": "shots/shot-3-dough-hook.mp4",
+      "start_frame": 150,
+      "duration_frames": 75
+    },
+    {
+      "html_path": "scenes/04-chocolate.html",
+      "video_bg": "shots/shot-4-chocolate.mp4",
+      "start_frame": 225,
+      "duration_frames": 75
+    },
+    {
+      "html_path": "scenes/05-cta.html",
+      "start_frame": 300,
+      "duration_frames": 60
+    }
+  ],
+  "audio_cues": [
+    {
+      "id": "music",
+      "asset_path": "music/track.wav",
+      "start_frame": 0,
+      "duration_frames": 360,
+      "volume": 0.85,
+      "pan": 0.0,
+      "fade_in_frames": 12,
+      "fade_out_frames": 30,
+      "duck_targets": [],
+      "duck_db": 0.0
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "duration_secs": 9.899889,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "INT. KITCHEN COUNTER - MORNING",
+      "first_shot": 0,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 1,
+      "slugline": "INT. MIXING BOWL - MORNING",
+      "first_shot": 2,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 2,
+      "slugline": "INT. KITCHEN - MORNING",
+      "first_shot": 4,
+      "shot_count": 2
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-0-est",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 0,
+      "start_secs": 0.0,
+      "duration_secs": 1.5,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN COUNTER",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN COUNTER",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-1-0",
+      "shot_index": 1,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 1.5,
+      "duration_secs": 1.5407407,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "creamy KitchenAid Artisan stand mixer",
+      "generation": {
+        "kind": "stock_search",
+        "query": "creamy KitchenAid Artisan stand mixer",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-1-est",
+      "shot_index": 2,
+      "scene_index": 1,
+      "screenplay_element_index": 3,
+      "start_secs": 3.0407407,
+      "duration_secs": 1.6016731,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "MIXING BOWL",
+      "generation": {
+        "kind": "stock_search",
+        "query": "MIXING BOWL",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-1-act-4-0",
+      "shot_index": 3,
+      "scene_index": 1,
+      "screenplay_element_index": 4,
+      "start_secs": 4.642414,
+      "duration_secs": 1.6703436,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Macro: the spiral dough hook",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Macro: the spiral dough hook",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-2-est",
+      "shot_index": 4,
+      "scene_index": 2,
+      "screenplay_element_index": 6,
+      "start_secs": 6.3127575,
+      "duration_secs": 1.7485241,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-2-act-7-0",
+      "shot_index": 5,
+      "scene_index": 2,
+      "screenplay_element_index": 7,
+      "start_secs": 8.061281,
+      "duration_secs": 1.8386079,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "The camera dollies slowly backward.",
+      "generation": {
+        "kind": "stock_search",
+        "query": "The camera dollies slowly backward.",
+        "orientation": "landscape"
+      }
+    }
+  ]
+}

@@ -281,7 +281,7 @@ pub fn transform_inherits(snap: &FrameSnapshot, selector: &str) -> TransformInhe
     let mut cur_parent = n.parent;
     while let Some(pid) = cur_parent {
         let Some(p) = by_id.get(&pid) else { break };
-        if p.has_own_transform {
+        if p.transform.is_some() {
             offending.push(p.id);
         }
         cur_parent = p.parent;

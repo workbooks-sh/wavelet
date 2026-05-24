@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "provider": "google-lyria-3-pro",
+  "cluster": "music_ref_conditioned",
+  "request_hash": "e950703c1f53e305",
+  "request": {
+    "prompt": "warm low-key acoustic guitar bed, soft brushed percussion, gentle and intimate, 80bpm open → 105bpm transition-cut → 105bpm build → 70bpm transition-fadeout, 76 bpm average",
+    "duration_secs": 24.0,
+    "bpm": 75.56301879882812
+  },
+  "response": {
+    "provider": "google-lyria-3-pro",
+    "audio_path": ".wavelet-cache/google-lyria-3-pro/e950703c1f53e305.mp3",
+    "audio_bytes": 1654298,
+    "mime": "audio/mpeg",
+    "model_variant": "lyria-3-pro-preview",
+    "prompt_sent": "24 second warm low-key acoustic guitar bed, soft brushed percussion, gentle and intimate, 80bpm open → 105bpm transition-cut → 105bpm build → 70bpm transition-fadeout, 76 bpm average",
+    "duration_secs": 24.0
+  },
+  "cost_estimate_usd": 0.024,
+  "asset_path": ".wavelet-cache/google-lyria-3-pro/e950703c1f53e305.mp3",
+  "created_at": "2026-05-23T23:21:28Z"
+}

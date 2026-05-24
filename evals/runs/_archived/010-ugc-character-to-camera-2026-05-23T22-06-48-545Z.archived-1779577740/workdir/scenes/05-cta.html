@@ -1,0 +1,107 @@
+<!doctype html>
+<html><head><style>
+  @import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,800;1,400&family=Inter:wght@500;700;800&display=swap");
+  :root {
+    --cream: #FAF5EE;
+    --aqua: #B8DDE3;
+    --aqua-deep: #7FB1BA;
+    --ink: #1F1F22;
+    --sage: #C8D4C0;
+    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-out-back:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  html, body { margin: 0; padding: 0; background: transparent; width: 100%; height: 100%; overflow: hidden; }
+  .stage {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 28%, rgba(184, 221, 227, 0.65) 0%, transparent 58%),
+      var(--cream);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 200px 40px 200px;  /* clear Reels safe zones top/bottom */
+    gap: 28px;
+  }
+  /* floating dew-drop motif */
+  .drop {
+    position: relative;
+    width: 130px; height: 162px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.78) 0%, var(--aqua) 55%, var(--aqua-deep) 100%);
+    border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+    transform: rotate(-8deg);
+    filter: drop-shadow(0 12px 24px rgba(31, 31, 34, 0.20));
+    margin-bottom: 6px;
+    opacity: 0;
+    animation: drop-in 0.85s var(--ease-out-back) 0.05s forwards;
+  }
+  .drop::after {
+    content: "";
+    position: absolute;
+    top: 18%; left: 28%;
+    width: 32px; height: 46px;
+    background: rgba(255, 255, 255, 0.82);
+    border-radius: 50%;
+  }
+  @keyframes drop-in {
+    from { opacity: 0; transform: translateY(-22px) rotate(-8deg) scale(0.82); }
+    to   { opacity: 1; transform: translateY(0)     rotate(-8deg) scale(1); }
+  }
+  .wordmark {
+    font: 800 112px/0.92 "Fraunces", "Georgia", serif;
+    color: var(--ink);
+    letter-spacing: -0.04em;
+    margin: 0;
+    text-align: center;
+    opacity: 0;
+    animation: rise 0.7s var(--ease-out-quint) 0.32s forwards;
+  }
+  .wordmark em {
+    font-style: italic;
+    font-weight: 400;
+  }
+  .tagline {
+    margin: 0;
+    font: 600 54px/1.15 "Fraunces", serif;
+    font-style: italic;
+    color: var(--ink);
+    text-align: center;
+    opacity: 0;
+    animation: rise 0.7s var(--ease-out-quint) 0.5s forwards;
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .cta-btn {
+    background: var(--ink);
+    color: var(--cream);
+    border: 0;
+    padding: 30px 56px;
+    font: 800 54px/1 "Inter", system-ui, sans-serif;
+    letter-spacing: 0.04em;
+    border-radius: 999px;
+    box-shadow: 0 6px 12px rgba(31, 31, 34, 0.18);
+    margin-top: 12px;
+    opacity: 0;
+    animation: rise 0.5s var(--ease-out-back) 0.3s forwards;
+  }
+  .url {
+    font: 700 54px/1 "Inter", system-ui, sans-serif;
+    color: #FAF5EE;
+    background: #1F1F22;
+    letter-spacing: 0.04em;
+    margin-top: 40px;
+    padding: 36px 60px;
+    border-radius: 18px;
+    opacity: 0;
+    animation: rise 0.5s var(--ease-out-quint) 0.4s forwards;
+  }
+</style></head>
+<body>
+  <div class="stage">
+    <div class="drop"></div>
+    <h1 class="wordmark">dew <em>drop</em></h1>
+    <p class="tagline">two drops to glass skin.</p>
+    <button class="cta-btn">Shop now</button>
+    <span class="url">dewdrop.co</span>
+  </div>
+</body></html>

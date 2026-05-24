@@ -3,10 +3,20 @@
 //! emits a `LintReport` in the requested format.
 
 use crate::cli_args::LintOp;
+use crate::lint::audio_presence as audio_presence_rule;
+use crate::lint::baked_text_ocr as baked_text_ocr_rule;
+use crate::lint::color_grade as color_grade_rule;
 use crate::lint::glyph_clip as glyph_clip_rule;
+use crate::lint::hallucinated_attrs as hallucinated_attrs_rule;
+use crate::lint::layout_axis as layout_axis_rule;
+use crate::lint::mp4_frames;
 use crate::lint::report::{LintReport, Severity};
+use crate::lint::static_frame_trim as static_frame_trim_rule;
 use crate::lint::safe_zone as safe_zone_rule;
 use crate::lint::safe_zones;
+use crate::lint::text_on_subject as text_on_subject_rule;
+use crate::lint::text_readability as text_readability_rule;
+use crate::lint::text_readability_contrast as text_readability_contrast_rule;
 use crate::query::FrameSnapshot;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
@@ -29,7 +39,12 @@ pub fn run(op: LintOp) -> ExitCode {
     }
 
     let rules_run = filter_rules(&op.rules);
-    let (canvas_w, canvas_h) = infer_canvas(&op.aspect, &scenes);
+    let (canvas_w, canvas_h) = infer_canvas(&op.aspect, &op.path, &scenes);
+    let aspect_class = text_readability_rule::classify_aspect(
+        op.aspect.as_deref(),
+        canvas_w,
+        canvas_h,
+    );
 
     let mut report = LintReport {
         scenes_checked: scenes.len(),
@@ -62,19 +77,186 @@ pub fn run(op: LintOp) -> ExitCode {
         _ => None,
     };
 
-    for scene_path in &scenes {
-        let t_secs = op.at.unwrap_or(1.0);
-        let snap = FrameSnapshot::from_html(scene_path, canvas_w, canvas_h, t_secs);
+    // When `--at` is unset we sample at one settled-midpoint time
+    // per scene. The 3-sample multi-time scan (0.11, 0.5, 1.0) was
+    // intended to catch animation-driven geometry changes (letter-
+    // spacing keyframes, font-variation interpolation) but the
+    // 008 post-mortem showed it inflated lint runtime to 145s for a
+    // typical 8-scene commercial — agent burned half its budget on
+    // lint iterations that never advanced because the cost was so
+    // high. The vast majority of text overlays are static across
+    // their scene window; a single t=1.0s sample is sufficient.
+    // Callers who genuinely care about animation-start clip cases
+    // can opt back in with multi-`--at` invocations or by extending
+    // this list locally; the dedup logic handles overlap regardless.
+    let sample_times: Vec<f32> = match op.at {
+        Some(t) => vec![t],
+        None => vec![1.0],
+    };
 
-        if rules_run.contains(&safe_zone_rule::RULE) {
-            if let (Some(zone), Some(platform)) = (scaled_zone.as_ref(), op.platform.as_deref()) {
-                let mut fs = safe_zone_rule::run(&snap, scene_path, zone, platform);
-                report.findings.append(&mut fs);
+    let mut contrast_cache = text_readability_contrast_rule::ContrastFrameCache::new();
+    for scene_path in &scenes {
+        let mut per_scene: Vec<crate::lint::report::LintFinding> = Vec::new();
+        for &t_secs in &sample_times {
+            let snap = FrameSnapshot::from_html(scene_path, canvas_w, canvas_h, t_secs);
+
+            if rules_run.contains(&safe_zone_rule::RULE) {
+                if let (Some(zone), Some(platform)) =
+                    (scaled_zone.as_ref(), op.platform.as_deref())
+                {
+                    let mut fs = safe_zone_rule::run(&snap, scene_path, zone, platform);
+                    per_scene.append(&mut fs);
+                }
+            }
+
+            if rules_run.contains(&glyph_clip_rule::RULE) {
+                let mut fs = glyph_clip_rule::run(&snap, scene_path);
+                per_scene.append(&mut fs);
+            }
+
+            if rules_run.contains(&layout_axis_rule::RULE) {
+                let mut fs = layout_axis_rule::run(&snap, scene_path);
+                per_scene.append(&mut fs);
+            }
+
+            if rules_run.contains(&static_frame_trim_rule::RULE) {
+                let mut fs = static_frame_trim_rule::run(scene_path);
+                per_scene.append(&mut fs);
+            }
+
+            if rules_run.contains(&text_readability_rule::RULE) {
+                let mut fs = text_readability_rule::run(&snap, scene_path, aspect_class);
+                per_scene.append(&mut fs);
+                // Contrast pass — independent of cap-height. Same rule
+                // identifier; subkind distinguishes them in dedup.
+                let mut fs2 = text_readability_contrast_rule::run(
+                    &snap,
+                    scene_path,
+                    &mut contrast_cache,
+                );
+                per_scene.append(&mut fs2);
+            }
+
+            // text-on-subject: opt-in, depth-model-gated. Runs once per
+            // sample time. Passes the MP4 path (if any) so the rule can
+            // sample actual rendered video frames rather than the HTML
+            // placeholder.
+            if rules_run.contains(&text_on_subject_rule::RULE) {
+                let mut fs = text_on_subject_rule::run(
+                    &snap,
+                    scene_path,
+                    op.mp4.as_deref(),
+                );
+                per_scene.append(&mut fs);
             }
         }
 
-        if rules_run.contains(&glyph_clip_rule::RULE) {
-            let mut fs = glyph_clip_rule::run(&snap, scene_path);
+        // Dedup: per (rule, element_selector, subkind) keep the
+        // worst-severity finding. Sampling multiple times can surface
+        // the same defect twice; the reader doesn't want both. The
+        // subkind dimension keeps cap-height + contrast findings on
+        // the same element from collapsing into each other.
+        per_scene.sort_by(|a, b| {
+            (a.rule.as_str(), a.element_selector.as_str(), a.subkind.as_deref().unwrap_or(""))
+                .cmp(&(b.rule.as_str(), b.element_selector.as_str(), b.subkind.as_deref().unwrap_or("")))
+                .then_with(|| severity_rank(b.severity).cmp(&severity_rank(a.severity)))
+        });
+        per_scene.dedup_by(|a, b| {
+            a.rule == b.rule
+                && a.element_selector == b.element_selector
+                && a.subkind == b.subkind
+        });
+        report.findings.append(&mut per_scene);
+    }
+
+    // Post-render contrast pass — when an MP4 was provided, sample
+    // frames from the actual composited output and run the halo-
+    // contrast measurement against those pixels. This is the only
+    // stage that sees the same pixels the viewer will: white text
+    // over Veo-rendered countertops, scrim panels burned in by the
+    // encoder, etc. Findings carry `subkind: "contrast-rendered"`
+    // so they coexist with the lint-time HTML-render contrast pass.
+    if let Some(mp4_path) = &op.mp4 {
+        if rules_run.contains(&text_readability_rule::RULE) {
+            let duration = mp4_frames::probe_duration_secs(mp4_path).unwrap_or(12.0);
+            // 4 evenly-spaced samples avoid the first/last keyframe
+            // edge cases. For a 12s spot: 1.5, 4.5, 7.5, 10.5.
+            let n_samples = 4;
+            for i in 0..n_samples {
+                let frac = (i as f32 + 0.5) / n_samples as f32;
+                let t = (duration * frac).max(0.0);
+                let snap = FrameSnapshot::from_html(&op.path, canvas_w, canvas_h, t);
+                let Some(frame) =
+                    mp4_frames::sample_frame_rgba(mp4_path, t, canvas_w, canvas_h)
+                else {
+                    eprintln!(
+                        "wavelet lint: ffmpeg sample failed at t={t:.2}s — skipping"
+                    );
+                    continue;
+                };
+                let mut fs = crate::lint::text_readability_contrast::run_against_frame(
+                    &snap, &op.path, &frame,
+                );
+                for f in fs.iter_mut() {
+                    f.subkind = Some("contrast-rendered".to_string());
+                    f.message = format!(
+                        "{}  (sampled from final MP4 at t={:.2}s)",
+                        f.message, t
+                    );
+                }
+                report.findings.append(&mut fs);
+            }
+        }
+    }
+
+    if rules_run.contains(&color_grade_rule::RULE) {
+        match color_grade_rule::run(&op.path) {
+            Ok(mut outcome) => report.findings.append(&mut outcome.findings),
+            Err(e) => {
+                eprintln!("wavelet lint: color-grade-coherence: {e}");
+                return ExitCode::from(3);
+            }
+        }
+    }
+
+    if rules_run.contains(&audio_presence_rule::RULE) {
+        match audio_presence_rule::run(&op.path) {
+            Ok(mut outcome) => report.findings.append(&mut outcome.findings),
+            Err(e) => {
+                eprintln!("wavelet lint: audio-presence: {e}");
+                return ExitCode::from(3);
+            }
+        }
+    }
+
+    // wb-a2z2: catch the hallucinated attribute names (data-video-bg,
+    // data-scene-href, etc.) that the compose pre-pass silently drops.
+    if rules_run.contains(&hallucinated_attrs_rule::RULE) {
+        match hallucinated_attrs_rule::run(&op.path) {
+            Ok(mut outcome) => report.findings.append(&mut outcome.findings),
+            Err(e) => {
+                eprintln!("wavelet lint: hallucinated-attrs: {e}");
+                return ExitCode::from(3);
+            }
+        }
+    }
+
+    // Baked-text OCR pass — requires --mp4. Samples 4 frames from the final
+    // composited MP4 and runs PaddleOCR v5 ONNX to catch garbled letterforms
+    // that Veo or other AI generators sometimes produce. The `ocr` cargo
+    // feature gate is inside baked_text_ocr::run; when the feature is off it
+    // returns one Info finding describing how to opt in.
+    if rules_run.contains(&baked_text_ocr_rule::RULE) {
+        if let Some(mp4_path) = &op.mp4 {
+            let html = std::fs::read_to_string(&op.path).unwrap_or_default();
+            let expected_tokens = baked_text_ocr_rule::extract_brand_tokens(&html);
+            let mut fs = baked_text_ocr_rule::run(
+                mp4_path,
+                &op.path,
+                &expected_tokens,
+                canvas_w,
+                canvas_h,
+            );
             report.findings.append(&mut fs);
         }
     }
@@ -91,8 +273,30 @@ pub fn run(op: LintOp) -> ExitCode {
     }
 }
 
+fn severity_rank(s: Severity) -> u8 {
+    match s {
+        Severity::Error => 3,
+        Severity::Warn => 2,
+        Severity::Info => 1,
+    }
+}
+
 fn filter_rules(requested: &[String]) -> Vec<&'static str> {
-    let available = [safe_zone_rule::RULE, glyph_clip_rule::RULE];
+    // `text-on-subject` is intentionally excluded from the default set —
+    // it requires the `depth` feature + model download and is opt-in via
+    // `--rules text-on-subject`.
+    let available = [
+        safe_zone_rule::RULE,
+        glyph_clip_rule::RULE,
+        layout_axis_rule::RULE,
+        color_grade_rule::RULE,
+        text_readability_rule::RULE,
+        audio_presence_rule::RULE,
+        hallucinated_attrs_rule::RULE,
+        static_frame_trim_rule::RULE,
+        text_on_subject_rule::RULE,
+        baked_text_ocr_rule::RULE,
+    ];
     let mut out = Vec::new();
     for r in requested {
         let want = r.trim();
@@ -114,15 +318,48 @@ fn filter_rules(requested: &[String]) -> Vec<&'static str> {
     out
 }
 
-fn infer_canvas(aspect: &Option<String>, scenes: &[PathBuf]) -> (u32, u32) {
+fn infer_canvas(aspect: &Option<String>, input: &Path, scenes: &[PathBuf]) -> (u32, u32) {
     if let Some(a) = aspect {
         if let Some(d) = aspect_to_canvas(a) {
             return d;
         }
     }
+    // Canonical source: the manifest (`input`) almost always carries
+    // the `<meta name="resolution">`. Check it FIRST — before falling
+    // back to per-scene meta or walking the workdir — because the 008
+    // post-mortem showed the walk-up logic mis-resolving canvas on
+    // relative scene paths (`scenes/foo.html`) where `parent().parent()`
+    // returns an empty path and `read_dir("")` fails silently.
+    if let Some(d) = parse_meta_resolution(input) {
+        return d;
+    }
+    // Per-scene meta (rare — scene HTMLs usually inherit from manifest).
     for scene in scenes {
         if let Some(d) = parse_meta_resolution(scene) {
             return d;
+        }
+    }
+    // Last-resort directory walk: look for ANY .html sibling of the
+    // first scene's workdir with a meta. Robust against relative-path
+    // edge cases by canonicalizing the parent.
+    if let Some(first) = scenes.first() {
+        let parent = first
+            .parent()
+            .and_then(|p| p.parent())
+            .filter(|p| !p.as_os_str().is_empty())
+            .map(|p| p.to_path_buf())
+            .or_else(|| Some(std::env::current_dir().ok()?));
+        if let Some(dir) = parent {
+            if let Ok(read) = std::fs::read_dir(&dir) {
+                for entry in read.flatten() {
+                    let p = entry.path();
+                    if p.extension().and_then(|s| s.to_str()) == Some("html") {
+                        if let Some(d) = parse_meta_resolution(&p) {
+                            return d;
+                        }
+                    }
+                }
+            }
         }
     }
     (1080, 1920)
@@ -257,16 +494,25 @@ fn emit_text(report: &LintReport) {
             f.scene_path.display(),
             f.t_secs,
         );
-        println!("       element: {}", f.element_selector);
-        println!(
-            "       bbox: x={} y={} w={} h={}",
-            f.element_bbox.x as i32,
-            f.element_bbox.y as i32,
-            f.element_bbox.w as i32,
-            f.element_bbox.h as i32,
-        );
-        println!("       detail: {}", f.message);
-        println!("       fix: {}", f.fix_hint);
+        let has_bbox = f.element_bbox.w > 0.0 && f.element_bbox.h > 0.0;
+        if has_bbox {
+            println!("       element: {}", f.element_selector);
+            println!(
+                "       bbox: x={} y={} w={} h={}",
+                f.element_bbox.x as i32,
+                f.element_bbox.y as i32,
+                f.element_bbox.w as i32,
+                f.element_bbox.h as i32,
+            );
+        }
+        if f.message.contains('\n') {
+            println!("       detail: {}", f.message);
+        } else {
+            println!("       detail: {}", f.message);
+        }
+        if !f.fix_hint.is_empty() {
+            println!("       fix: {}", f.fix_hint);
+        }
         println!();
     }
 

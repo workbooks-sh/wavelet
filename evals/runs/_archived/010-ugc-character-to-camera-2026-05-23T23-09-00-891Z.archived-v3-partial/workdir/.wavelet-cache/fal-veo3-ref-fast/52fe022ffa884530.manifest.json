@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "provider": "fal-veo3-ref-fast",
+  "cluster": "video_multi_ref",
+  "request_hash": "52fe022ffa884530",
+  "request": {
+    "prompt": "Extreme close-up of a young woman's hands with light olive skin and short clean unpainted nails, holding a small frosted-glass dropper bottle with a black rubber bulb over her open palm, she gently squeezes the bulb and one bead of clear serum slowly forms on the dropper tip and falls onto her fingertip, cream marble bathroom counter softly out of focus behind, soft warm daylight from camera-left, no dialogue and no spoken audio, only quiet room tone. Macro framing, handheld iPhone 16 Pro Max held close above the counter, Apple HDR camera-native color, slight rolling-shutter wobble, no color grade beyond camera-native, no anamorphic flare, no film grain, 9:16 portrait. No text on screen, no signage in background, no labels on the bottle, plain unmarked frosted glass, no captions, no watermarks.",
+    "reference_images": [
+      "./refs/character/dana-hands.jpg"
+    ],
+    "duration_secs": 8.0,
+    "aspect_ratio": "16:9"
+  },
+  "response": {
+    "provider": "fal-veo3-ref-fast",
+    "video_path": ".wavelet-cache/fal-veo3-ref-fast/52fe022ffa884530.mp4",
+    "video_bytes": 1971764,
+    "mime": "video/mp4",
+    "duration_secs": 8.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "Extreme close-up of a young woman's hands with light olive skin and short clean unpainted nails, holding a small frosted-glass dropper bottle with a black rubber bulb over her open palm, she gently squeezes the bulb and one bead of clear serum slowly forms on the dropper tip and falls onto her fingertip, cream marble bathroom counter softly out of focus behind, soft warm daylight from camera-left, no dialogue and no spoken audio, only quiet room tone. Macro framing, handheld iPhone 16 Pro Max held close above the counter, Apple HDR camera-native color, slight rolling-shutter wobble, no color grade beyond camera-native, no anamorphic flare, no film grain, 9:16 portrait. No text on screen, no signage in background, no labels on the bottle, plain unmarked frosted glass, no captions, no watermarks."
+  },
+  "cost_estimate_usd": 2.0,
+  "asset_path": ".wavelet-cache/fal-veo3-ref-fast/52fe022ffa884530.mp4",
+  "created_at": "2026-05-23T23:13:08Z"
+}

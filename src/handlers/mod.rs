@@ -31,6 +31,10 @@ pub mod image_scrim;
 
 /// Handler for the `image verify-shot` subcommand — VLM-graded verification.
 pub mod image_verify_shot;
+
+/// Handler for the `image depth-map` subcommand — per-pixel relative
+/// depth via Depth Anything V2 Small (requires the `depth` feature).
+pub mod image_depth_map;
 /// (auto-generated placeholder)
 pub mod shot_still_variants;
 /// (auto-generated placeholder)

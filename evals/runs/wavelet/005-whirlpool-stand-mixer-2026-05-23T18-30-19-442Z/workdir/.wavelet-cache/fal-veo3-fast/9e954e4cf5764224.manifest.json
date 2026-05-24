@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "fal-veo3-fast",
+  "cluster": "video_txt2vid",
+  "request_hash": "9e954e4cf5764224",
+  "request": {
+    "prompt": "A brown chicken egg cracks crisply against the rim of a polished stainless steel mixing bowl; the shell splits and golden yolk pours slowly into a soft cloud of pale flour, the iconic empire-red KitchenAid Artisan tilt-head stand mixer paused in the soft-focus background, 50mm full-frame, medium-close framing, warm morning window light from camera-left at 3200K, deep cream-flour and brick-red palette, soft shadow contrast, gentle film grain, A24 domestic-warm grade, shallow depth of field, locked 9:16 portrait",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "fal-veo3-fast",
+    "video_path": ".wavelet-cache/fal-veo3-fast/9e954e4cf5764224.mp4",
+    "video_bytes": 1084552,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "A brown chicken egg cracks crisply against the rim of a polished stainless steel mixing bowl; the shell splits and golden yolk pours slowly into a soft cloud of pale flour, the iconic empire-red KitchenAid Artisan tilt-head stand mixer paused in the soft-focus background, 50mm full-frame, medium-close framing, warm morning window light from camera-left at 3200K, deep cream-flour and brick-red palette, soft shadow contrast, gentle film grain, A24 domestic-warm grade, shallow depth of field, locked 9:16 portrait"
+  },
+  "cost_estimate_usd": 1.0,
+  "asset_path": ".wavelet-cache/fal-veo3-fast/9e954e4cf5764224.mp4",
+  "created_at": "2026-05-23T18:35:53Z"
+}

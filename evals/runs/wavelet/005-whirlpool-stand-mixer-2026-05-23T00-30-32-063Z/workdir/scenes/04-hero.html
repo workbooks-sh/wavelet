@@ -1,0 +1,52 @@
+<!doctype html>
+<html><head><style>
+  :root {
+    --cream: #f6efe2;
+    --red: #c61430;
+    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&family=Inter:wght@200;600&display=swap");
+  html, body { margin:0; padding:0; background: transparent; width:100%; height:100%; overflow:hidden; }
+
+  .stack {
+    position:absolute;
+    left: 6vw; right: 6vw;
+    bottom: 11vh;
+    color: var(--cream);
+  }
+  .eyebrow {
+    font: 600 13px/1 "Inter", sans-serif;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--red);
+    opacity: 0;
+    transform: translateY(16px);
+    animation: in 0.7s var(--ease-out-quint) 0.2s forwards;
+    margin-bottom: 1.4vh;
+  }
+  .line {
+    font: italic 500 11vw/0.95 "Playfair Display", serif;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-shadow: 0 6px 24px rgba(0,0,0,0.4);
+  }
+  .l1, .l2 {
+    opacity: 0;
+    transform: translateY(28px);
+    animation: in 1.1s var(--ease-out-quint) forwards;
+  }
+  .l1 { animation-delay: 0.45s; }
+  .l2 { animation-delay: 0.85s; color: var(--cream); }
+  .l2 em { color: var(--red); font-style: italic; }
+
+  @keyframes in {
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style></head>
+<body>
+  <div class="stack">
+    <div class="eyebrow">The Artisan</div>
+    <h1 class="line l1">An icon</h1>
+    <h1 class="line l2">on your <em>counter.</em></h1>
+  </div>
+</body></html>

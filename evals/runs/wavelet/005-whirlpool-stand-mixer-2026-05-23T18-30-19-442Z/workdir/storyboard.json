@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "duration_secs": 16.743921,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "first_shot": 0,
+      "shot_count": 3
+    },
+    {
+      "scene_index": 1,
+      "slugline": "INT. WARM KITCHEN - MORNING - MACRO",
+      "first_shot": 3,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 2,
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "first_shot": 5,
+      "shot_count": 3
+    },
+    {
+      "scene_index": 3,
+      "slugline": "INT. WARM KITCHEN - MORNING - BEAUTY HOLD",
+      "first_shot": 8,
+      "shot_count": 2
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-0-est",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 0,
+      "start_secs": 0.0,
+      "duration_secs": 1.5,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "WARM KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "WARM KITCHEN",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-1-0",
+      "shot_index": 1,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 1.5,
+      "duration_secs": 1.5243722,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Close-up: brown egg cracks against",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Close-up: brown egg cracks against",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-1-1",
+      "shot_index": 2,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 3.024372,
+      "duration_secs": 1.5594866,
+      "shot_type": "cu",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Close-up: brown egg cracks against",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Close-up: brown egg cracks against",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-1-est",
+      "shot_index": 3,
+      "scene_index": 1,
+      "screenplay_element_index": 3,
+      "start_secs": 4.5838585,
+      "duration_secs": 1.5971241,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "WARM KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "WARM KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-1-act-4-0",
+      "shot_index": 4,
+      "scene_index": 1,
+      "screenplay_element_index": 4,
+      "start_secs": 6.1809826,
+      "duration_secs": 1.637601,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Macro: the spiral dough hook",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Macro: the spiral dough hook",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-2-est",
+      "shot_index": 5,
+      "scene_index": 2,
+      "screenplay_element_index": 6,
+      "start_secs": 7.8185835,
+      "duration_secs": 1.6812906,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "WARM KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "WARM KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-2-act-7-0",
+      "shot_index": 6,
+      "scene_index": 2,
+      "screenplay_element_index": 7,
+      "start_secs": 9.499874,
+      "duration_secs": 1.7286397,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Two flour-dusted hands lift finished",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Two flour-dusted hands lift finished",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-2-act-7-1",
+      "shot_index": 7,
+      "scene_index": 2,
+      "screenplay_element_index": 7,
+      "start_secs": 11.228514,
+      "duration_secs": 1.7801855,
+      "shot_type": "cu",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Two flour-dusted hands lift finished",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Two flour-dusted hands lift finished",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-3-est",
+      "shot_index": 8,
+      "scene_index": 3,
+      "screenplay_element_index": 9,
+      "start_secs": 13.008699,
+      "duration_secs": 1.8365833,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "WARM KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "WARM KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-3-act-10-0",
+      "shot_index": 9,
+      "scene_index": 3,
+      "screenplay_element_index": 10,
+      "start_secs": 14.845283,
+      "duration_secs": 1.8986393,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Locked-off three-quarter beauty hold the",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Locked-off three-quarter beauty hold the",
+        "orientation": "landscape"
+      }
+    }
+  ]
+}

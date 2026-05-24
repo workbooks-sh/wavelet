@@ -38,6 +38,12 @@ pollster = "0.4"
 # Drawing primitives Blitz exposes through paint_scene
 peniko = "0.6"
 kurbo = "0.13"
+# `euclid` is what blitz-dom's `resolve_2d_transform` takes for the
+# reference box parameter. The wavelet snapshot walker calls into
+# `resolve_2d_transform` to capture each element's resolved 2D affine,
+# matching the same code path the painter uses for transform
+# composition. blitz-dom 0.3.0-alpha.3 is on euclid 0.22.
+euclid = "0.22"
 
 # Motion graphics timeline kernel — upstream crates.io, NOT vendor/animato/
 
@@ -96,7 +102,7 @@ bytemuck = { version = "1", features = ["derive"] }
 # Fountain screenplay parser. Feeds `wavelet screenplay parse` and the
 # downstream velocity / storyboard proposers per the screenplay-to-MP4
 # epic (wb-iv3c). Path-dep — same monorepo.
-fountain = { path = "../fountain" }
+fountain = { path = "crates/fountain" }
 
 # Note on blur: we tried `imageproc::filter::gaussian_blur_f32`, but
 # imageproc ≥0.26 requires `image ^0.25.8` while blitz-dom 0.3.0-alpha.3
@@ -150,6 +156,16 @@ uuid = { version = "1", features = ["v4", "serde"] }
 # re-export the property accessors we need.
 stylo = "0.17"
 
+# Direct deps on Parley + skrifa so the snapshot walker can query
+# post-shaping per-glyph ink bounds from `inline_layout_data` — used by
+# the `glyph-clip` lint rule to fact-check from the visualization (real
+# painted glyph ink) rather than from layout bbox alone, which misses
+# italic side-bearings, ascender/descender overrun, and kerning. Pin to
+# the same versions blitz-paint uses (parley 0.9, skrifa 0.42) so
+# Cargo unifies onto a single instance.
+parley = { version = "0.9", default-features = false, features = ["std"] }
+skrifa = { version = "0.42", default-features = false, features = ["std"] }
+
 # C2PA content credentials. EU AI Act Article 50 enforcement begins
 # Aug 2026 — any AI-generated commercial deliverable shipped to EU
 # markets after that date must carry a C2PA manifest. We disable the
@@ -158,6 +174,28 @@ stylo = "0.17"
 # gives us ES256/Ed25519 without OpenSSL. `file_io` enables the
 # stream-based sign/verify path used by Builder::sign + Reader::with_stream.
 c2pa = { version = "0.84", default-features = false, features = ["rust_native_crypto", "file_io"] }
+
+# ONNX Runtime + ndarray — shared between the `depth` and `ocr` feature
+# flags. Pin to rc.10: rc.11/rc.12 break on the Vitis EP build path and
+# regressed the CoreML EP interface on macOS M-series. `load-dynamic`
+# lets us point at a system-installed `onnxruntime` (Homebrew / model
+# download path) instead of bundling the native libs.
+ort = { version = "=2.0.0-rc.10", default-features = false, features = ["std", "ndarray", "load-dynamic"], optional = true }
+# Pin to 0.16 to match the version bundled with ort rc.10. 0.15 fails
+# with "multiple ndarray versions in the dependency graph" because
+# TensorArrayData<T> isn't satisfied for the older ndarray.
+ndarray = { version = "0.16", default-features = false, features = ["std"], optional = true }
+
+[features]
+# Enable the Depth Anything V2 ONNX inference path + `text-on-subject`
+# lint rule. Off by default — keeps the standard build free of the ORT
+# dynamic-library dep. Downloads ~25 MB to ~/.wavelet/models/depth/ on
+# first use.
+depth = ["dep:ort", "dep:ndarray"]
+# Enable PaddleOCR-v5 ONNX inference for the `baked-text-ocr` lint rule.
+# Downloads ~60 MB to ~/.wavelet/models/ocr/ on first use. Requires
+# ORT 2.0.0-rc.10 native library (macOS: `brew install onnxruntime`).
+ocr = ["dep:ort", "dep:ndarray"]
 
 [[bin]]
 name = "wavelet"

@@ -67,10 +67,19 @@ pub struct RenderOptions {
     /// Maximum wall-clock seconds allowed for a single frame. See
     /// [`DEFAULT_FRAME_BUDGET_SECS`] for the default.
     pub frame_budget_secs: u64,
+    /// Mux the rendered audio buffer into the MP4 as an AAC stream.
+    /// Default ON: a `<audio>` reference in the HTML produces a single
+    /// MP4 with both video and audio. Setting this to false leaves the
+    /// MP4 video-only (the sidecar WAV is still written) — useful when
+    /// the caller wants to mux audio manually downstream.
+    pub mux_audio: bool,
 }
 
 impl Default for RenderOptions {
     fn default() -> Self {
-        Self { frame_budget_secs: DEFAULT_FRAME_BUDGET_SECS }
+        Self {
+            frame_budget_secs: DEFAULT_FRAME_BUDGET_SECS,
+            mux_audio: true,
+        }
     }
 }

@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head><style>
+  @import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,800;1,400&display=swap");
+  html, body { margin: 0; padding: 0; background: transparent; width: 100%; height: 100%; overflow: hidden; }
+  .bug {
+    position: absolute;
+    top: 156px; left: 28px;
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 26px 14px 22px;
+    background: rgba(250, 245, 238, 0.92);
+    border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+    opacity: 0;
+    animation: bug-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+  }
+  .bug .dot {
+    width: 28px; height: 28px;
+    background: linear-gradient(140deg, #ffffff 0%, #B8DDE3 60%, #7FB1BA 100%);
+    border-radius: 50%;
+    box-shadow: inset -3px -4px 6px rgba(31, 31, 34, 0.18);
+  }
+  .bug .name {
+    font: 800 56px/1 "Fraunces", "Georgia", serif;
+    color: #1F1F22;
+    letter-spacing: -0.025em;
+  }
+  .bug .name em { font-style: italic; font-weight: 400; }
+  @keyframes bug-in {
+    from { opacity: 0; transform: translateY(-8px) scale(0.94); }
+    to   { opacity: 1; transform: translateY(0)    scale(1); }
+  }
+</style></head>
+<body>
+  <video src="../shots/shot-1.mp4" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;"></video>
+  <div class="bug">
+    <span class="dot"></span>
+    <span class="name">dew <em>drop</em></span>
+  </div>
+</body></html>

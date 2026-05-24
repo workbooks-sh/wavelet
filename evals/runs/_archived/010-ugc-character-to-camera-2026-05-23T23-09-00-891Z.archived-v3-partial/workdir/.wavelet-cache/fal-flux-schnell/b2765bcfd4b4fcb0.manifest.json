@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "provider": "fal-flux-schnell",
+  "cluster": "image_txt2img",
+  "request_hash": "b2765bcfd4b4fcb0",
+  "request": {
+    "prompt": "studio portrait headshot, a 27-year-old woman with light olive skin and natural freckles across her cheeks and nose, glossy collarbone-length brunette hair parted center, soft brown eyes, no makeup look with a fresh dewy complexion, wearing a cream ribbed cotton tank top, neutral light-grey backdrop, soft front light, no environment, no props, no scene context, eye contact with camera, sharp focus, 9:16 portrait, photorealistic",
+    "image_size": "landscape_16_9"
+  },
+  "response": {
+    "provider": "fal-flux-schnell",
+    "image_path": ".wavelet-cache/fal-flux-schnell/b2765bcfd4b4fcb0.jpg",
+    "image_bytes": 126127,
+    "width": 1024,
+    "height": 576,
+    "mime": "image/jpeg"
+  },
+  "cost_estimate_usd": 0.005,
+  "asset_path": ".wavelet-cache/fal-flux-schnell/b2765bcfd4b4fcb0.jpg",
+  "created_at": "2026-05-23T23:10:27Z"
+}

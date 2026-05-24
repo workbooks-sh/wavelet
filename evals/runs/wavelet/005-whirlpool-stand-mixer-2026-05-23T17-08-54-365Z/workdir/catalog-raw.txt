@@ -1,0 +1,1 @@
+{"domain":"kitchenaid.com","brand_id":"726a2312-e792-480c-8451-54d3fd636565","products":12,"images":62,"strategy":"auto","mirrored":false}

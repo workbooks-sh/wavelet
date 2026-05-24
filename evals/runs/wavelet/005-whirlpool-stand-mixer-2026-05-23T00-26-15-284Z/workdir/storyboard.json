@@ -1,0 +1,270 @@
+{
+  "version": 1,
+  "duration_secs": 20.54859,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "first_shot": 0,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 1,
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "first_shot": 2,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 2,
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "first_shot": 4,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 3,
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "first_shot": 6,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 4,
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "first_shot": 8,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 5,
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "first_shot": 10,
+      "shot_count": 2
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-0-est",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 0,
+      "start_secs": 0.0,
+      "duration_secs": 1.5,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "WARM KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "WARM KITCHEN",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-1-0",
+      "shot_index": 1,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 1.5,
+      "duration_secs": 1.548387,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Cracked egg falls slow motion",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Cracked egg falls slow motion",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-1-est",
+      "shot_index": 2,
+      "scene_index": 1,
+      "screenplay_element_index": 3,
+      "start_secs": 3.048387,
+      "duration_secs": 1.6220393,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "WARM KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "WARM KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-1-act-4-0",
+      "shot_index": 3,
+      "scene_index": 1,
+      "screenplay_element_index": 4,
+      "start_secs": 4.6704264,
+      "duration_secs": 1.707104,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "baker's hands tilt the head",
+      "generation": {
+        "kind": "stock_search",
+        "query": "baker's hands tilt the head",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-2-est",
+      "shot_index": 4,
+      "scene_index": 2,
+      "screenplay_element_index": 6,
+      "start_secs": 6.37753,
+      "duration_secs": 1.8068289,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "WARM KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "WARM KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-2-act-7-0",
+      "shot_index": 5,
+      "scene_index": 2,
+      "screenplay_element_index": 7,
+      "start_secs": 8.184359,
+      "duration_secs": 1.9259079,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Macro the spiral dough hook",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Macro the spiral dough hook",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-3-est",
+      "shot_index": 6,
+      "scene_index": 3,
+      "screenplay_element_index": 9,
+      "start_secs": 10.110267,
+      "duration_secs": 1.6003911,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "WARM KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "WARM KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-3-act-10-0",
+      "shot_index": 7,
+      "scene_index": 3,
+      "screenplay_element_index": 10,
+      "start_secs": 11.710658,
+      "duration_secs": 1.6638052,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Slow push-in the stainless bowl.",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Slow push-in the stainless bowl.",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-4-est",
+      "shot_index": 8,
+      "scene_index": 4,
+      "screenplay_element_index": 12,
+      "start_secs": 13.374463,
+      "duration_secs": 1.7352891,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "WARM KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "WARM KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-4-act-13-0",
+      "shot_index": 9,
+      "scene_index": 4,
+      "screenplay_element_index": 13,
+      "start_secs": 15.109753,
+      "duration_secs": 1.816695,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "baker's hands lift golden, crusty",
+      "generation": {
+        "kind": "stock_search",
+        "query": "baker's hands lift golden, crusty",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-5-est",
+      "shot_index": 10,
+      "scene_index": 5,
+      "screenplay_element_index": 15,
+      "start_secs": 16.926447,
+      "duration_secs": 1.9105263,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "WARM KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "WARM KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-5-act-16-0",
+      "shot_index": 11,
+      "scene_index": 5,
+      "screenplay_element_index": 16,
+      "start_secs": 18.836973,
+      "duration_secs": 1.7116158,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Wide still-life marble counter: sliced",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Wide still-life marble counter: sliced",
+        "orientation": "landscape"
+      }
+    }
+  ]
+}

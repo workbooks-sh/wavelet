@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# PATH shim around the real `adalign` binary. Logs every invocation to
+# $ADALIGN_TRACE as one JSONL record per call, then forwards the call
+# transparently.
+#
+# Required env (set by workbench wavelet.commercial action):
+#   ADALIGN_REAL    — absolute path to the real `adalign` binary
+#   ADALIGN_TRACE   — absolute path to the trace file (jsonl, appended)
+#
+# Backend keys: Claude Code's Bash tool strips API-key-looking env vars
+# before spawning the shell that invokes this shim, so the agent's
+# adalign calls would otherwise see no credentials. We re-source them
+# from ~/.config/wavelet/env here (same file wavelet-traced sources);
+# the env file is the canonical source. Shell-exported values (if any
+# survive sanitization) win over file values.
+
+set -u
+
+if [[ -z "${ADALIGN_REAL:-}" ]]; then
+  echo "adalign-traced: ADALIGN_REAL not set" >&2
+  exit 127
+fi
+if [[ -z "${ADALIGN_TRACE:-}" ]]; then
+  echo "adalign-traced: ADALIGN_TRACE not set" >&2
+  exit 127
+fi
+
+# Re-source backend keys claude-code's Bash sanitization stripped.
+WAVELET_ENV_FILE="${HOME}/.config/wavelet/env"
+if [[ -f "$WAVELET_ENV_FILE" ]]; then
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    key="${line%%=*}"
+    value="${line#*=}"
+    [[ -z "$key" || "$key" == "$line" ]] && continue
+    if [[ -z "${!key:-}" ]]; then
+      export "$key=$value"
+    fi
+  done < "$WAVELET_ENV_FILE"
+fi
+
+ts_start=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+ms_start=$(/usr/bin/python3 -c 'import time; print(int(time.time()*1000))')
+
+stdout_tmp=$(mktemp)
+stderr_tmp=$(mktemp)
+trap 'rm -f "$stdout_tmp" "$stderr_tmp"' EXIT
+
+"$ADALIGN_REAL" "$@" > >(tee "$stdout_tmp") 2> >(tee "$stderr_tmp" >&2)
+exit_code=$?
+
+ms_end=$(/usr/bin/python3 -c 'import time; print(int(time.time()*1000))')
+duration_ms=$(( ms_end - ms_start ))
+stdout_bytes=$(wc -c < "$stdout_tmp" | tr -d ' ')
+stderr_bytes=$(wc -c < "$stderr_tmp" | tr -d ' ')
+
+# Build JSON via python so argv quoting is correct without bash gymnastics.
+/usr/bin/python3 - "$ts_start" "$duration_ms" "$exit_code" "$stdout_bytes" "$stderr_bytes" "$@" <<'PY' >> "$ADALIGN_TRACE"
+import json, sys
+ts, dur, exit_code, sob, seb, *argv = sys.argv[1:]
+print(json.dumps({
+    "ts": ts,
+    "argv": ["adalign", *argv],
+    "duration_ms": int(dur),
+    "exit": int(exit_code),
+    "stdout_bytes": int(sob),
+    "stderr_bytes": int(seb),
+}, separators=(",", ":")))
+PY
+
+exit "$exit_code"

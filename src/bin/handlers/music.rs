@@ -6,7 +6,7 @@ use wavelet::backends::elevenlabs::{ElevenLabsClient, ElevenLabsMusicAdapter};
 use wavelet::backends::google::{GoogleAiClient, GoogleLyriaAdapter, LyriaModel};
 use wavelet::backends::music::{RefConditionedMusicGenBackend, RefConditionedMusicRequest};
 use wavelet::backends::udio::UdioMusicAdapter;
-use wavelet::backends::{BackendError, RunMode};
+use wavelet::backends::{exit_for_backend_error, BackendError, RunMode};
 use wavelet::velocity::VelocityProfile;
 
 use super::super::MusicOp;
@@ -44,7 +44,10 @@ pub fn run(op: MusicOp) -> ExitCode {
                         Ok(v) => v,
                         Err(e) => {
                             eprintln!("{e}");
-                            return ExitCode::from(2);
+                            // Post-parse hard fail: caller pointed at a
+                            // velocity file we couldn't read/parse. Not
+                            // a clap arg error.
+                            return ExitCode::from(3);
                         }
                     };
                     let mut r = RefConditionedMusicRequest::from_velocity(&v, &style);
@@ -58,7 +61,29 @@ pub fn run(op: MusicOp) -> ExitCode {
                 }
                 (None, Some(p), Some(d)) => RefConditionedMusicRequest::new(p, d),
                 _ => {
-                    eprintln!("supply either --velocity <path>, or both --prompt and --duration.");
+                    // 005 v5 had the agent burn a call here with just
+                    // `--prompt <text>` and no duration. The original
+                    // error read "supply either --velocity <path>, or
+                    // both --prompt and --duration" — technically
+                    // correct but missing a concrete fix. The
+                    // shape-of-success template + an example save the
+                    // agent a round-trip through --help.
+                    eprintln!(
+                        "wavelet music gen: missing required args.\n\
+                         \n\
+                         You provided:\n  --prompt={}  --duration={}  --velocity={}\n\
+                         \n\
+                         Need EITHER:\n\
+                         (a) --velocity <profile.json> --style \"<text>\" --out music/track.wav --max-cost 0.10\n\
+                         (b) --prompt \"<text>\" --duration <secs> --out music/track.wav --max-cost 0.10\n\
+                         \n\
+                         Example (full):\n\
+                         wavelet music gen --prompt \"warm intimate solo piano, gentle\" \\\n\
+                                            --duration 12 --out music/track.wav --max-cost 0.10",
+                        prompt.as_deref().map(|s| if s.len() > 40 { format!("\"{}…\"", &s[..37]) } else { format!("\"{s}\"") }).unwrap_or_else(|| "<unset>".into()),
+                        duration.map(|d| format!("{d}")).unwrap_or_else(|| "<unset>".into()),
+                        velocity.as_ref().map(|p| p.display().to_string()).unwrap_or_else(|| "<unset>".into()),
+                    );
                     return ExitCode::from(3);
                 }
             };
@@ -100,7 +125,7 @@ pub fn run(op: MusicOp) -> ExitCode {
                                 if let BackendError::MissingCredential(name) = &e {
                                     eprintln!("set {name} or pass --dry-run to preview.");
                                 }
-                                return ExitCode::from(2);
+                                return exit_for_backend_error(&e);
                             }
                         }
                     };
@@ -122,7 +147,7 @@ pub fn run(op: MusicOp) -> ExitCode {
                                          permission — TTS-only keys 401."
                                     );
                                 }
-                                return ExitCode::from(2);
+                                return exit_for_backend_error(&e);
                             }
                         }
                     };
@@ -153,7 +178,8 @@ pub fn run(op: MusicOp) -> ExitCode {
                                     outcome.response.audio_path.display(),
                                     dest.display()
                                 );
-                                return ExitCode::from(2);
+                                // Generic runtime I/O failure → 1, not 2.
+                                return ExitCode::from(1);
                             }
                         }
                     }
@@ -178,7 +204,7 @@ pub fn run(op: MusicOp) -> ExitCode {
                 }
                 Err(e) => {
                     eprintln!("music gen: {e}");
-                    ExitCode::from(2)
+                    exit_for_backend_error(&e)
                 }
             }
         }

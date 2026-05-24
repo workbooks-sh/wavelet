@@ -1,14 +1,15 @@
 ---
 name: wavelet/005-whirlpool-stand-mixer
 agent: wavelet.commercial
-timeoutMs: 1800000
+timeoutMs: 3600000
 turns:
   - action:
       kind: wavelet.commercial
       brief: packages/wavelet/evals/prompts/005-whirlpool-stand-mixer.txt
       adversarial: true
       agent: claude
-      budget_usd: 5.00
+      budget_usd: 10.00
+      timeout_ms: 3600000
       pipeline: commercial
     checks:
       - kind: wavelet.video_renders
@@ -20,7 +21,7 @@ turns:
         codec: h264
       - kind: wavelet.cost_below
         trace: ctx:waveletTrace
-        max_usd: 5.00
+        max_usd: 10.00
       - kind: wavelet.workflow_complete
         workdir: ctx:waveletWorkdir
         pipeline: commercial
@@ -85,7 +86,7 @@ turns:
           Did the agent investigate its environment before spending?
 
           - Pass-if (2-3): `transcript.log` shows the agent ran
-            `wavelet --help` AND `adalign --help` (or equivalent
+            `wavelet --help` AND `brandwork --help` (or equivalent
             subcommand-level help) BEFORE the first paid backend
             call. The agent also inspected
             `wavelet pipelines show commercial` (or equivalent) to
@@ -236,11 +237,11 @@ turns:
 Maximally-adversarial commercial eval. The agent receives one
 paragraph of natural language — no brief.md, no SKILL.md, no
 pipeline.yaml, no skills pre-loaded. Just the user-style prompt and
-the `wavelet` + `adalign` CLIs on PATH.
+the `wavelet` + `brandwork` CLIs on PATH.
 
 Tests the realistic Wavelet deployment vibe:
 
-> "I have Claude Code, I installed wavelet + adalign, I'm sitting at
+> "I have Claude Code, I installed wavelet + brandwork, I'm sitting at
 > my terminal, I want to make a video for my brand."
 
 The signature test is **brand_resolution**: the user said "Whirlpool"
@@ -252,7 +253,7 @@ the comprehension test before any pixel is rendered.
 
 Companion failure modes graded across dimensions 1-4:
 
-- agent never inspects `wavelet --help` / `adalign --help` →
+- agent never inspects `wavelet --help` / `brandwork --help` →
   `tool_discovery`
 - agent never produces a real brief from the one-paragraph prompt →
   `self_authored_brief`

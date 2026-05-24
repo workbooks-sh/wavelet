@@ -1,0 +1,59 @@
+<!doctype html>
+<html><head>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap");
+
+  html, body { margin: 0; padding: 0; background: transparent; width: 100%; height: 100%; overflow: hidden; }
+
+  .hud {
+    position: absolute; inset: 0;
+    padding: 56px 44px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    color: rgba(248, 240, 228, 0.86);
+  }
+
+  .top-left, .top-right, .bottom-left, .bottom-right { position: absolute; }
+  .top-left  { top: 56px; left: 44px; }
+  .top-right { top: 56px; right: 44px; text-align: right; }
+  .bottom-left  { bottom: 56px; left: 44px; }
+  .bottom-right { bottom: 56px; right: 44px; text-align: right; }
+
+  .tag {
+    font-size: 14px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fade-in 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
+  }
+
+  .label { color: rgba(248, 240, 228, 0.5); }
+
+  .rule {
+    display: block; height: 1px; width: 0;
+    background: rgba(248, 240, 228, 0.45);
+    margin-top: 8px;
+    animation: rule-draw 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.9s both;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes rule-draw {
+    from { width: 0; }
+    to   { width: 88px; }
+  }
+</style></head>
+<body>
+  <div class="hud">
+    <div class="top-left">
+      <div class="tag"><span class="label">EST.</span>&nbsp;1919</div>
+      <span class="rule"></span>
+    </div>
+    <div class="bottom-right">
+      <div class="tag">ARTISAN&nbsp;·&nbsp;<span class="label">SERIES&nbsp;K45</span></div>
+    </div>
+  </div>
+</body></html>

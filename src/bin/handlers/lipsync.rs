@@ -5,7 +5,7 @@ use std::process::ExitCode;
 
 use wavelet::backends::replicate::{ReplicateClient, ReplicateSyncLipSyncAdapter};
 use wavelet::backends::video::{LipSyncBackend, LipSyncRequest};
-use wavelet::backends::{BackendError, RunMode};
+use wavelet::backends::{exit_for_backend_error, BackendError, RunMode};
 
 /// Dispatch entrypoint.
 #[allow(clippy::too_many_arguments)]
@@ -49,7 +49,7 @@ pub fn run(
                         if let BackendError::MissingCredential(name) = &e {
                             eprintln!("set {name} or pass --dry-run to preview.");
                         }
-                        return ExitCode::from(2);
+                        return exit_for_backend_error(&e);
                     }
                 }
             };
@@ -72,7 +72,8 @@ pub fn run(
                             outcome.response.video_path.display(),
                             dest.display()
                         );
-                        return ExitCode::from(2);
+                        // Generic runtime I/O failure → 1, not 2.
+                        return ExitCode::from(1);
                     }
                 }
             }
@@ -97,7 +98,7 @@ pub fn run(
         }
         Err(e) => {
             eprintln!("lipsync: {e}");
-            ExitCode::from(2)
+            exit_for_backend_error(&e)
         }
     }
 }

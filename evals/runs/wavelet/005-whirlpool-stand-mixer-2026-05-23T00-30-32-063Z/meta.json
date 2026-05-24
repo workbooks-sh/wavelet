@@ -1,0 +1,59 @@
+{
+  "run_id": "wavelet/005-whirlpool-stand-mixer-2026-05-23T00-30-32-063Z",
+  "spec_name": "wavelet/005-whirlpool-stand-mixer",
+  "brief_path": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/evals/prompts/005-whirlpool-stand-mixer.txt",
+  "agent": "claude",
+  "budget_usd": 5,
+  "pipeline": "commercial",
+  "dry_run": false,
+  "timeout_ms": 1800000,
+  "per_attempt_timeout_ms": 600000,
+  "validate_mp4": true,
+  "retries_allowed": 2,
+  "retries_used": 2,
+  "attempts": [
+    {
+      "exit_code": 143,
+      "duration_ms": 600352,
+      "timed_out": true,
+      "validation_error": "attempt timed out after 600000ms",
+      "transcript_path": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/evals/runs/wavelet/005-whirlpool-stand-mixer-2026-05-23T00-30-32-063Z/transcript.log"
+    },
+    {
+      "exit_code": 0,
+      "duration_ms": 512503,
+      "timed_out": false,
+      "validation_error": "workflow stage storyboard status: ready",
+      "transcript_path": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/evals/runs/wavelet/005-whirlpool-stand-mixer-2026-05-23T00-30-32-063Z/transcript.retry-1.log"
+    },
+    {
+      "exit_code": 0,
+      "duration_ms": 547724,
+      "timed_out": false,
+      "validation_error": null,
+      "transcript_path": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/evals/runs/wavelet/005-whirlpool-stand-mixer-2026-05-23T00-30-32-063Z/transcript.retry-2.log"
+    }
+  ],
+  "timed_out": false,
+  "exit_code": 0,
+  "started_at": "2026-05-23T00:30:32.064Z",
+  "ended_at": "2026-05-23T00:58:12.748Z",
+  "duration_ms": 1660684,
+  "wavelet_real": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/target/debug/wavelet",
+  "shim": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/evals/bin/wavelet-traced",
+  "workdir": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/evals/runs/wavelet/005-whirlpool-stand-mixer-2026-05-23T00-30-32-063Z/workdir",
+  "transcript_path": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/evals/runs/wavelet/005-whirlpool-stand-mixer-2026-05-23T00-30-32-063Z/transcript.log",
+  "trace_path": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/evals/runs/wavelet/005-whirlpool-stand-mixer-2026-05-23T00-30-32-063Z/workdir/.wavelet-trace.jsonl",
+  "commercial_mp4": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/evals/runs/wavelet/005-whirlpool-stand-mixer-2026-05-23T00-30-32-063Z/workdir/commercial.mp4",
+  "final_validation_error": null,
+  "env": {
+    "PATH": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/evals/runs/wavelet/005-whirlpool-stand-mixer-2026-05-23T00-30-32-063Z/workdir/.bin:/Users/shinyobjectz/perl5/bin:/Users/shinyobjectz/.composio:/Users/shinyobjectz/.local/bin:/opt/homebrew/share/flutter/bin:/Users/shinyobjectz/.bun/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/Users/shinyobjectz/.cargo/bin:/Applications/iTerm.app/Contents/Resources/utilities:/Users/shinyobjectz/.claude/plugins/cache/claude-plugins-official/swift-lsp/1.0.0/bin:/Users/shinyobjectz/.claude/plugins/cache/claude-plugins-official/pinecone/1.4.1/bin:/Users/shinyobjectz/.claude/plugins/cache/claude-plugins-official/frontend-design/7abbfc245bd4/bin:/Users/shinyobjectz/.claude/plugins/cache/claude-plugins-official/skill-creator/7abbfc245bd4/bin:/Users/shinyobjectz/.claude/plugins/cache/claude-plugins-official/clangd-lsp/1.0.0/bin",
+    "OPENROUTER_API_KEY": "sk-o…",
+    "WAVELET_REAL": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/target/debug/wavelet",
+    "WAVELET_TRACE": "/Users/shinyobjectz/Apps/workbooks/packages/wavelet/evals/runs/wavelet/005-whirlpool-stand-mixer-2026-05-23T00-30-32-063Z/workdir/.wavelet-trace.jsonl",
+    "WAVELET_MAX_COST": "5",
+    "FAL_KEY": "d188…",
+    "GOOGLE_API_KEY": "AIza…",
+    "GEMINI_API_KEY": "AIza…"
+  }
+}

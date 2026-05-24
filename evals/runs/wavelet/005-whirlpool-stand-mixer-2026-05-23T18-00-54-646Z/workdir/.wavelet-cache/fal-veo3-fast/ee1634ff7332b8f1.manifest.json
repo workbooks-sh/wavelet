@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "fal-veo3-fast",
+  "cluster": "video_txt2vid",
+  "request_hash": "ee1634ff7332b8f1",
+  "request": {
+    "prompt": "A pristine cream-white tilt-head stand mixer in profile on a polished marble countertop in a sunlit modern kitchen, side-on hero composition, the cream-white tilt head slowly lowers and locks down into the polished steel mixing bowl with quiet mechanical authority, soft window light glints off the rounded chrome of the head, shallow depth of field, slow cinematic push-in, no text, no logos, no branding visible, 50mm full-frame, medium-close framing, warm morning window light camera-left at 3200K, deep brown-and-cream palette, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "fal-veo3-fast",
+    "video_path": ".wavelet-cache/fal-veo3-fast/ee1634ff7332b8f1.mp4",
+    "video_bytes": 982334,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "A pristine cream-white tilt-head stand mixer in profile on a polished marble countertop in a sunlit modern kitchen, side-on hero composition, the cream-white tilt head slowly lowers and locks down into the polished steel mixing bowl with quiet mechanical authority, soft window light glints off the rounded chrome of the head, shallow depth of field, slow cinematic push-in, no text, no logos, no branding visible, 50mm full-frame, medium-close framing, warm morning window light camera-left at 3200K, deep brown-and-cream palette, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait"
+  },
+  "cost_estimate_usd": 1.0,
+  "asset_path": ".wavelet-cache/fal-veo3-fast/ee1634ff7332b8f1.mp4",
+  "created_at": "2026-05-23T18:06:41Z"
+}

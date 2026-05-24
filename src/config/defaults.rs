@@ -8,8 +8,15 @@
 //! available; ElevenLabs for voice. MusicGen / Suno are intentionally
 //! not the default (licensing).
 
-/// Default text-to-video and image-to-video backend.
-pub const VIDEO_BACKEND: &str = "veo";
+/// Default text-to-video backend. `fal-veo3-fast` ($0.25/s × 4s = $1.00/
+/// clip) — same model and price tier as Google's `veo-3.1-fast` but
+/// routed through Fal's queue API. We default to Fal because Google's
+/// direct preview quota is much smaller and burns out fast during eval
+/// iteration (008 + 005 hit RESOURCE_EXHAUSTED). Fal exposes the same
+/// Veo 3 / Veo 3 Fast models without the project-level quota cap.
+/// Callers can opt back to Google direct via `--backend veo-fast` /
+/// `veo-lite`.
+pub const VIDEO_BACKEND: &str = "fal-veo3-fast";
 
 /// Default reference-conditioned music backend.
 pub const MUSIC_BACKEND: &str = "lyria-pro";

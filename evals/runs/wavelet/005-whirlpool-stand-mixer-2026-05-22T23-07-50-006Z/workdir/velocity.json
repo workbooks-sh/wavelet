@@ -1,0 +1,83 @@
+{
+  "duration_secs": 48.0,
+  "mean_bpm": 68.270836,
+  "anchors": [
+    {
+      "t": 0.0,
+      "bpm": 80.0,
+      "label": "open"
+    },
+    {
+      "t": 0.4,
+      "bpm": 80.0
+    },
+    {
+      "t": 11.599999,
+      "bpm": 60.0,
+      "label": "action"
+    },
+    {
+      "t": 11.599999,
+      "bpm": 60.0
+    },
+    {
+      "t": 12.099999,
+      "bpm": 75.0,
+      "label": "transition-cut"
+    },
+    {
+      "t": 12.499999,
+      "bpm": 75.0
+    },
+    {
+      "t": 22.5,
+      "bpm": 60.0,
+      "label": "action"
+    },
+    {
+      "t": 22.5,
+      "bpm": 60.0
+    },
+    {
+      "t": 23.0,
+      "bpm": 75.0,
+      "label": "transition-cut"
+    },
+    {
+      "t": 23.4,
+      "bpm": 75.0
+    },
+    {
+      "t": 31.8,
+      "bpm": 60.0,
+      "label": "action"
+    },
+    {
+      "t": 31.8,
+      "bpm": 60.0
+    },
+    {
+      "t": 32.3,
+      "bpm": 75.0,
+      "label": "transition-cut"
+    },
+    {
+      "t": 32.7,
+      "bpm": 75.0
+    },
+    {
+      "t": 47.5,
+      "bpm": 60.0,
+      "label": "action"
+    },
+    {
+      "t": 47.5,
+      "bpm": 60.0
+    },
+    {
+      "t": 48.0,
+      "bpm": 55.0,
+      "label": "transition-fadeout"
+    }
+  ]
+}

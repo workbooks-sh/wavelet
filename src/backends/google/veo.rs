@@ -332,7 +332,7 @@ fn live_call<Req: serde::Serialize>(
         provider: provider.into(),
         video_path: video_path.clone(),
         video_bytes,
-        duration_secs: body.parameters.duration_seconds.unwrap_or(0.0),
+        duration_secs: body.parameters.duration_seconds.unwrap_or(0) as f32,
         width: 0,
         height: 0,
         mime: "video/mp4".into(),
@@ -380,7 +380,7 @@ impl VeoBody {
             }],
             parameters: VeoParameters {
                 aspect_ratio: Some(request.aspect_ratio.clone()),
-                duration_seconds: Some(request.duration_secs),
+                duration_seconds: Some(veo_duration_seconds(request.duration_secs)),
                 negative_prompt: request.negative_prompt.clone(),
                 seed: request.seed,
             },
@@ -396,11 +396,25 @@ impl VeoBody {
             }],
             parameters: VeoParameters {
                 aspect_ratio: Some(request.aspect_ratio.clone()),
-                duration_seconds: Some(request.duration_secs),
+                duration_seconds: Some(veo_duration_seconds(request.duration_secs)),
                 negative_prompt: request.negative_prompt.clone(),
                 seed: request.seed,
             },
         })
+    }
+}
+
+/// Coerce a duration to an integer the Veo API accepts. The endpoint's
+/// own error message claims "between 4 and 8 inclusive" but empirically
+/// rejects 5 with HTTP 400 — the accepted set is {4, 6, 7, 8}. Round
+/// to the nearest accepted value and clamp to [4, 8]. Floats are
+/// rejected on the wire regardless of value, so we always serialize
+/// as a JSON integer.
+fn veo_duration_seconds(secs: f32) -> u32 {
+    let rounded = secs.round().clamp(4.0, 8.0) as u32;
+    match rounded {
+        5 => 4,
+        n => n,
     }
 }
 
@@ -424,7 +438,7 @@ struct VeoParameters {
     #[serde(rename = "aspectRatio", skip_serializing_if = "Option::is_none")]
     aspect_ratio: Option<String>,
     #[serde(rename = "durationSeconds", skip_serializing_if = "Option::is_none")]
-    duration_seconds: Option<f32>,
+    duration_seconds: Option<u32>,
     #[serde(rename = "negativePrompt", skip_serializing_if = "Option::is_none")]
     negative_prompt: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]

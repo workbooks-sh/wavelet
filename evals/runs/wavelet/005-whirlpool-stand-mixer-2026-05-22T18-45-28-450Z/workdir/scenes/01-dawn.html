@@ -1,0 +1,67 @@
+<!doctype html>
+<html><head>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;1,400&family=Inter:wght@400;600&display=swap");
+  :root {
+    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html, body { margin: 0; padding: 0; background: transparent; width: 100%; height: 100%; overflow: hidden; }
+  .frame {
+    position: absolute; inset: 0;
+    padding: 6vh 7vw;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    color: #f5efe6;
+  }
+  .eyebrow {
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: #f5efe6c8;
+    opacity: 0;
+    animation: fade-in 1.6s var(--ease-out-quint) 0.3s forwards;
+  }
+  .moment {
+    align-self: end; justify-self: end;
+    font-family: "Bodoni Moda", "Didot", serif;
+    font-weight: 400;
+    font-size: 7vw;
+    line-height: 1.02;
+    text-align: right;
+    max-width: 78%;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(28px);
+    animation: drift-up 2.1s var(--ease-out-expo) 0.7s forwards;
+  }
+  .moment em { font-style: italic; }
+  .stamp {
+    justify-self: end;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: #f5efe690;
+    opacity: 0;
+    animation: fade-in 1.4s var(--ease-out-quint) 1.6s forwards;
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes drift-up {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style></head>
+<body>
+  <div class="frame">
+    <div class="eyebrow">Whirlpool · the kitchen series</div>
+    <h1 class="moment">The first<br><em>quiet</em> hour.</h1>
+    <div class="stamp">CHAPTER ONE</div>
+  </div>
+</body></html>

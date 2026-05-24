@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "fal-veo3-fast",
+  "cluster": "video_txt2vid",
+  "request_hash": "845f89553aa6b887",
+  "request": {
+    "prompt": "Overhead macro: a slow cascading waterfall of dark glossy chocolate chips falls from above into a polished steel mixing bowl filled with pale cookie dough, the chocolate chips bounce and scatter as a stainless steel flat beater turns at low speed folding them into the dough, ribbons of dough catch the warm window light, no text, no logos, 50mm full-frame, medium-close framing, warm morning window light camera-left at 3200K, deep brown-and-cream palette, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "fal-veo3-fast",
+    "video_path": ".wavelet-cache/fal-veo3-fast/845f89553aa6b887.mp4",
+    "video_bytes": 2198397,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "Overhead macro: a slow cascading waterfall of dark glossy chocolate chips falls from above into a polished steel mixing bowl filled with pale cookie dough, the chocolate chips bounce and scatter as a stainless steel flat beater turns at low speed folding them into the dough, ribbons of dough catch the warm window light, no text, no logos, 50mm full-frame, medium-close framing, warm morning window light camera-left at 3200K, deep brown-and-cream palette, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait"
+  },
+  "cost_estimate_usd": 1.0,
+  "asset_path": ".wavelet-cache/fal-veo3-fast/845f89553aa6b887.mp4",
+  "created_at": "2026-05-23T18:07:09Z"
+}

@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "provider": "fal-flux-schnell",
+  "cluster": "image_txt2img",
+  "request_hash": "ebae7e208f356a41",
+  "request": {
+    "prompt": "close-up of a young woman's hands, natural unpainted nails, light olive skin tone, holding a small clear glass serum bottle with a matte black pipette dropper top and a minimal cream paper label, soft window daylight from the side catches a single liquid droplet hanging from the pipette tip, neutral cream marble bathroom counter background slightly out of focus, vertical iPhone macro composition, hands centered, sharp focus on the dropper tip, Apple HDR camera-native color, 9:16 portrait",
+    "image_size": "portrait_4_3",
+    "seed": 7712
+  },
+  "response": {
+    "provider": "fal-flux-schnell",
+    "image_path": ".wavelet-cache/fal-flux-schnell/ebae7e208f356a41.jpg",
+    "image_bytes": 117836,
+    "width": 768,
+    "height": 1024,
+    "mime": "image/jpeg"
+  },
+  "cost_estimate_usd": 0.005,
+  "asset_path": ".wavelet-cache/fal-flux-schnell/ebae7e208f356a41.jpg",
+  "created_at": "2026-05-23T22:09:48Z"
+}

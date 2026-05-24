@@ -50,6 +50,13 @@ pub struct LintFinding {
     pub message: String,
     /// Concrete remediation guidance the agent (or human) can act on.
     pub fix_hint: String,
+    /// Optional discriminator within a rule — e.g. `cap-height` vs
+    /// `contrast` for the `text-readability` rule. Lets the dedup logic
+    /// in `handlers/lint.rs` keep two independent findings against the
+    /// same element when they describe meaningfully different defects.
+    /// Rules without sub-categories leave this unset.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub subkind: Option<String>,
 }
 
 /// Top-level lint output.

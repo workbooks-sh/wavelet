@@ -26,6 +26,7 @@ pub mod captions_op;
 pub mod image_op;
 pub mod shot_op;
 pub mod lint_op;
+pub mod character_op;
 
 pub use cmd::Cmd;
 pub use plan_mode_arg::PlanModeArg;
@@ -48,3 +49,4 @@ pub use captions_op::CaptionsOp;
 pub use image_op::ImageOp;
 pub use shot_op::ShotOp;
 pub use lint_op::LintOp;
+pub use character_op::{CharacterOp, CharacterType as CliCharacterType};

@@ -19,12 +19,18 @@ pub enum ShotOp {
         /// `veo`). See `crate::config::cascade` and wb-e90g.
         #[arg(long)]
         backend: Option<String>,
-        /// Desired clip duration in seconds. Models clamp to their
-        /// max length — Veo typically returns ~5s.
-        #[arg(long, default_value_t = 5.0)]
+        /// Desired clip duration in seconds. The Veo backend accepts
+        /// integer values from the set {4, 6, 7, 8} — `5` is silently
+        /// rejected by the API despite its docs claiming `4..=8`.
+        /// Values outside that set are rounded to the nearest accepted
+        /// value (5 → 4) by `veo_duration_seconds`. Default 4 for
+        /// minimal-cost runs.
+        #[arg(long, default_value_t = 4.0)]
         duration: f32,
-        /// Aspect ratio (`16:9`, `9:16`, `1:1`).
-        #[arg(long, default_value = "16:9")]
+        /// Aspect ratio (`16:9`, `9:16`, `1:1`). Accepts both
+        /// `--aspect` and `--aspect-ratio` so the agent's natural
+        /// guesses based on storyboard.json field names resolve.
+        #[arg(long, alias = "aspect-ratio", default_value = "16:9")]
         aspect: String,
         /// Negative prompt (things to avoid). Merged with the canonical
         /// default negatives (wb-ynn0) unless `--no-default-negatives`
@@ -70,6 +76,24 @@ pub enum ShotOp {
         /// Pretty-print the emitted JSON.
         #[arg(long)]
         pretty: bool,
+        /// Skip the automatic `freezedetect` trim on the output clip.
+        /// By default `shot txt2vid` runs the same logic as
+        /// `wavelet clip trim-static` against the generated clip and
+        /// trims any leading / trailing static. Use this flag when
+        /// debugging or when the raw clip is needed for inspection.
+        #[arg(long)]
+        no_trim_static: bool,
+        /// Reference image for character-consistent generation. Repeatable;
+        /// accepts up to 3 images (Google Gemini docs cap — see
+        /// <https://ai.google.dev/gemini-api/docs/video>). Local paths
+        /// are uploaded to fal-storage before submission; HTTPS URLs are
+        /// forwarded directly.
+        ///
+        /// Requires `--backend fal-veo3-ref` (or `fal-veo3.1-ref`).
+        /// Without this flag, `fal-veo3-ref` backends reject the request
+        /// with "ref-to-video requires --reference".
+        #[arg(long = "reference", value_name = "PATH_OR_URL")]
+        references: Vec<PathBuf>,
     },
     /// Text-to-image generation (`Txt2Img` cluster, Google nano-banana-3
     /// primary; Fal Flux Schnell available as alternate). Used for
@@ -104,8 +128,11 @@ pub enum ShotOp {
         /// Emit the request spec without hitting the API.
         #[arg(long)]
         dry_run: bool,
-        /// Maximum USD spend.
-        #[arg(long, default_value_t = 0.0)]
+        /// Maximum USD spend per still. Default 0.05 covers Flux Schnell
+        /// ($0.003/image, ~16× margin) and just barely Imagen 3 ($0.04).
+        /// Bump higher for premium backends. The old default was $0.00
+        /// which forced every caller to retry with an explicit budget.
+        #[arg(long, default_value_t = 0.05)]
         max_cost: f32,
         /// Cache root.
         #[arg(long, default_value = ".wavelet-cache")]

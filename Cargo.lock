@@ -77,9 +77,9 @@ dependencies = [
 
 [[package]]
 name = "animato"
-version = "1.1.0"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "74083ff16f9038f6bb8ea768c1dfab6bcfbbd97cc7dd552d1f61381d1b8bd167"
+checksum = "3c6d3e97e578f4625a18df292e5c0e2a25800f507a074e0b438a4fb0494ab0bd"
 dependencies = [
  "animato-color",
  "animato-core",
@@ -95,9 +95,9 @@ dependencies = [
 
 [[package]]
 name = "animato-color"
-version = "1.1.0"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7262174507cf58cc4ef929a45f1a7bec0d647c4bf706294a62f2d73255527e69"
+checksum = "d04b17de9e7612398bb49db386d89fe812e0cd97ea3c77c7cd7ded1a5181cd34"
 dependencies = [
  "animato-core",
  "palette",
@@ -106,9 +106,9 @@ dependencies = [
 
 [[package]]
 name = "animato-core"
-version = "1.1.0"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "abb78e88f57e30be9b6d298100faad99787284cfb3f0b435c70a28885360951d"
+checksum = "1023fa853cd2dcd8ffedda1c0adeaef233c9105855b9d2b99c8ee47e5a166457"
 dependencies = [
  "libm",
  "serde",
@@ -116,18 +116,18 @@ dependencies = [
 
 [[package]]
 name = "animato-driver"
-version = "1.1.0"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d499f5408adb260a1bf7b83c2ea0a024c5bba9e7cf474fcfb247b350eda17973"
+checksum = "ec327458f247f85ef944a4fb18e8c5aa353d447806d09d34180bc1249df66a5e"
 dependencies = [
  "animato-core",
 ]
 
 [[package]]
 name = "animato-path"
-version = "1.1.0"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd7d9ac3522b90eeb5263e3596ae4dea83ed27c8e5088a9e62477d91c3a47c97"
+checksum = "1b8d970b02ba0a6cfcf0e8d3b6ae4f1a4d11e43bc1556f9edf029d37e5c578c5"
 dependencies = [
  "animato-core",
  "animato-tween",
@@ -137,9 +137,9 @@ dependencies = [
 
 [[package]]
 name = "animato-physics"
-version = "1.1.0"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "65b6af2faf875046f65519aaaa913411ef6615afc825f74d009a951f632690aa"
+checksum = "8efe5f54e092694d838c1efb317a6d7a620d00316d0b5e991642c5f9faa9303b"
 dependencies = [
  "animato-core",
  "libm",
@@ -148,9 +148,9 @@ dependencies = [
 
 [[package]]
 name = "animato-spring"
-version = "1.1.0"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e9f7c1adaf798d891dfd052fbe490a01acf197f538ea92e59613dcb4e24625d7"
+checksum = "2b15d671c3b059cdf294f58a89d1b040710750511c057713d1cf9655f0dbf84a"
 dependencies = [
  "animato-core",
  "serde",
@@ -158,9 +158,9 @@ dependencies = [
 
 [[package]]
 name = "animato-timeline"
-version = "1.1.0"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9591ed66bb63cbcd299070121adc72b174488413271056b5d1dff5fc9d89b36c"
+checksum = "4e927e282c0a51103967cf2297dc2181559fb6f57ac6021c37f5a5fb25437c18"
 dependencies = [
  "animato-core",
  "animato-tween",
@@ -169,9 +169,9 @@ dependencies = [
 
 [[package]]
 name = "animato-tween"
-version = "1.1.0"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d98f172b3c7aa6221138de3f00d83b1b9108f4b6185acf586c4e84b0ee849931"
+checksum = "5ba8a30db900912497cf617a458f3835e1bc919867f0409379317d0ca8a92d88"
 dependencies = [
  "animato-core",
  "serde",
@@ -403,9 +403,9 @@ checksum = "239d25181cb40f1955529367ee495e35d03aab4e578028f41e7abc8b21c367a8"
 
 [[package]]
 name = "autocfg"
-version = "1.5.0"
+version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c08606f8c3cbf4ce6ec8e28fb0014a2c086708fe954eaa885384a6165172e7e8"
+checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
 
 [[package]]
 name = "av1-grain"
@@ -455,7 +455,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1f7c42c9913f68cf9390a225e81ad56a5c515347287eb98baa710090ca1de86d"
 dependencies = [
  "bytes",
- "smallvec",
+ "smallvec 1.15.1",
 ]
 
 [[package]]
@@ -585,7 +585,7 @@ dependencies = [
  "selectors",
  "skrifa",
  "slab",
- "smallvec",
+ "smallvec 1.15.1",
  "stylo",
  "stylo_dom",
  "stylo_static_prefs",
@@ -766,7 +766,7 @@ checksum = "7a2b56d3029f075c4fa892428a098425b86cef5c89ae54073137ece416aef13c"
 dependencies = [
  "cc-traits",
  "slab",
- "smallvec",
+ "smallvec 1.15.1",
 ]
 
 [[package]]
@@ -777,9 +777,9 @@ checksum = "56ed6191a7e78c36abdb16ab65341eefd73d64d303fffccdbb00d51e4205967b"
 
 [[package]]
 name = "bumpalo"
-version = "3.20.2"
+version = "3.20.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5d20789868f4b01b2f2caec9f5c4e0213b41e3e5702a50157d699ae31ced2fcb"
+checksum = "72f5acc6cb2ba439de613abc23857ec3d78374d8ed5ac84e9d11336e87da8649"
 
 [[package]]
 name = "by_address"
@@ -974,7 +974,7 @@ version = "0.15.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d067ad48b8650848b989a59a86c6c36a995d02d2bf778d45c3c5d57bc2718f02"
 dependencies = [
- "smallvec",
+ "smallvec 1.15.1",
  "target-lexicon",
 ]
 
@@ -1282,7 +1282,7 @@ dependencies = [
  "itoa",
  "phf",
  "serde",
- "smallvec",
+ "smallvec 1.15.1",
 ]
 
 [[package]]
@@ -1590,9 +1590,9 @@ dependencies = [
 
 [[package]]
 name = "either"
-version = "1.15.0"
+version = "1.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
+checksum = "91622ff5e7162018101f2fea40d6ebf4a78bbe5a49736a2020649edf9693679e"
 
 [[package]]
 name = "elliptic-curve"
@@ -1681,7 +1681,7 @@ dependencies = [
  "lebe",
  "miniz_oxide 0.8.9",
  "rayon-core",
- "smallvec",
+ "smallvec 1.15.1",
  "zune-inflate",
 ]
 
@@ -1799,7 +1799,7 @@ dependencies = [
  "parlance",
  "read-fonts",
  "roxmltree",
- "smallvec",
+ "smallvec 1.15.1",
  "windows",
  "windows-core",
  "yeslogic-fontconfig-sys",
@@ -1991,7 +1991,7 @@ dependencies = [
  "log",
  "peniko",
  "skrifa",
- "smallvec",
+ "smallvec 1.15.1",
  "vello_common",
 ]
 
@@ -2109,15 +2109,15 @@ dependencies = [
 
 [[package]]
 name = "harfrust"
-version = "0.6.0"
+version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a9ce5e848d21ba97a324266e41c70e0eb5e2577a610c1fbd546e15096f2e8e37"
+checksum = "551ed25397e4b444e89686602877d5cf3a7f6e3d548dcac37a8357d1e195f4df"
 dependencies = [
  "bitflags 2.11.1",
  "bytemuck",
  "core_maths",
  "read-fonts",
- "smallvec",
+ "smallvec 1.15.1",
 ]
 
 [[package]]
@@ -2321,7 +2321,7 @@ dependencies = [
  "icu_normalizer_data",
  "icu_properties",
  "icu_provider",
- "smallvec",
+ "smallvec 1.15.1",
  "zerovec",
 ]
 
@@ -2420,7 +2420,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3b0875f23caa03898994f6ddc501886a45c7d3d62d04d2d90788d47be1b1e4de"
 dependencies = [
  "idna_adapter",
- "smallvec",
+ "smallvec 1.15.1",
  "utf8_iter",
 ]
 
@@ -2544,7 +2544,7 @@ checksum = "b10559a0d518effd4f2cee107f40f83acf8583dcd3e6760b9b60293b0d2c2a70"
 dependencies = [
  "pct-str",
  "serde",
- "smallvec",
+ "smallvec 1.15.1",
  "static-regular-grammar",
  "thiserror 1.0.69",
 ]
@@ -2640,9 +2640,9 @@ checksum = "00810f1d8b74be64b13dbf3db89ac67740615d6c891f0e7b6179326533011a07"
 
 [[package]]
 name = "js-sys"
-version = "0.3.98"
+version = "0.3.99"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "67df7112613f8bfd9150013a0314e196f4800d3201ae742489d999db2f979f08"
+checksum = "142bc4740e452c1e57ade0cbc129f139c9093e354346f0872ef985f4f5cf5f11"
 dependencies = [
  "cfg-if",
  "futures-util",
@@ -2687,7 +2687,7 @@ dependencies = [
  "arrayvec",
  "euclid",
  "polycool",
- "smallvec",
+ "smallvec 1.15.1",
 ]
 
 [[package]]
@@ -2820,6 +2820,16 @@ dependencies = [
  "log",
  "tendril",
  "web_atoms",
+]
+
+[[package]]
+name = "matrixmultiply"
+version = "0.3.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a06de3016e9fae57a36fd14dba131fccf49f74b40b7fbdb472f96e361ec71a08"
+dependencies = [
+ "autocfg",
+ "rawpointer",
 ]
 
 [[package]]
@@ -2972,6 +2982,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "ndarray"
+version = "0.16.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "882ed72dce9365842bf196bdeedf5055305f11fc8c03dee7bb0194a6cad34841"
+dependencies = [
+ "matrixmultiply",
+ "num-complex",
+ "num-integer",
+ "num-traits",
+ "portable-atomic",
+ "portable-atomic-util",
+ "rawpointer",
+]
+
+[[package]]
 name = "ndk-sys"
 version = "0.6.0+11769913"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3053,7 +3078,7 @@ dependencies = [
  "num-traits",
  "rand 0.8.6",
  "serde",
- "smallvec",
+ "smallvec 1.15.1",
  "zeroize",
 ]
 
@@ -3247,6 +3272,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "ort"
+version = "2.0.0-rc.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1fa7e49bd669d32d7bc2a15ec540a527e7764aec722a45467814005725bcd721"
+dependencies = [
+ "libloading",
+ "ndarray",
+ "ort-sys",
+ "smallvec 2.0.0-alpha.10",
+ "tracing",
+]
+
+[[package]]
+name = "ort-sys"
+version = "2.0.0-rc.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e2aba9f5c7c479925205799216e7e5d07cc1d4fa76ea8058c60a9a30f6a4e890"
+dependencies = [
+ "pkg-config",
+]
+
+[[package]]
 name = "p256"
 version = "0.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3328,7 +3375,7 @@ dependencies = [
  "cfg-if",
  "libc",
  "redox_syscall",
- "smallvec",
+ "smallvec 1.15.1",
  "windows-link",
 ]
 
@@ -3419,7 +3466,7 @@ dependencies = [
  "color",
  "kurbo",
  "linebender_resource_handle",
- "smallvec",
+ "smallvec 1.15.1",
 ]
 
 [[package]]
@@ -3854,7 +3901,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2d49e572143755710377fda7cbd3f46e8523b912339759636ab2770abb16c4c3"
 dependencies = [
  "num-traits",
- "smallvec",
+ "smallvec 1.15.1",
 ]
 
 [[package]]
@@ -4009,6 +4056,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "rawpointer"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "60a357793950651c4ed0f3f52338f53b2f809f32d83a07f72909fa13e4c6c1e3"
+
+[[package]]
 name = "rayon"
 version = "1.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4035,7 +4088,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c4ed38b89c2c77ff968c524145ad65fb010f38af5c7a224b53b81d47ac2daa81"
 dependencies = [
  "bytemuck",
- "core_maths",
  "font-types",
 ]
 
@@ -4385,7 +4437,7 @@ dependencies = [
  "precomputed-hash",
  "rustc-hash 2.1.2",
  "servo_arc",
- "smallvec",
+ "smallvec 1.15.1",
  "to_shmem",
  "to_shmem_derive",
 ]
@@ -4458,9 +4510,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.149"
+version = "1.0.150"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "83fc039473c5595ace860d8c4fafa220ff474b3fc6bfdb4293327f1a37e94d86"
+checksum = "e8014e44b4736ed0538adeecded0fce2a272f22dc9578a7eb6b2d9993c74cfb9"
 dependencies = [
  "indexmap 2.14.0",
  "itoa",
@@ -4656,6 +4708,12 @@ name = "smallvec"
 version = "1.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "67b1b7a3b5fe4f1376887184045fcf45c69e92af734b7aaddc05fb777b6fbd03"
+
+[[package]]
+name = "smallvec"
+version = "2.0.0-alpha.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "51d44cfb396c3caf6fbfd0ab422af02631b69ddd96d2eff0b0f0724f9024051b"
 
 [[package]]
 name = "smol_str"
@@ -4864,7 +4922,7 @@ dependencies = [
  "serde",
  "servo_arc",
  "smallbitvec",
- "smallvec",
+ "smallvec 1.15.1",
  "static_assertions",
  "string_cache",
  "strum",
@@ -4922,7 +4980,7 @@ dependencies = [
  "selectors",
  "servo_arc",
  "smallbitvec",
- "smallvec",
+ "smallvec 1.15.1",
  "string_cache",
  "thin-vec",
  "void",
@@ -5402,7 +5460,7 @@ dependencies = [
  "cssparser",
  "servo_arc",
  "smallbitvec",
- "smallvec",
+ "smallvec 1.15.1",
  "string_cache",
  "thin-vec",
 ]
@@ -5536,6 +5594,25 @@ name = "toml_writer"
 version = "1.1.1+spec-1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "756daf9b1013ebe47a8776667b466417e2d4c5679d441c26230efd9ef78692db"
+
+[[package]]
+name = "tracing"
+version = "0.1.44"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "63e71662fa4b2a2c3a26f570f037eb95bb1f85397f3cd8076caed2f026a6d100"
+dependencies = [
+ "pin-project-lite",
+ "tracing-core",
+]
+
+[[package]]
+name = "tracing-core"
+version = "0.1.36"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "db97caf9d906fbde555dd62fa95ddba9eecfd14cb388e4f491a66d74cd5fb79a"
+dependencies = [
+ "once_cell",
+]
 
 [[package]]
 name = "traitful"
@@ -5777,7 +5854,7 @@ dependencies = [
  "hashbrown 0.17.1",
  "log",
  "peniko",
- "smallvec",
+ "smallvec 1.15.1",
  "thiserror 2.0.18",
 ]
 
@@ -5803,7 +5880,7 @@ dependencies = [
  "guillotiere",
  "peniko",
  "skrifa",
- "smallvec",
+ "smallvec 1.15.1",
 ]
 
 [[package]]
@@ -5873,9 +5950,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen"
-version = "0.2.121"
+version = "0.2.122"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "49ace1d07c165b0864824eee619580c4689389afa9dc9ed3a4c75040d82e6790"
+checksum = "3ed04576f974d2b2fba0f38c51dbc5518011e38c36bf1143164be765528fd409"
 dependencies = [
  "cfg-if",
  "once_cell",
@@ -5886,9 +5963,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-futures"
-version = "0.4.71"
+version = "0.4.72"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "96492d0d3ffba25305a7dc88720d250b1401d7edca02cc3bcd50633b424673b8"
+checksum = "9473dbd2991ae90b6291c3c32c30c6187ac49aa32f9905d1cce280ec1e110b0f"
 dependencies = [
  "js-sys",
  "wasm-bindgen",
@@ -5896,9 +5973,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro"
-version = "0.2.121"
+version = "0.2.122"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e68e6f4afd367a562002c05637acb8578ff2dea1943df76afb9e83d177c8578"
+checksum = "916151b09da36bd82f6615cbf3a419e2f0ba23a03c6160e8e92eb6bd4aa1dec6"
 dependencies = [
  "quote",
  "wasm-bindgen-macro-support",
@@ -5906,9 +5983,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro-support"
-version = "0.2.121"
+version = "0.2.122"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d95a9ec35c64b2a7cb35d3fead40c4238d0940c86d107136999567a4703259f2"
+checksum = "299047362ccbfce148b67ab7e73349f77748e00c8296f9542adfad2ad82c5c5e"
 dependencies = [
  "bumpalo",
  "proc-macro2",
@@ -5919,9 +5996,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-shared"
-version = "0.2.121"
+version = "0.2.122"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c4e0100b01e9f0d03189a92b96772a1fb998639d981193d7dbab487302513441"
+checksum = "9a929b2c61f11ba3e9bc35b50c1f25cb38e0e892c0c231ae2b8cf78d5dad4437"
 dependencies = [
  "unicode-ident",
 ]
@@ -5976,11 +6053,15 @@ dependencies = [
  "c2pa",
  "chrono",
  "clap",
+ "euclid",
  "fountain",
  "futures-util",
  "image",
  "kurbo",
  "naga 28.0.0",
+ "ndarray",
+ "ort",
+ "parley",
  "peniko",
  "png 0.17.16",
  "pollster",
@@ -5991,6 +6072,7 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "sha2",
+ "skrifa",
  "stylo",
  "symphonia",
  "tempfile",
@@ -6032,9 +6114,9 @@ dependencies = [
 
 [[package]]
 name = "web-sys"
-version = "0.3.98"
+version = "0.3.99"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b572dff8bcf38bad0fa19729c89bb5748b2b9b1d8be70cf90df697e3a8f32aa"
+checksum = "6d621441cfc37b84979402712047321980c178f299193a3589d05b99e8763436"
 dependencies = [
  "js-sys",
  "wasm-bindgen",
@@ -6106,7 +6188,7 @@ dependencies = [
  "portable-atomic",
  "profiling",
  "raw-window-handle",
- "smallvec",
+ "smallvec 1.15.1",
  "static_assertions",
  "wasm-bindgen",
  "wasm-bindgen-futures",
@@ -6136,7 +6218,7 @@ dependencies = [
  "portable-atomic",
  "profiling",
  "raw-window-handle",
- "smallvec",
+ "smallvec 1.15.1",
  "static_assertions",
  "wasm-bindgen",
  "wasm-bindgen-futures",
@@ -6169,7 +6251,7 @@ dependencies = [
  "profiling",
  "raw-window-handle",
  "rustc-hash 1.1.0",
- "smallvec",
+ "smallvec 1.15.1",
  "thiserror 2.0.18",
  "wgpu-core-deps-apple 28.0.0",
  "wgpu-core-deps-emscripten 28.0.0",
@@ -6201,7 +6283,7 @@ dependencies = [
  "profiling",
  "raw-window-handle",
  "rustc-hash 1.1.0",
- "smallvec",
+ "smallvec 1.15.1",
  "thiserror 2.0.18",
  "wgpu-core-deps-apple 29.0.3",
  "wgpu-core-deps-emscripten 29.0.3",
@@ -6304,7 +6386,7 @@ dependencies = [
  "range-alloc",
  "raw-window-handle",
  "renderdoc-sys",
- "smallvec",
+ "smallvec 1.15.1",
  "thiserror 2.0.18",
  "wasm-bindgen",
  "web-sys",
@@ -6355,7 +6437,7 @@ dependencies = [
  "raw-window-handle",
  "raw-window-metal",
  "renderdoc-sys",
- "smallvec",
+ "smallvec 1.15.1",
  "thiserror 2.0.18",
  "wasm-bindgen",
  "wayland-sys",

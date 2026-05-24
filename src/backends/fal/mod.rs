@@ -3,8 +3,12 @@
 //! Fal is the host for utility-tier image clusters (background removal,
 //! segmentation, OCR, Flux Schnell text-to-image, Flux Kontext Max instruction
 //! edit, SUPIR upscale, CLIP similarity, pairwise compare, vision verify) plus
-//! Whisper-words and Kokoro TTS. Hero text-to-video routes through Google Veo
-//! directly; reference-conditioned stills route through Google Nano-Banana 3.
+//! Whisper-words, Kokoro TTS, Veo 3 Standard + Fast text-to-video
+//! (`fal/veo.rs`), and Veo 3.1 reference-to-video (`fal/veo_ref.rs`).
+//! Hero text-to-video can now route through either Fal Veo (`--backend
+//! fal-veo3`) or Google AI Studio directly. Character-consistent clips use
+//! `--backend fal-veo3-ref` with one or more `--reference` images;
+//! reference-conditioned stills route through Google Nano-Banana 3.
 //!
 //! All submodules share `FalClient` for auth + HTTP + error mapping.
 //! `FalClient` is itself a thin newtype over the generic
@@ -38,6 +42,8 @@ pub mod kokoro;
 pub mod kontext_max;
 pub mod pairwise_compare;
 pub mod supir;
+pub mod veo;
+pub mod veo_ref;
 pub mod vision_verify;
 pub mod whisper_words;
 
@@ -49,6 +55,8 @@ pub use kokoro::FalKokoroAdapter;
 pub use kontext_max::FalKontextMaxAdapter;
 pub use pairwise_compare::FalPairwiseCompareAdapter;
 pub use supir::FalSupirAdapter;
+pub use veo::{FalVeoAdapter, FalVeoModel};
+pub use veo_ref::{FalVeoRefAdapter, FalVeoRefModel};
 pub use vision_verify::FalVisionVerifyAdapter;
 pub use whisper_words::FalWhisperWordsAdapter;
 

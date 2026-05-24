@@ -6,10 +6,7 @@ license = "MIT OR Apache-2.0"
 publish = false
 description = "Wavelet FX — fragment-shader DSL + render-graph emit for video post-effects. The internal authoring surface for CSS `filter:` hijacks and any custom shader effect a scene declares. Not exposed to agents directly; the agent-facing surface is standard CSS `filter:` (and a `<shader>` HTML tag when needed)."
 
-# One crate, one Cargo.toml — matches the convention in packages/wavelet and
-# packages/orchestrator-core. Split if/when modules become independently
-# consumable (e.g. wavelet_fx-stdlib as a separate published crate).
-
+# One crate, one Cargo.toml — matches the convention in packages/wavelet.
 [dependencies]
 thiserror = "2"
 serde = { version = "1", features = ["derive"] }

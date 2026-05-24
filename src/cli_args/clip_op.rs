@@ -57,4 +57,34 @@ pub enum ClipOp {
         #[arg(long)]
         dry_run: bool,
     },
+    /// Detect and trim leading / trailing freeze frames from a clip.
+    /// Veo and similar AI video generators routinely emit ~0.5–1.5s of
+    /// frozen frames at the start (and sometimes end) of clips before
+    /// the action begins. This subcommand identifies those static
+    /// regions via ffmpeg `freezedetect`, reports the trim range as
+    /// JSON, and optionally writes the trimmed result with `--out`.
+    /// Lossless stream-copy — no re-encode.
+    TrimStatic {
+        /// Path to the input MP4 clip.
+        input: PathBuf,
+        /// When set, write the trimmed clip to this path. When omitted,
+        /// only the JSON report is emitted to stdout.
+        #[arg(long)]
+        out: Option<PathBuf>,
+        /// freezedetect noise threshold in dB (negative). Lower is
+        /// stricter. Default -60 matches ffmpeg's default; -50 catches
+        /// near-freezes where the model emits one pixel of jitter per
+        /// frame but is visually static.
+        #[arg(long, default_value_t = -60.0)]
+        noise_db: f32,
+        /// Minimum freeze duration in seconds. Below this, the detector
+        /// ignores the freeze. Default 0.4s — short enough to catch
+        /// leading freezes on 4-5s clips, long enough to not chop
+        /// natural pauses inside motion.
+        #[arg(long, default_value_t = 0.4)]
+        min_freeze_secs: f32,
+        /// Pretty-print the emitted JSON.
+        #[arg(long)]
+        pretty: bool,
+    },
 }

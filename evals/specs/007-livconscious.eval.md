@@ -83,7 +83,7 @@ turns:
           ## 2. tool_discovery
 
           - Pass-if (2-3): `transcript.log` shows the agent ran
-            `wavelet --help` AND `adalign --help` BEFORE the first
+            `wavelet --help` AND `brandwork --help` BEFORE the first
             paid backend call. Agent inspected
             `wavelet pipelines show commercial` (or equivalent).
           - Fail-if (0-1): agent jumped straight into paid calls
@@ -206,7 +206,7 @@ turns:
 Maximally-adversarial commercial eval. The agent receives one
 paragraph of natural language — no brief.md, no SKILL.md, no
 pipeline.yaml, no skills pre-loaded. Just the user prompt and the
-`wavelet` + `adalign` CLIs on PATH.
+`wavelet` + `brandwork` CLIs on PATH.
 
 Liv Conscious is a deliberately-chosen niche DTC supplement brand
 at **livconscious.com** — note "Liv" not "Live", and note the domain
@@ -214,7 +214,7 @@ at **livconscious.com** — note "Liv" not "Live", and note the domain
 against:
 
 - agent corrects "Liv" to "Live" and searches the wrong domain
-- agent skips `adalign brand.brief` and hallucinates a generic
+- agent skips `brandwork brand.brief` and hallucinates a generic
   supplement catalog
 - agent leans into one of the supplement-ad clichés it was warned
   against (slow-mo capsule, lab-coat shot, ingredient cloud)

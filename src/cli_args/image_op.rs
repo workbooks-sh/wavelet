@@ -66,6 +66,16 @@ pub enum ImageOp {
     /// for a text overlay (low edge density + low brightness variance).
     /// Pure-local Sobel + statistics; no backend call. Each cell ships
     /// a suggested text color and required scrim opacity for WCAG AA.
+    ///
+    /// When `--use-depth` is set (requires the `depth` Cargo feature),
+    /// the scorer additionally penalises cells where the depth map
+    /// indicates foreground proximity. The combined score is:
+    ///
+    /// `score = (1 − edge_density − 0.3 × variance_norm) × depth_weight`
+    ///
+    /// where `depth_weight = (1 + depth_bg_value) / 2` and
+    /// `depth_bg_value` is the mean-pooled background score for the cell
+    /// from the depth model (1.0 = far/background, 0.0 = close/subject).
     #[command(name = "negative-space")]
     NegativeSpace {
         /// Path to the source PNG/JPG.
@@ -76,7 +86,37 @@ pub enum ImageOp {
         /// Grid columns. Default 3.
         #[arg(long, default_value_t = 3)]
         cols: u32,
+        /// Incorporate depth-map background likelihood into the cell
+        /// score. Requires the `depth` Cargo feature and downloads the
+        /// Depth Anything V2 Small model (~25 MB) on first use.
+        #[arg(long)]
+        use_depth: bool,
         /// Pretty-print the emitted JSON.
+        #[arg(long)]
+        pretty: bool,
+    },
+    /// Estimate per-pixel relative depth using Depth Anything V2 Small
+    /// (ViT-S/14). Emits a grayscale PNG where **bright = close to
+    /// camera** and **dark = far** (standard depth-map convention).
+    ///
+    /// The model (~25 MB fp16 ONNX) is downloaded on first use to
+    /// `~/.wavelet/models/depth/depth-anything-v2-small.onnx`.
+    ///
+    /// Requires the `depth` Cargo feature:
+    ///
+    /// ```text
+    /// cargo build -p wavelet --features depth
+    /// ```
+    #[command(name = "depth-map")]
+    DepthMap {
+        /// Path to the source PNG/JPG.
+        image: PathBuf,
+        /// Output PNG path. When omitted, prints the 16×16 grid JSON
+        /// to stdout instead of writing an image file.
+        #[arg(short, long)]
+        out: Option<PathBuf>,
+        /// Pretty-print the JSON grid (only relevant when `--out` is
+        /// not given).
         #[arg(long)]
         pretty: bool,
     },

@@ -1,0 +1,48 @@
+{
+  "width": 720,
+  "height": 1280,
+  "fps": 30,
+  "duration_frames": 360,
+  "scenes": [
+    {
+      "html_path": "scenes/01-hero.html",
+      "video_bg": "shots/shot-1-hero.mp4",
+      "start_frame": 0,
+      "duration_frames": 120
+    },
+    {
+      "html_path": "scenes/02-macro.html",
+      "video_bg": "shots/shot-2-macro.mp4",
+      "start_frame": 120,
+      "duration_frames": 120,
+      "transition_in": {
+        "wavelet_fx": "src(0).blend(src(1), prop(\"progress\")).out",
+        "duration_secs": 0.4
+      }
+    },
+    {
+      "html_path": "scenes/03-tagline.html",
+      "video_bg": "shots/shot-3-pullback.mp4",
+      "start_frame": 240,
+      "duration_frames": 120,
+      "transition_in": {
+        "wavelet_fx": "src(0).blend(src(1), prop(\"progress\")).out",
+        "duration_secs": 0.5
+      }
+    }
+  ],
+  "audio_cues": [
+    {
+      "id": "music",
+      "asset_path": "music/track.wav",
+      "start_frame": 0,
+      "duration_frames": 360,
+      "volume": 0.85,
+      "pan": 0.0,
+      "fade_in_frames": 18,
+      "fade_out_frames": 36,
+      "duck_targets": [],
+      "duck_db": 0.0
+    }
+  ]
+}

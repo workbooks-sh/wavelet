@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "provider": "google-lyria-3-clip",
+  "cluster": "music_ref_conditioned",
+  "request_hash": "bae8c227d00829da",
+  "request": {
+    "prompt": "Solo upright piano, slow tempo around 60 BPM, a single suspended chord blooming and resolving across twelve seconds. Hushed, intimate, warm room tone. Cinematic minimalist score, A24 sensibility. No drums, no strings, no synths — solo piano only. Ends on a resolved major chord with gentle fade.",
+    "duration_secs": 12.0
+  },
+  "response": {
+    "provider": "google-lyria-3-clip",
+    "audio_path": ".wavelet-cache/google-lyria-3-clip/bae8c227d00829da.mp3",
+    "audio_bytes": 744609,
+    "mime": "audio/mpeg",
+    "model_variant": "lyria-3-clip-preview",
+    "prompt_sent": "Solo upright piano, slow tempo around 60 BPM, a single suspended chord blooming and resolving across twelve seconds. Hushed, intimate, warm room tone. Cinematic minimalist score, A24 sensibility. No drums, no strings, no synths — solo piano only. Ends on a resolved major chord with gentle fade.",
+    "duration_secs": 12.0
+  },
+  "cost_estimate_usd": 0.0047999998,
+  "asset_path": ".wavelet-cache/google-lyria-3-clip/bae8c227d00829da.mp3",
+  "created_at": "2026-05-22T18:42:45Z"
+}

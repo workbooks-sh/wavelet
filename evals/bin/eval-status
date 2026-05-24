@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+# eval-status — one-shot snapshot of a running (or completed) eval.
+#
+# Usage: eval-status <short-name>
+#
+# Prints: process status, latest trace entry, file modification times,
+# detected stage progress, cumulative spend estimate, current attempt.
+
+set -uo pipefail
+
+if [[ $# -ne 1 ]]; then
+  echo "usage: $0 <short-name>" >&2
+  exit 2
+fi
+
+SHORT="$1"
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+PID_FILE="$ROOT/evals/runs/_logs/${SHORT}.pid"
+WORKDIR_FILE="$ROOT/evals/runs/_logs/${SHORT}.workdir"
+
+if [[ ! -f "$PID_FILE" ]]; then
+  echo "eval-status: no pid file at $PID_FILE"
+  exit 1
+fi
+
+PID=$(cat "$PID_FILE")
+ALIVE="NO"
+if kill -0 "$PID" 2>/dev/null; then ALIVE="YES"; fi
+
+echo "short=$SHORT pid=$PID alive=$ALIVE now=$(date -u +%FT%TZ)"
+
+if [[ -f "$WORKDIR_FILE" ]]; then
+  WORKDIR=$(cat "$WORKDIR_FILE")
+  echo "workdir=$WORKDIR"
+  TRACE="$WORKDIR/.wavelet-trace.jsonl"
+  if [[ -f "$TRACE" ]]; then
+    LINES=$(wc -l < "$TRACE" | tr -d ' ')
+    echo "trace=$LINES calls"
+    echo "--- latest 6 trace calls ---"
+    tail -6 "$TRACE" | python3 -c "
+import json, sys
+for line in sys.stdin:
+    try:
+        r = json.loads(line)
+        argv = r.get('argv', [])
+        verb = ' '.join(argv[1:5])
+        print(f\"  {r['ts']} exit={r['exit']:>2} {r['duration_ms']:>5}ms  {verb[:80]}\")
+    except Exception:
+        pass
+"
+    echo "--- gate-relevant calls ---"
+    python3 -c "
+import json
+target = '$TRACE'
+seen = {'screenplay_validate': None, 'lint_mp4': None, 'render_html': None}
+shot_spend = 0
+with open(target) as f:
+    for line in f:
+        try:
+            r = json.loads(line)
+            argv = r.get('argv', [])
+            if len(argv) > 2 and argv[1]=='screenplay' and argv[2]=='validate':
+                seen['screenplay_validate'] = r['exit']
+            if argv[1:2]==['lint'] and '--mp4' in argv:
+                seen['lint_mp4'] = r['exit']
+            if argv[1:2]==['render']:
+                seen['render_html'] = r['exit']
+            if len(argv) > 2 and argv[1]=='shot' and argv[2]=='txt2vid':
+                shot_spend += 1
+        except Exception:
+            pass
+print(f'  screenplay validate: {seen[\"screenplay_validate\"]}')
+print(f'  lint --mp4: {seen[\"lint_mp4\"]}')
+print(f'  render: {seen[\"render_html\"]}')
+print(f'  shot txt2vid calls: {shot_spend}')
+"
+  fi
+  if [[ -f "$WORKDIR/commercial.mp4" ]]; then
+    MP4_SIZE=$(stat -f '%z' "$WORKDIR/commercial.mp4")
+    echo "commercial.mp4: ${MP4_SIZE} bytes"
+  fi
+
+  # brandwork capability checklist — shows which capabilities were and
+  # were NOT exercised. Falls back gracefully if brandwork isn't on PATH
+  # or if no trace file exists.
+  if command -v brandwork &>/dev/null; then
+    BWTRACE="$WORKDIR/.brandwork-trace.jsonl"
+    ADTRACE="$WORKDIR/.adalign-trace.jsonl"
+    if [[ -f "$BWTRACE" || -f "$ADTRACE" ]]; then
+      echo ""
+      echo "--- brandwork capabilities used ---"
+      brandwork audit-trace "$WORKDIR" 2>/dev/null || echo "  (audit-trace failed)"
+    fi
+  fi
+fi

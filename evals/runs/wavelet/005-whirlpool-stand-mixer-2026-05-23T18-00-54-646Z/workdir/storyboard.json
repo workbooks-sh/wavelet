@@ -1,0 +1,227 @@
+{
+  "version": 1,
+  "duration_secs": 16.84946,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "INT. SUNLIT HOME KITCHEN - MORNING",
+      "first_shot": 0,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 1,
+      "slugline": "INT. KITCHEN - CONTINUOUS",
+      "first_shot": 2,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 2,
+      "slugline": "INT. KITCHEN - CONTINUOUS",
+      "first_shot": 4,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 3,
+      "slugline": "INT. KITCHEN - CONTINUOUS",
+      "first_shot": 6,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 4,
+      "slugline": "INT. STUDIO - CONTINUOUS",
+      "first_shot": 8,
+      "shot_count": 2
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-0-est",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 0,
+      "start_secs": 0.0,
+      "duration_secs": 1.5,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "SUNLIT HOME KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "SUNLIT HOME KITCHEN",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-1-0",
+      "shot_index": 1,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 1.5,
+      "duration_secs": 1.5351813,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "pat golden butter and cascade",
+      "generation": {
+        "kind": "stock_search",
+        "query": "pat golden butter and cascade",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-1-est",
+      "shot_index": 2,
+      "scene_index": 1,
+      "screenplay_element_index": 3,
+      "start_secs": 3.0351813,
+      "duration_secs": 1.5871329,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-1-act-4-0",
+      "shot_index": 3,
+      "scene_index": 1,
+      "screenplay_element_index": 4,
+      "start_secs": 4.6223145,
+      "duration_secs": 1.6446736,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "pristine cream-white tilt-head stand mixer",
+      "generation": {
+        "kind": "stock_search",
+        "query": "pristine cream-white tilt-head stand mixer",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-2-est",
+      "shot_index": 4,
+      "scene_index": 2,
+      "screenplay_element_index": 6,
+      "start_secs": 6.266988,
+      "duration_secs": 1.7088737,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-2-act-7-0",
+      "shot_index": 5,
+      "scene_index": 2,
+      "screenplay_element_index": 7,
+      "start_secs": 7.9758615,
+      "duration_secs": 1.781114,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "Macro: the spiral dough hook",
+      "generation": {
+        "kind": "stock_search",
+        "query": "Macro: the spiral dough hook",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-3-est",
+      "shot_index": 6,
+      "scene_index": 3,
+      "screenplay_element_index": 9,
+      "start_secs": 9.756975,
+      "duration_secs": 1.863208,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "KITCHEN",
+      "generation": {
+        "kind": "stock_search",
+        "query": "KITCHEN",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-3-act-10-0",
+      "shot_index": 7,
+      "scene_index": 3,
+      "screenplay_element_index": 10,
+      "start_secs": 11.620183,
+      "duration_secs": 1.9575955,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "waterfall dark chocolate chips pours",
+      "generation": {
+        "kind": "stock_search",
+        "query": "waterfall dark chocolate chips pours",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-4-est",
+      "shot_index": 8,
+      "scene_index": 4,
+      "screenplay_element_index": 12,
+      "start_secs": 13.577779,
+      "duration_secs": 1.6089387,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "STUDIO",
+      "generation": {
+        "kind": "stock_search",
+        "query": "STUDIO",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-4-act-13-0",
+      "shot_index": 9,
+      "scene_index": 4,
+      "screenplay_element_index": 13,
+      "start_secs": 15.186718,
+      "duration_secs": 1.6627425,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "The KitchenAid wordmark holds clean",
+      "generation": {
+        "kind": "stock_search",
+        "query": "The KitchenAid wordmark holds clean",
+        "orientation": "landscape"
+      }
+    }
+  ]
+}

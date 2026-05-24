@@ -1,0 +1,92 @@
+<!doctype html>
+<html><head><style>
+  :root {
+    --red: #E0241B;
+    --cream: #F4F0E8;
+    --warm: #EFE5D2;
+    --ink: #1A1614;
+    --brass: #C8862E;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
+
+  body {
+    background:
+      radial-gradient(120% 90% at 50% 35%, #F8F2E3 0%, #E9DDC4 60%, #D8C7A4 100%);
+    color: var(--ink);
+  }
+
+  .frame {
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding: 0 8vw;
+    box-sizing: border-box;
+  }
+
+  .rule-top {
+    width: 0; height: 1px;
+    background: rgba(26,22,20,0.35);
+    margin-bottom: 6vh;
+    animation: drawLine 1.0s var(--ease-out-expo) 0.10s forwards;
+  }
+
+  .wordmark {
+    font: 700 13.5vw/0.9 -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--red);
+    letter-spacing: -0.038em;
+    text-transform: lowercase;
+    opacity: 0;
+    margin: 0;
+    text-align: center;
+    animation: rise 1.1s var(--ease-out-expo) 0.30s forwards;
+  }
+
+  .wordmark .dot {
+    color: var(--red);
+  }
+
+  .tag {
+    margin-top: 3.4vh;
+    font: italic 500 5.4vw/1.2 "Georgia", "Times New Roman", serif;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+    text-align: center;
+    opacity: 0;
+    animation: rise 1.0s var(--ease-out-expo) 0.85s forwards;
+  }
+
+  .since {
+    margin-top: 5.0vh;
+    font: 600 11px/1 -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: rgba(26,22,20,0.62);
+    letter-spacing: 0.46em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: rise 0.9s var(--ease-out-expo) 1.40s forwards;
+  }
+
+  .rule-bot {
+    width: 0; height: 1px;
+    background: rgba(26,22,20,0.35);
+    margin-top: 6vh;
+    animation: drawLine 1.0s var(--ease-out-expo) 1.70s forwards;
+  }
+
+  @keyframes rise {
+    from { opacity:0; transform: translateY(18px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  @keyframes drawLine {
+    from { width: 0; }
+    to   { width: 38vw; }
+  }
+</style></head>
+<body>
+  <div class="frame">
+    <div class="rule-top"></div>
+    <h1 class="wordmark">whirlpool<span class="dot">.</span></h1>
+    <p class="tag">Made for makers.</p>
+    <div class="since">Since 1911</div>
+    <div class="rule-bot"></div>
+  </div>
+</body></html>

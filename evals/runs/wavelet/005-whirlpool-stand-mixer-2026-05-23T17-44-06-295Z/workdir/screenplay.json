@@ -1,0 +1,120 @@
+{
+  "title_page": {
+    "title": "KitchenAid - Shop the Icon",
+    "author": "wavelet-director"
+  },
+  "elements": [
+    {
+      "type": "scene_heading",
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "ie": "int",
+      "location": "WARM KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "A KitchenAid stand mixer in glossy empire-red sits on a cream marble counter. A cloud of flour blooms upward as dough lands in the bowl. Soft window light from the left."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "ie": "int",
+      "location": "WARM KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "Two hands gently lower the tilt-head into place over the bowl. The iconic curved housing locks down with a precise mechanical motion."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "ie": "int",
+      "location": "WARM KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "Macro: the spiral dough hook rotates slowly. Pale dough catches the hook, folds over itself, and starts to climb the spindle."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "ie": "int",
+      "location": "WARM KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "Macro: the wire whip turns inside a chilled metal bowl. Cream lifts into glossy stiff peaks, ribbons sliding off the whip."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "ie": "int",
+      "location": "WARM KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "A linen-wrapped hand pulls a deep-crusted sourdough loaf from a hot oven. Steam catches the light."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "ie": "int",
+      "location": "WARM KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "Wide shot. The finished loaf rests on a wooden board, knife beside it. The empire-red stand mixer sits softly out of focus in the background."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. STUDIO - DAY",
+      "ie": "int",
+      "location": "STUDIO",
+      "time_of_day": "DAY"
+    },
+    {
+      "type": "action",
+      "text": "The KitchenAid wordmark holds against an empire-red field. A small \"A WHIRLPOOL BRAND\" line sits beneath it. A cream button reads \"SHOP THE ICON\"."
+    },
+    {
+      "type": "transition",
+      "text": "FADE OUT.",
+      "kind": "fade_out"
+    }
+  ]
+}

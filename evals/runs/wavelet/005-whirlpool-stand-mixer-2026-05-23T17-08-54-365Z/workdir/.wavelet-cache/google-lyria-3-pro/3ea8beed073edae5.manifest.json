@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "provider": "google-lyria-3-pro",
+  "cluster": "music_ref_conditioned",
+  "request_hash": "3ea8beed073edae5",
+  "request": {
+    "prompt": "Cinematic warm solo piano with subtle string swell, no drums, no percussion, gentle and intimate, slow 70 BPM build with quiet emotional crescendo, breath of A24 domestic warmth",
+    "duration_secs": 12.0,
+    "bpm": 70.0
+  },
+  "response": {
+    "provider": "google-lyria-3-pro",
+    "audio_path": ".wavelet-cache/google-lyria-3-pro/3ea8beed073edae5.mp3",
+    "audio_bytes": 2854885,
+    "mime": "audio/mpeg",
+    "model_variant": "lyria-3-pro-preview",
+    "prompt_sent": "12 second Cinematic warm solo piano with subtle string swell, no drums, no percussion, gentle and intimate, slow 70 BPM build with quiet emotional crescendo, breath of A24 domestic warmth",
+    "duration_secs": 12.0
+  },
+  "cost_estimate_usd": 0.012,
+  "asset_path": ".wavelet-cache/google-lyria-3-pro/3ea8beed073edae5.mp3",
+  "created_at": "2026-05-23T17:14:13Z"
+}

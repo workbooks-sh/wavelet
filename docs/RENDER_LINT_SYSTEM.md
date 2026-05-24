@@ -313,18 +313,18 @@ consumer / conversion spots → clear CTA.
 The decision needs to live in the **brand-research stage**, not in the
 director recipe. Proposed addition to that stage:
 
-The `adalign brand.brief <domain>` response already includes brand
+The `brandwork brand.brief <domain>` response already includes brand
 descriptors (positioning, slogan, palette, social handles). Add one
 derived field the brief stage emits:
 
 ```json
 {
-  "...standard adalign fields...",
+  "...standard brandwork fields...",
   "wavelet_recommended_cta_mode": "lifestyle" | "direct_response"
 }
 ```
 
-Resolution rule: if the brand's published ads (`adalign ads`) lean
+Resolution rule: if the brand's published ads (`brandwork ads`) lean
 heavily on "buy now / shop the link / use code XYZ" copy → direct
 response. If they lean on aspirational / mood / "available where good
 X is sold" → lifestyle. Director uses this hint when scripting the
@@ -335,7 +335,7 @@ CTA-card pattern:
 
 - Last scene 1.5–2 s of total runtime
 - Brand wordmark animates in (use the brand's actual logo URL from
-  `adalign brand.brief`)
+  `brandwork brand.brief`)
 - One-line CTA copy (e.g. "shop the iconic stand mixer")
 - One button (real CSS / SVG, not an image of a button)
 - Optional QR code
@@ -409,7 +409,7 @@ vendor/colorwave/app/src/lib/video-reframe/safe-zones.ts → becomes a generated
   as one paragraph; skill carries the discipline)
 - Refactoring the deleted-Fal grab-bag any further (it's gone)
 - Adalign feature work (the brief enrichment in 2.3 might live on the
-  adalign side or in a wavelet post-processor; that's a design call
+  brandwork side or in a wavelet post-processor; that's a design call
   for whoever implements step 4)
 
 End of doc. Confirm order + scope, then implement section by section.

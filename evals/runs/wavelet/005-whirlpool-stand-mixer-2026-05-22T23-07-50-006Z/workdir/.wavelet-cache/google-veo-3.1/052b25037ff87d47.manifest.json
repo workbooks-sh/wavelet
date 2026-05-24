@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "google-veo-3.1",
+  "cluster": "video_txt2vid",
+  "request_hash": "052b25037ff87d47",
+  "request": {
+    "prompt": "Wide static cinematic portrait shot: a vintage tilt-head stand mixer in iconic Empire Red glossy enamel sits at the center of a polished honed-marble counter inside a modern farmhouse kitchen at dawn, the kitchen is intentional and lived in with a wooden cutting board, a sourdough crock, dried herbs hanging in the background, a single brass tap reflecting the morning sky, the mixer is the focal subject in perfect quiet stillness, slow imperceptible push-in, 50mm full-frame, shallow depth of field, warm morning window light from camera-left at 3200K, deep cream-and-walnut palette with iconic Empire Red accent, gentle film grain, A24 domestic-warm color grade, locked 9:16 portrait",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "google-veo-3.1",
+    "video_path": ".wavelet-cache/google-veo-3.1/052b25037ff87d47.mp4",
+    "video_bytes": 783234,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "Wide static cinematic portrait shot: a vintage tilt-head stand mixer in iconic Empire Red glossy enamel sits at the center of a polished honed-marble counter inside a modern farmhouse kitchen at dawn, the kitchen is intentional and lived in with a wooden cutting board, a sourdough crock, dried herbs hanging in the background, a single brass tap reflecting the morning sky, the mixer is the focal subject in perfect quiet stillness, slow imperceptible push-in, 50mm full-frame, shallow depth of field, warm morning window light from camera-left at 3200K, deep cream-and-walnut palette with iconic Empire Red accent, gentle film grain, A24 domestic-warm color grade, locked 9:16 portrait"
+  },
+  "cost_estimate_usd": 2.0,
+  "asset_path": ".wavelet-cache/google-veo-3.1/052b25037ff87d47.mp4",
+  "created_at": "2026-05-22T23:11:22Z"
+}

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "google-veo-3.1",
+  "cluster": "video_txt2vid",
+  "request_hash": "168d4e30778ddb60",
+  "request": {
+    "prompt": "Cinematic 9:16 vertical close-up. A premium stand mixer in cream enamel with brushed-brass trim on white marble counter, amber late-afternoon light from camera-left, very slow push-in, shallow depth of field, copper pots blurred in background, no people, no text. Photoreal, 35mm prime.",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "google-veo-3.1",
+    "video_path": ".wavelet-cache/google-veo-3.1/168d4e30778ddb60.mp4",
+    "video_bytes": 673195,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "Cinematic 9:16 vertical close-up. A premium stand mixer in cream enamel with brushed-brass trim on white marble counter, amber late-afternoon light from camera-left, very slow push-in, shallow depth of field, copper pots blurred in background, no people, no text. Photoreal, 35mm prime."
+  },
+  "cost_estimate_usd": 2.0,
+  "asset_path": ".wavelet-cache/google-veo-3.1/168d4e30778ddb60.mp4",
+  "created_at": "2026-05-23T01:42:28Z"
+}

@@ -1,0 +1,63 @@
+<!doctype html>
+<html><head><style>
+  :root {
+    --red: #c61430;
+    --cream: #f6efe2;
+    --ink: #2c2c2c;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&family=Inter:wght@200;700&display=swap");
+  html, body { margin:0; padding:0; background: transparent; width:100%; height:100%; overflow:hidden; }
+
+  .frame { position:absolute; inset:0; }
+
+  .since {
+    position:absolute;
+    left: 6vw; top: 7vh;
+    color: var(--cream);
+    font: 200 16px/1.4 "Inter", sans-serif;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: rise 1.4s var(--ease-out-expo) 0.2s forwards;
+  }
+  .since b { font-weight: 700; }
+
+  .word {
+    position:absolute;
+    left: 6vw; bottom: 14vh;
+    color: var(--cream);
+    font: italic 500 12.5vw/0.95 "Playfair Display", serif;
+    letter-spacing: -0.02em;
+    margin: 0;
+    max-width: 88vw;
+    text-shadow: 0 6px 24px rgba(0,0,0,0.35);
+    opacity: 0;
+    animation: rise 1.6s var(--ease-out-expo) 0.55s forwards;
+  }
+
+  .rule {
+    position:absolute;
+    left: 6vw; bottom: 11vh;
+    width: 0;
+    height: 2px;
+    background: var(--red);
+    animation: draw 0.9s var(--ease-out-expo) 1.5s forwards;
+  }
+
+  @keyframes rise {
+    from { opacity:0; transform: translateY(28px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  @keyframes draw {
+    from { width: 0; }
+    to   { width: 28vw; }
+  }
+</style></head>
+<body>
+  <div class="frame">
+    <div class="since">Since <b>1919</b></div>
+    <h1 class="word">Begin<br>at home.</h1>
+    <div class="rule"></div>
+  </div>
+</body></html>

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "fal-veo3-fast",
+  "cluster": "video_txt2vid",
+  "request_hash": "a2c7db1e98d61dd6",
+  "request": {
+    "prompt": "A single fresh red apple on a clean white background, soft natural light, 4 seconds",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "fal-veo3-fast",
+    "video_path": ".wavelet-cache/fal-veo3-fast/a2c7db1e98d61dd6.mp4",
+    "video_bytes": 896629,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "A single fresh red apple on a clean white background, soft natural light, 4 seconds"
+  },
+  "cost_estimate_usd": 1.0,
+  "asset_path": ".wavelet-cache/fal-veo3-fast/a2c7db1e98d61dd6.mp4",
+  "created_at": "2026-05-23T17:43:23Z"
+}

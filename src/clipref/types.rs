@@ -22,6 +22,11 @@ pub enum ClipKind {
     ScreenplayScene,
     /// Hand-authored HTML/CSS overlay (text card, lower-third, etc.).
     Overlay,
+    /// Character reference bundle — name + 1..N reference images used to
+    /// condition reference-to-video generation (Fal Veo 3.1 ref, etc.).
+    /// Defined by `wavelet character define`, picked up by the storyboard
+    /// planner to route matching CHARACTER cues through `fal-veo3-ref`.
+    CharacterRef,
 }
 
 impl ClipKind {
@@ -38,6 +43,7 @@ impl ClipKind {
             ClipKind::Caption => "caption",
             ClipKind::ScreenplayScene => "screenplay-scene",
             ClipKind::Overlay => "overlay",
+            ClipKind::CharacterRef => "character",
         }
     }
 }

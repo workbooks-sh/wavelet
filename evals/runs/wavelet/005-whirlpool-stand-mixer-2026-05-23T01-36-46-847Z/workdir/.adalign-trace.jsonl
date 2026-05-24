@@ -1,0 +1,4 @@
+{"ts":"2026-05-23T01:57:58Z","argv":["adalign","--help"],"duration_ms":95,"exit":0,"stdout_bytes":1659,"stderr_bytes":0}
+{"ts":"2026-05-23T01:58:01Z","argv":["adalign","brief","--help"],"duration_ms":92,"exit":0,"stdout_bytes":366,"stderr_bytes":0}
+{"ts":"2026-05-23T01:58:02Z","argv":["adalign","brand","--help"],"duration_ms":83,"exit":0,"stdout_bytes":315,"stderr_bytes":0}
+{"ts":"2026-05-23T01:58:02Z","argv":["adalign","ads","--help"],"duration_ms":84,"exit":0,"stdout_bytes":435,"stderr_bytes":0}

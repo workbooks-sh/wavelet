@@ -1,0 +1,59 @@
+{
+  "title_page": {
+    "title": "KitchenAid Artisan â Made for Makers",
+    "author": "wavelet-director",
+    "other": {
+      "format": "9:16 / Meta Reels / 12s"
+    }
+  },
+  "elements": [
+    {
+      "type": "scene_heading",
+      "slugline": "INT. KITCHEN - LATE AFTERNOON",
+      "ie": "int",
+      "location": "KITCHEN",
+      "time_of_day": "LATE AFTERNOON"
+    },
+    {
+      "type": "action",
+      "text": "A KitchenAid Artisan stand mixer in Empire Red sits on a polished marble counter. Warm amber side light rakes across the dome. Copper saucepans blur in the background. The camera does an extremely slow push-in. Eyebrow text rises in: For the ones who still make it by hand. A short red rule draws in beneath."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. KITCHEN - LATE AFTERNOON",
+      "ie": "int",
+      "location": "KITCHEN",
+      "time_of_day": "LATE AFTERNOON"
+    },
+    {
+      "type": "action",
+      "text": "Macro: the whisk attachment turns through soft peaks of whipped cream, glossy ribbons folding in slow motion. Shallow depth of field; only the whisk-and-cream is in focus. Center text fades in: Built to be passed down."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. CARD - DAY",
+      "ie": "int",
+      "location": "CARD",
+      "time_of_day": "DAY"
+    },
+    {
+      "type": "action",
+      "text": "End card. The KitchenAid wordmark, large, red on cream. Tagline: Made for makers. URL: kitchenaid.com. The music resolves and holds."
+    },
+    {
+      "type": "transition",
+      "text": "FADE OUT.",
+      "kind": "fade_out"
+    }
+  ]
+}

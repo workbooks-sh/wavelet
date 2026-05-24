@@ -1,9 +1,9 @@
 //! `wavelet` — the canonical CLI for the wavelet motion-graphics renderer.
 //!
 //! ```text
-//! wavelet render <comp.json> [-o out.mp4]
-//! wavelet verify <comp.json> [--deep]
-//! wavelet query  <comp.json> ...      (Phase 1+; currently a stub)
+//! wavelet render <commercial.html> [-o out.mp4]
+//! wavelet verify <commercial.html|*.mp4> [--deep]
+//! wavelet query  <commercial.html> ...      (Phase 1+; currently a stub)
 //! wavelet shader ...                  (Phase 7+; currently a stub)
 //! ```
 
@@ -14,7 +14,7 @@ use wavelet::query::{
     DiffMetric, DiffOptions, FrameDiff, FramePixels, FrameSnapshot, OverlapPair, Rect,
     ScoredEvent, VisibilityVerdict,
 };
-use wavelet::cli_args::{AgentOp, BriefOp, C2paOp, CaptionsOp, ClipOp, Cmd, ContinuityOp, DialogueOp, DirectorOp, ImageOp, MusicOp, PipelinesOp, PlanModeArg, ScreenplayOp, ShaderOp, ShotOp, StoryboardOp, TransitionsOp, VelocityOp, WorkflowOp};
+use wavelet::cli_args::{AgentOp, BriefOp, C2paOp, CaptionsOp, CharacterOp, ClipOp, Cmd, ContinuityOp, DialogueOp, DirectorOp, ImageOp, MusicOp, PipelinesOp, PlanModeArg, ScreenplayOp, ShaderOp, ShotOp, StoryboardOp, TransitionsOp, VelocityOp, WorkflowOp};
 use wavelet::handlers::util::{QueryArgs, QueryEntry, QueryOutput, QuerySummary};
 use wavelet::handlers::util::image_arg_to_url;
 use wavelet::render_offline::Composition;
@@ -68,6 +68,7 @@ fn main() -> ExitCode {
             signing_key,
             aspects,
             frame_budget_secs,
+            no_audio,
         } => handlers::render::run(
             comp,
             out,
@@ -81,6 +82,7 @@ fn main() -> ExitCode {
             },
             aspects,
             frame_budget_secs,
+            no_audio,
         ),
         Cmd::Verify { comp, deep } => handlers::verify::run(comp, deep),
         Cmd::Query {
@@ -153,6 +155,12 @@ fn main() -> ExitCode {
             ScreenplayOp::Reassemble { workdir, out } => {
                 handlers::screenplay::reassemble(workdir, out)
             }
+            ScreenplayOp::Validate { path, duration, pretty } => {
+                handlers::screenplay::validate(path, duration, pretty)
+            }
+            ScreenplayOp::Characters { path, json, pretty } => {
+                handlers::screenplay::characters(path, json, pretty)
+            }
         },
         Cmd::Velocity { op } => handlers::velocity::run(op),
         Cmd::Storyboard { op } => run_storyboard(op),
@@ -192,6 +200,7 @@ fn main() -> ExitCode {
         } => run_query_shader(&shader, &frame, &params),
         Cmd::Agent { op } => run_agent(op),
         Cmd::Lint(op) => run_lint(op),
+        Cmd::Character { op } => handlers::character::run(op),
     }
 }
 

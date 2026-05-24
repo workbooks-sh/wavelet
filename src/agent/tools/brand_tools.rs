@@ -1,10 +1,10 @@
-//! `brand.*` — wrap the local `adalign` CLI as agent tools.
+//! `brand.*` — wrap the local `brandwork` CLI as agent tools.
 //!
 //! Five verbs: `brand.brief` (cross-channel: identity + ads + social),
 //! `brand.fetch` (identity only — faster), `brand.catalog` (product
 //! crawl, capped at 20 URLs), `brand.product` (single SKU + image URLs
 //! for hero-shot conditioning), `brand.ads` (Meta + Google ad creatives
-//! for tonal grounding). Shells out to `adalign` and parses its
+//! for tonal grounding). Shells out to `brandwork` and parses its
 //! `--json` stdout. Read-only — none of these touch the local SQLite.
 
 use std::process::Command;
@@ -13,6 +13,8 @@ use serde_json::{json, Value};
 
 use super::{arg_str as s, Tool, ToolRegistry, ToolResult};
 
+const BRANDWORK_FALLBACK: &str = "/Users/shinyobjectz/.local/bin/brandwork";
+/// Backward-compat fallback for the transition window (adalign symlink).
 const ADALIGN_FALLBACK: &str = "/Users/shinyobjectz/.local/bin/adalign";
 
 pub fn register(r: &mut ToolRegistry) {
@@ -23,28 +25,31 @@ pub fn register(r: &mut ToolRegistry) {
     r.register(BrandAds);
 }
 
-fn run_adalign(name: &str, args: &[&str]) -> ToolResult {
-    match run_adalign_raw(name, args) {
+fn run_brandwork(name: &str, args: &[&str]) -> ToolResult {
+    match run_brandwork_raw(name, args) {
         Ok(v) => ToolResult::local_ok(name, v),
         Err(r) => r,
     }
 }
 
-/// Same shell-out + auth-envelope detection as `run_adalign`, but
+/// Same shell-out + auth-envelope detection as `run_brandwork`, but
 /// returns the parsed JSON so callers can post-process (e.g. filter a
 /// product list) before wrapping it in a `ToolResult`. The `Err` arm
 /// carries an already-formed `ToolResult::local_err`.
-fn run_adalign_raw(name: &str, args: &[&str]) -> Result<Value, ToolResult> {
+fn run_brandwork_raw(name: &str, args: &[&str]) -> Result<Value, ToolResult> {
     let try_invoke = |bin: &str| Command::new(bin).args(args).output();
 
-    let out = match try_invoke("adalign") {
+    let out = match try_invoke("brandwork") {
         Ok(o) => o,
-        Err(_) => match try_invoke(ADALIGN_FALLBACK) {
+        Err(_) => match try_invoke(BRANDWORK_FALLBACK) {
             Ok(o) => o,
-            Err(e) => return Err(ToolResult::local_err(
-                name,
-                format!("adalign CLI not found on PATH or at {ADALIGN_FALLBACK}: {e}"),
-            )),
+            Err(_) => match try_invoke(ADALIGN_FALLBACK) {
+                Ok(o) => o,
+                Err(e) => return Err(ToolResult::local_err(
+                    name,
+                    format!("brandwork CLI not found on PATH or at {BRANDWORK_FALLBACK}: {e}"),
+                )),
+            },
         },
     };
 
@@ -65,14 +70,14 @@ fn run_adalign_raw(name: &str, args: &[&str]) -> Result<Value, ToolResult> {
     match serde_json::from_str::<Value>(stdout.trim()) {
         Ok(v) => {
             if let Some(true) = v.get("error").and_then(|e| e.as_bool()) {
-                let msg = v.get("message").and_then(|m| m.as_str()).unwrap_or("adalign error");
+                let msg = v.get("message").and_then(|m| m.as_str()).unwrap_or("brandwork error");
                 return Err(ToolResult::local_err(name, msg.to_string()));
             }
             Ok(v)
         }
         Err(e) => Err(ToolResult::local_err(
             name,
-            format!("could not parse adalign JSON: {e}; stdout: {}", stdout.chars().take(400).collect::<String>()),
+            format!("could not parse brandwork JSON: {e}; stdout: {}", stdout.chars().take(400).collect::<String>()),
         )),
     }
 }
@@ -100,7 +105,7 @@ impl Tool for BrandBrief {
             Some(v) => v,
             None => return ToolResult::local_err(self.name(), "missing `domain`"),
         };
-        run_adalign(self.name(), &["brief", &domain, "--json"])
+        run_brandwork(self.name(), &["brief", &domain, "--json"])
     }
 }
 
@@ -125,7 +130,7 @@ impl Tool for BrandFetch {
             Some(v) => v,
             None => return ToolResult::local_err(self.name(), "missing `domain`"),
         };
-        run_adalign(self.name(), &["brand", "fetch", &domain, "--json"])
+        run_brandwork(self.name(), &["brand", "fetch", &domain, "--json"])
     }
 }
 
@@ -150,7 +155,7 @@ impl Tool for BrandCatalog {
             Some(v) => v,
             None => return ToolResult::local_err(self.name(), "missing `domain`"),
         };
-        run_adalign(self.name(), &["catalog", "crawl", &domain, "--json", "--max-urls", "20"])
+        run_brandwork(self.name(), &["catalog", "crawl", &domain, "--json", "--max-urls", "20"])
     }
 }
 
@@ -183,10 +188,10 @@ impl Tool for BrandProduct {
             Some(v) => v,
             None => return ToolResult::local_err(self.name(), "missing `query`"),
         };
-        // `adalign catalog crawl` has no --query flag, so we crawl 20 and
-        // filter client-side. Verified against `adalign catalog crawl --help`
+        // `brandwork catalog crawl` has no --query flag, so we crawl 20 and
+        // filter client-side. Verified against `brandwork catalog crawl --help`
         // on 2026-05-20.
-        let raw = match run_adalign_raw(
+        let raw = match run_brandwork_raw(
             self.name(),
             &["catalog", "crawl", &domain, "--json", "--max-urls", "20"],
         ) {
@@ -223,7 +228,7 @@ impl Tool for BrandAds {
     fn description(&self) -> &str {
         "Discover Meta + Google ad creatives the brand currently runs — palette, copy voice, \
          pacing reference. Use after `brand.brief` to mirror the brand's actual ad register. \
-         Returns `{ ads: [...] }` from `adalign ads search`."
+         Returns `{ ads: [...] }` from `brandwork ads search`."
     }
     fn parameters_schema(&self) -> Value {
         json!({
@@ -248,7 +253,7 @@ impl Tool for BrandAds {
         };
         let limit = args.get("limit").and_then(|v| v.as_i64()).unwrap_or(5).max(1).to_string();
         let source = s(args, "source").unwrap_or_else(|| "all".to_string());
-        let raw = match run_adalign_raw(
+        let raw = match run_brandwork_raw(
             self.name(),
             &["ads", "search", &domain, "--source", &source, "--limit", &limit, "--json"],
         ) {
@@ -269,7 +274,7 @@ impl Tool for BrandAds {
     }
 }
 
-/// Find the array of products in adalign's `catalog crawl --json` output.
+/// Find the array of products in brandwork's `catalog crawl --json` output.
 /// The shape varies — sometimes top-level array, sometimes nested under
 /// `products` / `items` / `data`. Returns an empty Vec if nothing
 /// resembles a product list.
@@ -338,15 +343,15 @@ mod tests {
     // parallel cargo-test threads see each other's mock shadows.
     static PATH_LOCK: Mutex<()> = Mutex::new(());
 
-    /// Write a mock `adalign` shell script that emits `stdout_body` and
+    /// Write a mock `brandwork` shell script that emits `stdout_body` and
     /// returns `exit_code`. Returns the tempdir so the caller can prepend
     /// it to `PATH` for the duration of the test.
-    fn mock_adalign(stdout_body: &str, exit_code: i32) -> tempfile::TempDir {
+    fn mock_brandwork(stdout_body: &str, exit_code: i32) -> tempfile::TempDir {
         let dir = tempfile::tempdir().unwrap();
-        let path = dir.path().join("adalign");
+        let path = dir.path().join("brandwork");
         // Single-quote the heredoc so the body isn't shell-expanded.
         let script = format!(
-            "#!/bin/sh\ncat <<'__ADALIGN_EOF__'\n{stdout_body}\n__ADALIGN_EOF__\nexit {exit_code}\n"
+            "#!/bin/sh\ncat <<'__BRANDWORK_EOF__'\n{stdout_body}\n__BRANDWORK_EOF__\nexit {exit_code}\n"
         );
         fs::write(&path, script).unwrap();
         let mut perms = fs::metadata(&path).unwrap().permissions();
@@ -374,7 +379,7 @@ mod tests {
               "price": "$329" }
           ]
         }"#;
-        let dir = mock_adalign(body, 0);
+        let dir = mock_brandwork(body, 0);
         with_mock_path(&dir, || {
             let t = BrandProduct;
             let r = t.dispatch(&json!({ "domain": "patagonia.com", "query": "down sweater" }));
@@ -391,7 +396,7 @@ mod tests {
     #[test]
     fn brand_product_no_match_returns_local_err() {
         let body = r#"{ "products": [ { "name": "Better Sweater" } ] }"#;
-        let dir = mock_adalign(body, 0);
+        let dir = mock_brandwork(body, 0);
         with_mock_path(&dir, || {
             let r = BrandProduct.dispatch(&json!({ "domain": "x.com", "query": "zzz nothing" }));
             assert!(!r.ok);
@@ -402,7 +407,7 @@ mod tests {
     #[test]
     fn brand_ads_wraps_array_under_ads_key() {
         let body = r#"[ { "id": "1", "headline": "hi" }, { "id": "2", "headline": "ho" } ]"#;
-        let dir = mock_adalign(body, 0);
+        let dir = mock_brandwork(body, 0);
         with_mock_path(&dir, || {
             let r = BrandAds.dispatch(&json!({ "domain": "patagonia.com", "limit": 2 }));
             assert!(r.ok, "summary: {}", r.summary);
@@ -414,8 +419,8 @@ mod tests {
 
     #[test]
     fn brand_ads_auth_envelope_routes_to_local_err() {
-        let body = r#"{ "error": true, "message": "not signed in: run `adalign login`" }"#;
-        let dir = mock_adalign(body, 0);
+        let body = r#"{ "error": true, "message": "not signed in: run `brandwork login`" }"#;
+        let dir = mock_brandwork(body, 0);
         with_mock_path(&dir, || {
             let r = BrandAds.dispatch(&json!({ "domain": "x.com" }));
             assert!(!r.ok);
@@ -426,7 +431,7 @@ mod tests {
     #[test]
     fn brand_product_auth_envelope_routes_to_local_err() {
         let body = r#"{ "error": true, "message": "ADALIGN_API_KEY missing" }"#;
-        let dir = mock_adalign(body, 0);
+        let dir = mock_brandwork(body, 0);
         with_mock_path(&dir, || {
             let r = BrandProduct.dispatch(&json!({ "domain": "x.com", "query": "any" }));
             assert!(!r.ok);

@@ -174,6 +174,36 @@ pub(crate) fn mode_label(mode: RunMode) -> &'static str {
     }
 }
 
+/// Map a `BackendError` to a CLI exit code per the wavelet convention:
+///
+/// - `0` = success
+/// - `1` = generic runtime error (HTTP, transport, decode, I/O)
+/// - `2` = clap arg parse error (reserved — never returned from here)
+/// - `3` = post-parse hard fail (missing credential, over-budget,
+///         invalid-request gate, unimplemented backend)
+///
+/// Exit `2` is reserved for clap; any error originating after arg
+/// parse (an HTTP 4xx, a missing credential env var, a cost-gate trip)
+/// must NOT collide with that. Eval drivers rely on this split to
+/// distinguish "I called the tool wrong" from "the tool ran but the
+/// backend pushed back".
+///
+/// Shared across every CLI handler (`shot txt2vid`, `music gen`,
+/// `dialogue tts`, `lipsync`, ...) so a single convention is enforced.
+pub fn exit_for_backend_error(err: &BackendError) -> std::process::ExitCode {
+    use std::process::ExitCode;
+    match err {
+        BackendError::MissingCredential(_)
+        | BackendError::OverBudget { .. }
+        | BackendError::InvalidRequest(_)
+        | BackendError::Unimplemented(_) => ExitCode::from(3),
+        BackendError::Transport(_)
+        | BackendError::HttpStatus { .. }
+        | BackendError::Decode(_)
+        | BackendError::Cache(_) => ExitCode::from(1),
+    }
+}
+
 /// Centralized budget gate used by every cluster trait. Dry-run mode
 /// always passes (no actual spend); live mode rejects when the estimate
 /// exceeds the configured budget.
@@ -241,5 +271,118 @@ mod tests {
         };
         assert!(check_budget(&est, RunMode::Live { max_cost_usd: 1.0 }).is_ok());
         assert!(check_budget(&est, RunMode::Live { max_cost_usd: 0.1 }).is_err());
+    }
+
+    /// Cross-handler regression: `exit_for_backend_error` must never
+    /// return exit 2 (clap collision) for any `BackendError` variant.
+    /// Music, dialogue, lipsync and shot-txt2vid all route through
+    /// this single helper — the test locks the convention in one place
+    /// so adding a new variant without updating the mapping breaks
+    /// the build (non-exhaustive match + this case-list test).
+    #[test]
+    fn exit_for_backend_error_never_returns_two() {
+        use std::process::ExitCode;
+        let two = format!("{:?}", ExitCode::from(2));
+        let cases = [
+            BackendError::Unimplemented("x"),
+            BackendError::MissingCredential("KEY".into()),
+            BackendError::OverBudget {
+                estimate: 1.0,
+                budget: 0.5,
+            },
+            BackendError::Transport("net".into()),
+            BackendError::HttpStatus {
+                status: 500,
+                body: "".into(),
+            },
+            BackendError::Decode("d".into()),
+            BackendError::Cache("c".into()),
+            BackendError::InvalidRequest("i".into()),
+        ];
+        for err in &cases {
+            let code = exit_for_backend_error(err);
+            assert_ne!(
+                format!("{:?}", code),
+                two,
+                "BackendError {err:?} routed to exit 2 (reserved for clap parse errors)",
+            );
+        }
+    }
+
+    #[test]
+    fn exit_for_backend_error_hard_fail_variants_route_to_three() {
+        use std::process::ExitCode;
+        let three = format!("{:?}", ExitCode::from(3));
+        let cases = [
+            BackendError::MissingCredential("ELEVENLABS_API_KEY".into()),
+            BackendError::OverBudget {
+                estimate: 0.10,
+                budget: 0.00,
+            },
+            BackendError::InvalidRequest("prompt empty".into()),
+            BackendError::Unimplemented("google-lyria-3-pro"),
+        ];
+        for err in &cases {
+            let code = exit_for_backend_error(err);
+            assert_eq!(
+                format!("{:?}", code),
+                three,
+                "expected exit 3 for {err:?} (post-parse hard fail)",
+            );
+        }
+    }
+
+    #[test]
+    fn exit_for_backend_error_runtime_variants_route_to_one() {
+        use std::process::ExitCode;
+        let one = format!("{:?}", ExitCode::from(1));
+        let cases = [
+            BackendError::Transport("connection refused".into()),
+            BackendError::HttpStatus {
+                status: 503,
+                body: "lyria queue down".into(),
+            },
+            BackendError::Decode("malformed lyria response".into()),
+            BackendError::Cache("disk full".into()),
+        ];
+        for err in &cases {
+            let code = exit_for_backend_error(err);
+            assert_eq!(
+                format!("{:?}", code),
+                one,
+                "expected exit 1 for {err:?} (generic runtime)",
+            );
+        }
+    }
+
+    /// Music gen regression: the eval-010-v5 trace showed
+    /// `wavelet music gen --backend google-lyria-3-pro --max-cost 0.10`
+    /// returning exit 2 after a 29-second API call. With the helper,
+    /// the OverBudget gate trip pre-call routes to 3, and any HTTP
+    /// pushback routes to 1 — never 2.
+    #[test]
+    fn music_gen_over_budget_maps_to_three() {
+        use std::process::ExitCode;
+        let err = BackendError::OverBudget {
+            estimate: 0.40,
+            budget: 0.10,
+        };
+        assert_eq!(
+            format!("{:?}", exit_for_backend_error(&err)),
+            format!("{:?}", ExitCode::from(3)),
+        );
+    }
+
+    #[test]
+    fn music_gen_http_status_maps_to_one() {
+        use std::process::ExitCode;
+        let err = BackendError::HttpStatus {
+            status: 429,
+            body: "rate limited".into(),
+        };
+        assert_eq!(
+            format!("{:?}", exit_for_backend_error(&err)),
+            format!("{:?}", ExitCode::from(1)),
+        );
     }
 }

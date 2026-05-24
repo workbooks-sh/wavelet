@@ -14,6 +14,7 @@ pub mod query;
 pub mod render;
 pub mod rubric;
 pub mod shader;
+pub mod trace;
 pub mod unit;
 mod util;
 
@@ -21,6 +22,7 @@ pub use query::{QueryBeat, QueryPixels, QuerySceneGraph, QuerySnapshot};
 pub use render::{C2paVerifyPasses, CompVerifyPasses};
 pub use rubric::RubricPasses;
 pub use shader::QueryShader;
+pub use trace::{AdalignResearchDone, BrandworkResearchDone, ScreenplayDurationFits, WaveletLintPasses};
 pub use unit::UnitTestPasses;
 
 use super::validator::{ValidatorRegistry, ValidatorRegistryError};
@@ -37,6 +39,14 @@ pub fn register_all(reg: &mut ValidatorRegistry) -> Result<(), ValidatorRegistry
     reg.register(Box::new(C2paVerifyPasses))?;
     reg.register(Box::new(UnitTestPasses))?;
     reg.register(Box::new(RubricPasses))?;
+    reg.register(Box::new(BrandworkResearchDone))?;
+    // Transitional alias — `adalign_research_done` is still a valid criterion
+    // kind in pipeline YAML files during the migration window. Register a
+    // separate instance under the old name so existing pipeline definitions
+    // keep working without edits.
+    reg.register(Box::new(crate::agent::plan::validators::trace::AdalignResearchDoneAlias))?;
+    reg.register(Box::new(WaveletLintPasses))?;
+    reg.register(Box::new(ScreenplayDurationFits))?;
     Ok(())
 }
 

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "google-veo-3.1-lite",
+  "cluster": "video_txt2vid",
+  "request_hash": "1c41dc9ba1bece36",
+  "request": {
+    "prompt": "Studio product photography of a pearl-white stand mixer centered on a soft cream paper backdrop, gentle key light from the upper-left, soft falloff shadow on the right, very subtle slow camera push-in, plenty of empty headroom above the mixer for typography, no text in frame, no logos in frame, no people, 50 mm full-frame, warm morning window light camera-left at 3200K, deep cream-and-brown palette, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "google-veo-3.1-lite",
+    "video_path": ".wavelet-cache/google-veo-3.1-lite/1c41dc9ba1bece36.mp4",
+    "video_bytes": 528208,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "Studio product photography of a pearl-white stand mixer centered on a soft cream paper backdrop, gentle key light from the upper-left, soft falloff shadow on the right, very subtle slow camera push-in, plenty of empty headroom above the mixer for typography, no text in frame, no logos in frame, no people, 50 mm full-frame, warm morning window light camera-left at 3200K, deep cream-and-brown palette, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait"
+  },
+  "cost_estimate_usd": 0.4,
+  "asset_path": ".wavelet-cache/google-veo-3.1-lite/1c41dc9ba1bece36.mp4",
+  "created_at": "2026-05-22T23:37:36Z"
+}

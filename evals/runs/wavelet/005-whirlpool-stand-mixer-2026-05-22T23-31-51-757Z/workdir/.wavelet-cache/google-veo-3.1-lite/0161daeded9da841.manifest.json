@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "google-veo-3.1-lite",
+  "cluster": "video_txt2vid",
+  "request_hash": "0161daeded9da841",
+  "request": {
+    "prompt": "A hand sets a polished stainless mixing bowl onto the cast-metal base of a pearl-white stand mixer, subtle click as the bowl locks into place, soft hand motion, no faces, intimate close-up, 50 mm full-frame, medium-close framing, warm morning window light camera-left at 3200K, deep cream-and-brown palette, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "google-veo-3.1-lite",
+    "video_path": ".wavelet-cache/google-veo-3.1-lite/0161daeded9da841.mp4",
+    "video_bytes": 752954,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "A hand sets a polished stainless mixing bowl onto the cast-metal base of a pearl-white stand mixer, subtle click as the bowl locks into place, soft hand motion, no faces, intimate close-up, 50 mm full-frame, medium-close framing, warm morning window light camera-left at 3200K, deep cream-and-brown palette, gentle film grain, A24 domestic-warm grade, locked 9:16 portrait"
+  },
+  "cost_estimate_usd": 0.4,
+  "asset_path": ".wavelet-cache/google-veo-3.1-lite/0161daeded9da841.mp4",
+  "created_at": "2026-05-22T23:35:01Z"
+}

@@ -4,9 +4,14 @@
 //! `tier_policy` (image / video / music). TTS stays on ElevenLabs — see
 //! `commercial.yaml`.
 //!
-//! Fal does not host Veo (probed 2026-05-19; every `fal-ai/veo*` and
-//! `fal-ai/google/veo*` path returned 404). The Google AI Studio
-//! generative-language API hosts Veo 3.1 in the `*_preview` track:
+//! **Note (2026-05-23):** Fal now hosts Veo 3 at `queue.fal.run/fal-ai/veo3`
+//! (Standard) and `queue.fal.run/fal-ai/veo3/fast` (Fast). The earlier
+//! probe on 2026-05-19 found 404s; those paths are live as of this date.
+//! Use `--backend fal-veo3` to route through Fal (see
+//! `backends/fal/veo.rs`) when Google project quota is exhausted.
+//!
+//! The Google AI Studio generative-language API hosts Veo 3.1 in the
+//! `*_preview` track:
 //!
 //! - `models/veo-3.1-generate-preview`
 //! - `models/veo-3.1-fast-generate-preview`

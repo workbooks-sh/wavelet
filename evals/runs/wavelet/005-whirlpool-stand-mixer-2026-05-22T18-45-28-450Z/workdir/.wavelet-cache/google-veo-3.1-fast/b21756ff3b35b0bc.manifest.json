@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "provider": "google-veo-3.1-fast",
+  "cluster": "video_txt2vid",
+  "request_hash": "b21756ff3b35b0bc",
+  "request": {
+    "prompt": "Golden hour kitchen. In the foreground a pair of weathered adult hands lifts a finished crusty boule of bread from a wooden board, steam rising in soft curls. In the background, slightly out of focus on the marble counter, the same graphite tilt-head stand mixer sits still and dignified, its polished bowl glowing in the warm low sun. Wide shot, low angle, 35mm, deep amber backlight, dust motes, slight lens vignette. Cinematic editorial, quiet, reverent. Vertical 9:16.",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16"
+  },
+  "response": {
+    "provider": "google-veo-3.1-fast",
+    "video_path": ".wavelet-cache/google-veo-3.1-fast/b21756ff3b35b0bc.mp4",
+    "video_bytes": 1484336,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "Golden hour kitchen. In the foreground a pair of weathered adult hands lifts a finished crusty boule of bread from a wooden board, steam rising in soft curls. In the background, slightly out of focus on the marble counter, the same graphite tilt-head stand mixer sits still and dignified, its polished bowl glowing in the warm low sun. Wide shot, low angle, 35mm, deep amber backlight, dust motes, slight lens vignette. Cinematic editorial, quiet, reverent. Vertical 9:16."
+  },
+  "cost_estimate_usd": 1.0,
+  "asset_path": ".wavelet-cache/google-veo-3.1-fast/b21756ff3b35b0bc.mp4",
+  "created_at": "2026-05-22T18:48:44Z"
+}

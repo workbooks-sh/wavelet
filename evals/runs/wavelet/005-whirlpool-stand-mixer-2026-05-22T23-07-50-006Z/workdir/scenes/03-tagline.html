@@ -1,0 +1,84 @@
+<!doctype html>
+<html><head>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;500;700&display=swap");
+
+  :root {
+    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-out-expo:  cubic-bezier(0.16, 1, 0.3,  1);
+  }
+
+  html, body { margin: 0; padding: 0; background: transparent; width: 100%; height: 100%; overflow: hidden; }
+
+  /* Subtle bottom scrim so the tagline reads cleanly over any backdrop */
+  .scrim {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 62%;
+    background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(18, 12, 6, 0.10) 30%,
+      rgba(15, 10, 4, 0.55) 75%,
+      rgba(12, 7, 2, 0.78) 100%);
+    opacity: 0;
+    animation: scrim-in 1.2s var(--ease-out-quint) 0.1s both;
+  }
+
+  .end {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 0 56px 200px;
+    text-align: center;
+    color: #f8f0e4;
+  }
+
+  .tagline {
+    font-family: "Bodoni Moda", "Didot", serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 88px;
+    line-height: 1.02;
+    letter-spacing: -0.012em;
+    margin: 0;
+    mix-blend-mode: screen;
+    color: #fff7ea;
+  }
+
+  .tagline .a, .tagline .b { display: block; }
+  .tagline .a { opacity: 0; transform: translateY(28px); animation: rise 1.4s var(--ease-out-quint) 0.55s forwards; }
+  .tagline .b { opacity: 0; transform: translateY(28px); animation: rise 1.5s var(--ease-out-quint) 0.85s forwards; }
+
+  .divider {
+    display: block;
+    width: 0; height: 1px;
+    background: rgba(248, 240, 228, 0.55);
+    margin: 36px auto 32px;
+    animation: rule-draw 1.4s var(--ease-out-expo) 1.5s both;
+  }
+
+  .wordmark {
+    font-family: "Inter", "Helvetica Neue", sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: rgba(248, 240, 228, 0.94);
+    padding-left: 0.42em;
+    opacity: 0;
+    animation: fade-in 1.4s var(--ease-out-quint) 1.7s both;
+  }
+
+  @keyframes scrim-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+  @keyframes rule-draw { from { width: 0; } to { width: 96px; } }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+</style></head>
+<body>
+  <div class="scrim"></div>
+  <div class="end">
+    <h1 class="tagline">
+      <span class="a">At the heart</span>
+      <span class="b">of home.</span>
+    </h1>
+    <span class="divider"></span>
+    <div class="wordmark">KitchenAid</div>
+  </div>
+</body></html>

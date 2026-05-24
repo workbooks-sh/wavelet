@@ -1,4 +1,5 @@
 use std::process::ExitCode;
+use crate::handlers::image_depth_map::handle_image_depth_map;
 use crate::handlers::image_ocr::run_image_ocr;
 use crate::cli_args::ImageOp;
 use crate::handlers::image_bg_remove::handle_image_bg_remove;
@@ -18,8 +19,14 @@ pub fn run_image(op: ImageOp) -> ExitCode {
             image,
             rows,
             cols,
+            use_depth,
             pretty,
-        } => emit_analysis(pretty, || image_analysis::negative_space::analyze(&image, rows, cols)),
+        } => emit_analysis(pretty, || {
+            image_analysis::negative_space::analyze_with_depth(&image, rows, cols, use_depth)
+        }),
+        ImageOp::DepthMap { image, out, pretty } => {
+            handle_image_depth_map(image, out, pretty)
+        }
         ImageOp::Saliency {
             image,
             rows,

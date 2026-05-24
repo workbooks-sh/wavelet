@@ -1,0 +1,69 @@
+{
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "transitions": [
+    {
+      "element_index": 2,
+      "source_text": "CUT TO:",
+      "kind": "cut",
+      "t_secs": 10.4,
+      "bpm_at": 60.0,
+      "duration_secs": null,
+      "rationale": "hard cut (Cut) — no duration"
+    },
+    {
+      "element_index": 5,
+      "source_text": "CUT TO:",
+      "kind": "cut",
+      "t_secs": 19.3,
+      "bpm_at": 60.0,
+      "duration_secs": null,
+      "rationale": "hard cut (Cut) — no duration"
+    },
+    {
+      "element_index": 8,
+      "source_text": "CUT TO:",
+      "kind": "cut",
+      "t_secs": 27.0,
+      "bpm_at": 60.0,
+      "duration_secs": null,
+      "rationale": "hard cut (Cut) — no duration"
+    },
+    {
+      "element_index": 11,
+      "source_text": "CUT TO:",
+      "kind": "cut",
+      "t_secs": 35.5,
+      "bpm_at": 60.0,
+      "duration_secs": null,
+      "rationale": "hard cut (Cut) — no duration"
+    },
+    {
+      "element_index": 14,
+      "source_text": "CUT TO:",
+      "kind": "cut",
+      "t_secs": 42.4,
+      "bpm_at": 60.0,
+      "duration_secs": null,
+      "rationale": "hard cut (Cut) — no duration"
+    },
+    {
+      "element_index": 17,
+      "source_text": "CUT TO:",
+      "kind": "cut",
+      "t_secs": 53.700005,
+      "bpm_at": 60.0,
+      "duration_secs": null,
+      "rationale": "hard cut (Cut) — no duration"
+    },
+    {
+      "element_index": 20,
+      "source_text": "FADE OUT.",
+      "kind": "fade_out",
+      "t_secs": 63.800007,
+      "bpm_at": 60.0,
+      "duration_secs": 1.2,
+      "rationale": "fade length set from BPM (60): longer fade at lower tempo"
+    }
+  ]
+}

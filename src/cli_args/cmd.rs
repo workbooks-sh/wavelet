@@ -2,15 +2,21 @@
 
 use std::path::PathBuf;
 use clap::{Parser, Subcommand, ValueEnum, Args};
-use super::{AgentOp, BriefOp, C2paOp, CaptionsOp, ClipOp, ContinuityOp, DialogueOp, DirectorOp, ImageOp, LintOp, MusicOp, PipelinesOp, ScreenplayOp, ShaderOp, ShotOp, StoryboardOp, TransitionsOp, VelocityOp, WorkflowOp};
+use super::{AgentOp, BriefOp, C2paOp, CaptionsOp, CharacterOp, ClipOp, ContinuityOp, DialogueOp, DirectorOp, ImageOp, LintOp, MusicOp, PipelinesOp, ScreenplayOp, ShaderOp, ShotOp, StoryboardOp, TransitionsOp, VelocityOp, WorkflowOp};
 
 
 
 #[derive(Subcommand)]
 pub enum Cmd {
-    /// Render a JSON composition to MP4 (+ sidecar WAV if audio cues are present).
+    /// Render a `commercial.html` composition manifest to MP4 (+ sidecar
+    /// WAV if audio cues are present). HTML-only — JSON inputs are
+    /// rejected with exit 3.
     Render {
-        /// Path to the JSON composition file.
+        /// Path to the `commercial.html` manifest. Must declare
+        /// `<meta name="resolution" content="WxH">`,
+        /// `<meta name="fps" content="N">`,
+        /// `<meta name="duration" content="Ns">`, and reference each
+        /// scene via `<section data-scene-href="scenes/01-foo.html">`.
         comp: PathBuf,
         /// Output MP4 path. Defaults to <comp-stem>.mp4 alongside the input.
         #[arg(short, long)]
@@ -56,6 +62,13 @@ pub enum Cmd {
         /// long-running comps (heavy shader passes, high-res renders).
         #[arg(long, default_value_t = crate::render_offline::DEFAULT_FRAME_BUDGET_SECS)]
         frame_budget_secs: u64,
+        /// Skip the audio mux pass. By default any `<audio>` reference
+        /// in the HTML is encoded to AAC and muxed into the output MP4
+        /// alongside the video. Use --no-audio when the caller wants to
+        /// mux audio manually downstream — the sidecar WAV is still
+        /// written so the muxer has something to consume.
+        #[arg(long)]
+        no_audio: bool,
     },
     /// Lint a composition. Without --deep, only structural checks run.
     Verify {
@@ -367,4 +380,11 @@ pub enum Cmd {
     /// whose remediation hint is concrete enough for the agent to
     /// act on without a re-render.
     Lint(LintOp),
+    /// Character reference bundles — define a named character with 1..N
+    /// reference images. The storyboard planner auto-discovers these
+    /// refs and routes matching CHARACTER cues through `fal-veo3-ref`.
+    Character {
+        #[command(subcommand)]
+        op: CharacterOp,
+    },
 }

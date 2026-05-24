@@ -1,0 +1,104 @@
+{
+  "title_page": {
+    "title": "KitchenAid Artisan â The Icon",
+    "author": "wavelet-director"
+  },
+  "elements": [
+    {
+      "type": "scene_heading",
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "ie": "int",
+      "location": "WARM KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "Cracked egg falls in slow motion into a polished stainless mixing bowl. Yolk shines. A single drop of milk lands beside it."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "ie": "int",
+      "location": "WARM KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "A baker's hands tilt the head of an Empire Red KitchenAid Artisan stand mixer down into position. The chrome bowl-clamp clicks."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "ie": "int",
+      "location": "WARM KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "Macro on the spiral dough hook spinning slowly. Pale dough catches the hook, folds over itself, takes shape."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "ie": "int",
+      "location": "WARM KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "Slow push-in on the stainless bowl. Flour-dusted dough swirls inside as the Empire Red body looms behind."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "ie": "int",
+      "location": "WARM KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "A baker's hands lift a golden, crusty sourdough loaf out of an oven. Steam rises. The loaf glows."
+    },
+    {
+      "type": "transition",
+      "text": "CUT TO:",
+      "kind": "cut"
+    },
+    {
+      "type": "scene_heading",
+      "slugline": "INT. WARM KITCHEN - MORNING",
+      "ie": "int",
+      "location": "WARM KITCHEN",
+      "time_of_day": "MORNING"
+    },
+    {
+      "type": "action",
+      "text": "Wide still-life on a marble counter: a sliced sourdough loaf on a wooden board, butter melting on a slice, the Empire Red Artisan stand mixer at quiet attention beside it."
+    },
+    {
+      "type": "transition",
+      "text": "FADE OUT.",
+      "kind": "fade_out"
+    }
+  ]
+}

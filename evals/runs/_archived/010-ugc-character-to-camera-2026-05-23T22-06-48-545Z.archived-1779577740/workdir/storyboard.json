@@ -1,0 +1,256 @@
+{
+  "version": 1,
+  "duration_secs": 20.655,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "screenplay_ref": "script.fountain",
+  "velocity_ref": "velocity.json",
+  "scenes": [
+    {
+      "scene_index": 0,
+      "slugline": "INT. BATHROOM VANITY - MORNING",
+      "first_shot": 0,
+      "shot_count": 3
+    },
+    {
+      "scene_index": 1,
+      "slugline": "INT. APARTMENT WINDOW - CONTINUOUS",
+      "first_shot": 3,
+      "shot_count": 3
+    },
+    {
+      "scene_index": 2,
+      "slugline": "INT. APARTMENT WINDOW - CONTINUOUS",
+      "first_shot": 6,
+      "shot_count": 2
+    },
+    {
+      "scene_index": 3,
+      "slugline": "INT. BATHROOM VANITY - MORNING",
+      "first_shot": 8,
+      "shot_count": 3
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-0-est",
+      "shot_index": 0,
+      "scene_index": 0,
+      "screenplay_element_index": 0,
+      "start_secs": 0.0,
+      "duration_secs": 1.5,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "BATHROOM VANITY",
+      "generation": {
+        "kind": "stock_search",
+        "query": "BATHROOM VANITY",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-act-1-0",
+      "shot_index": 1,
+      "scene_index": 0,
+      "screenplay_element_index": 1,
+      "start_secs": 1.5,
+      "duration_secs": 1.5391923,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "ALEX, late twenties, freckles, glossy",
+      "generation": {
+        "kind": "stock_search",
+        "query": "ALEX, late twenties, freckles, glossy",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-0-dlg-2",
+      "shot_index": 2,
+      "scene_index": 0,
+      "screenplay_element_index": 2,
+      "start_secs": 3.0391922,
+      "duration_secs": 3.2,
+      "shot_type": "cu",
+      "camera_movement": "static",
+      "camera_side": "left",
+      "subject": "ALEX",
+      "generation": {
+        "kind": "stock_search",
+        "query": "ALEX face close-up",
+        "orientation": "portrait"
+      },
+      "audio_ref": "vo/ALEX-2.mp3",
+      "expected_checks": [
+        {
+          "gate": "subject_visible",
+          "selector": "#alex"
+        }
+      ]
+    },
+    {
+      "id": "shot-1-est",
+      "shot_index": 3,
+      "scene_index": 1,
+      "screenplay_element_index": 4,
+      "start_secs": 6.239192,
+      "duration_secs": 1.7344378,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "APARTMENT WINDOW",
+      "generation": {
+        "kind": "stock_search",
+        "query": "APARTMENT WINDOW",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-1-act-5-0",
+      "shot_index": 4,
+      "scene_index": 1,
+      "screenplay_element_index": 5,
+      "start_secs": 7.97363,
+      "duration_secs": 1.8188773,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "ALEX the same cream ribbed",
+      "generation": {
+        "kind": "stock_search",
+        "query": "ALEX the same cream ribbed",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-1-dlg-6",
+      "shot_index": 5,
+      "scene_index": 1,
+      "screenplay_element_index": 6,
+      "start_secs": 9.792507,
+      "duration_secs": 2.0,
+      "shot_type": "cu",
+      "camera_movement": "static",
+      "camera_side": "left",
+      "subject": "ALEX",
+      "generation": {
+        "kind": "stock_search",
+        "query": "ALEX face close-up",
+        "orientation": "portrait"
+      },
+      "audio_ref": "vo/ALEX-6.mp3",
+      "expected_checks": [
+        {
+          "gate": "subject_visible",
+          "selector": "#alex"
+        }
+      ]
+    },
+    {
+      "id": "shot-2-est",
+      "shot_index": 6,
+      "scene_index": 2,
+      "screenplay_element_index": 8,
+      "start_secs": 11.792507,
+      "duration_secs": 1.8837367,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "APARTMENT WINDOW",
+      "generation": {
+        "kind": "stock_search",
+        "query": "APARTMENT WINDOW",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-2-act-9-0",
+      "shot_index": 7,
+      "scene_index": 2,
+      "screenplay_element_index": 9,
+      "start_secs": 13.676244,
+      "duration_secs": 1.5898983,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "ECU ALEX's hands. She tilts",
+      "generation": {
+        "kind": "stock_search",
+        "query": "ECU ALEX's hands. She tilts",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-3-est",
+      "shot_index": 8,
+      "scene_index": 3,
+      "screenplay_element_index": 11,
+      "start_secs": 15.266142,
+      "duration_secs": 1.2631578,
+      "shot_type": "ws",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "BATHROOM VANITY",
+      "generation": {
+        "kind": "stock_search",
+        "query": "BATHROOM VANITY",
+        "orientation": "landscape"
+      },
+      "transition_in": {
+        "kind": "cut"
+      }
+    },
+    {
+      "id": "shot-3-act-12-0",
+      "shot_index": 9,
+      "scene_index": 3,
+      "screenplay_element_index": 12,
+      "start_secs": 16.5293,
+      "duration_secs": 1.3257006,
+      "shot_type": "ms",
+      "camera_movement": "static",
+      "camera_side": "center",
+      "subject": "ALEX back the vanity, shrugs,",
+      "generation": {
+        "kind": "stock_search",
+        "query": "ALEX back the vanity, shrugs,",
+        "orientation": "landscape"
+      }
+    },
+    {
+      "id": "shot-3-dlg-13",
+      "shot_index": 10,
+      "scene_index": 3,
+      "screenplay_element_index": 13,
+      "start_secs": 17.855001,
+      "duration_secs": 2.8,
+      "shot_type": "cu",
+      "camera_movement": "static",
+      "camera_side": "left",
+      "subject": "ALEX",
+      "generation": {
+        "kind": "stock_search",
+        "query": "ALEX face close-up",
+        "orientation": "portrait"
+      },
+      "audio_ref": "vo/ALEX-13.mp3",
+      "expected_checks": [
+        {
+          "gate": "subject_visible",
+          "selector": "#alex"
+        }
+      ]
+    }
+  ]
+}

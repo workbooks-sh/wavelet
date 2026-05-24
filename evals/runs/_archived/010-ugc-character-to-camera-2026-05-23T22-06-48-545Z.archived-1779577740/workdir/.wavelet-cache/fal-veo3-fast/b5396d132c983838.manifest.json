@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "provider": "fal-veo3-fast",
+  "cluster": "video_txt2vid",
+  "request_hash": "b5396d132c983838",
+  "request": {
+    "prompt": "a 28 year old woman with light olive skin, freckles scattered across her cheekbones, glossy collarbone-length brunette hair tucked behind one ear, no makeup or minimal makeup, wearing a cream ribbed cotton tank top, standing at her bright bathroom vanity with soft daylight from a frosted window camera-left, she turns from the mirror toward the phone camera with a warm half-laugh, leans in casually like she's recording a voice memo to a friend, and says brightly in a natural American accent: 'Okay I have to tell you about this.', medium close-up framing chest-up, eye contact with lens, no on-screen text or captions, no logos, handheld iPhone 16 Pro Max at chest height, soft window daylight from camera-left, slightly overexposed in highlights, Apple HDR camera-native color with no film grade, faint rolling-shutter wobble, no anamorphic flare, no film grain, 9:16 portrait, looks like a phone someone is actually holding",
+    "apply_default_negatives": true,
+    "duration_secs": 4.0,
+    "aspect_ratio": "9:16",
+    "seed": 1001
+  },
+  "response": {
+    "provider": "fal-veo3-fast",
+    "video_path": ".wavelet-cache/fal-veo3-fast/b5396d132c983838.mp4",
+    "video_bytes": 1903364,
+    "mime": "video/mp4",
+    "duration_secs": 4.0,
+    "width": 0,
+    "height": 0,
+    "prompt_sent": "a 28 year old woman with light olive skin, freckles scattered across her cheekbones, glossy collarbone-length brunette hair tucked behind one ear, no makeup or minimal makeup, wearing a cream ribbed cotton tank top, standing at her bright bathroom vanity with soft daylight from a frosted window camera-left, she turns from the mirror toward the phone camera with a warm half-laugh, leans in casually like she's recording a voice memo to a friend, and says brightly in a natural American accent: 'Okay I have to tell you about this.', medium close-up framing chest-up, eye contact with lens, no on-screen text or captions, no logos, handheld iPhone 16 Pro Max at chest height, soft window daylight from camera-left, slightly overexposed in highlights, Apple HDR camera-native color with no film grade, faint rolling-shutter wobble, no anamorphic flare, no film grain, 9:16 portrait, looks like a phone someone is actually holding",
+    "seed_used": 1001
+  },
+  "cost_estimate_usd": 1.0,
+  "asset_path": ".wavelet-cache/fal-veo3-fast/b5396d132c983838.mp4",
+  "created_at": "2026-05-23T22:13:18Z"
+}

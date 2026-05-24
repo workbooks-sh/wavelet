@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "provider": "google-lyria-3-pro",
+  "cluster": "music_ref_conditioned",
+  "request_hash": "1613d56d63e9adbb",
+  "request": {
+    "prompt": "warm intimate solo piano in C major, gentle and slow, with a soft low cello drone underneath, no percussion, no synths, no vocals — feels like Sunday morning in a sunlit kitchen, builds very gently across 12 seconds, A24 domestic-warm score, ends on an unresolved warm major chord",
+    "duration_secs": 12.0
+  },
+  "response": {
+    "provider": "google-lyria-3-pro",
+    "audio_path": ".wavelet-cache/google-lyria-3-pro/1613d56d63e9adbb.mp3",
+    "audio_bytes": 1427973,
+    "mime": "audio/mpeg",
+    "model_variant": "lyria-3-pro-preview",
+    "prompt_sent": "warm intimate solo piano in C major, gentle and slow, with a soft low cello drone underneath, no percussion, no synths, no vocals — feels like Sunday morning in a sunlit kitchen, builds very gently across 12 seconds, A24 domestic-warm score, ends on an unresolved warm major chord",
+    "duration_secs": 12.0
+  },
+  "cost_estimate_usd": 0.012,
+  "asset_path": ".wavelet-cache/google-lyria-3-pro/1613d56d63e9adbb.mp3",
+  "created_at": "2026-05-23T18:34:28Z"
+}

@@ -23,17 +23,23 @@ stages:
       - brief.md
     tools_available:
       - "brief check"
+      - "brandwork brief"
+      - "brandwork brand"
+      - "brandwork ads"
     success_criteria:
       - kind: artifact_exists
         params: { path: brief.md }
       - kind: brief_check_passes
         params: { path: brief.md }
+      - kind: brandwork_research_done
 
   - name: script
     description: >
       Author the Fountain screenplay. 4–6 scenes, mostly action
       paragraphs; pacing matches the brief's MUSIC energy curve.
-      Validated structurally before velocity gets to look at it.
+      Validated structurally AND for copy-density-vs-duration before
+      velocity gets to look at it — too much copy in too short a spot
+      is unrecoverable downstream.
     required_artifacts_in:
       - brief.md
     required_artifacts_out:
@@ -41,10 +47,12 @@ stages:
       - "any:screenplay.json|refs:screenplay-scene"
     tools_available:
       - "screenplay parse"
+      - "screenplay validate"
     success_criteria:
       - kind: artifact_exists
         params: { path: script.fountain }
       - kind: screenplay_parse_clean
+      - kind: screenplay_duration_fits
 
   - name: velocity
     description: >
@@ -137,9 +145,11 @@ stages:
       no template library. Each scene contains a `<video src="shots/
       shot-N.mp4">` (or `<img>` for stills) plus any creative overlay
       markup. Then assemble a single top-level `commercial.html`
-      manifest listing every scene + audio cue. Everything is HTML —
-      JSON compositions are deprecated; do not write comp.json. Verify
-      before render to catch structural problems early.
+      manifest listing every scene + audio cue. HTML is the ONLY
+      composition input wavelet render accepts — JSON inputs are
+      rejected at exit 3 with no fallback. If a render call fails, fix
+      the HTML or the upstream stage; never reach for a JSON workaround.
+      Verify before render to catch structural problems early.
     required_artifacts_in:
       - cuts.edl
       - captions.json
@@ -148,11 +158,14 @@ stages:
     tools_available:
       - verify
       - "query"
+      - "lint commercial.html --platform <p>"
     success_criteria:
       - kind: artifact_exists
         params: { path: commercial.html }
       - kind: comp_verify_passes
         params: { path: commercial.html }
+      - kind: wavelet_lint_passes
+        params: { target: commercial.html }
 
   - name: publish
     description: >

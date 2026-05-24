@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head>
+<style>
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+}
+html, body { margin: 0; padding: 0; background: transparent; width: 1080px; height: 1920px; overflow: hidden; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: #fff; }
+.hud { position: absolute; inset: 0; padding: 90px 60px; display: grid; grid-template-rows: auto 1fr auto; }
+.tag {
+  display: inline-flex; align-items: center; gap: 22px;
+  font-size: 26px; letter-spacing: 0.42em; text-transform: uppercase; font-weight: 600;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.55);
+}
+.dot { width: 10px; height: 10px; border-radius: 999px; background: #c61430; box-shadow: 0 0 24px #c61430cc; }
+.tag .num { font-feature-settings: "tnum"; font-weight: 800; }
+.bottom { align-self: end; }
+.bottom .strap { font-size: 26px; letter-spacing: 0.32em; text-transform: uppercase; opacity: 0.92; text-shadow: 0 2px 14px rgba(0,0,0,0.55); }
+.scrim {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 36%;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.55) 80%, rgba(0,0,0,0.8));
+}
+@keyframes fade-in   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.tag      { animation: fade-in 0.6s var(--ease-out-quint) 0.05s both; }
+.bottom   { animation: slide-in 0.9s var(--ease-out-expo) 0.45s both; }
+.scrim    { animation: fade-in 0.9s ease-out 0.2s both; }
+</style></head>
+<body>
+  <div class="scrim"></div>
+  <div class="hud">
+    <div class="tag"><span class="dot"></span><span class="num">EST. 1919</span><span>·</span><span>FROM SCRATCH</span></div>
+    <div></div>
+    <div class="bottom"><div class="strap">A century in one bowl</div></div>
+  </div>
+</body></html>

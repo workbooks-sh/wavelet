@@ -12,6 +12,7 @@
 
 pub mod beat;
 pub mod diff;
+pub mod glyph_run;
 pub mod ocr;
 pub mod pixels;
 pub mod repl;
@@ -30,4 +31,5 @@ pub use scene_graph::{
     bbox_of, in_safe_area, no_overlap, transform_inherits, visibility_of, BboxResult,
     OverlapPair, OverlapResult, SafeAreaResult, TransformInheritsResult,
 };
-pub use snapshot::{FrameSnapshot, NodeSnapshot, Rect, VisibilityVerdict};
+pub use glyph_run::{GlyphInk, GlyphRunData};
+pub use snapshot::{FlexAxis, FrameSnapshot, NodeSnapshot, Rect, VisibilityVerdict};

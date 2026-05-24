@@ -1,0 +1,60 @@
+<!doctype html>
+<html><head>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&display=swap");
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+}
+html, body { margin: 0; padding: 0; background: transparent; width: 1080px; height: 1920px; overflow: hidden; }
+.frame {
+  position: absolute; inset: 0; padding: 0 70px 280px;
+  display: grid; grid-template-rows: 1fr auto;
+  color: #fefaf2;
+}
+.scrim {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 55%;
+  background: linear-gradient(180deg, transparent, rgba(20,8,2,0.0) 25%, rgba(20,8,2,0.78) 100%);
+}
+.eyebrow {
+  font: 600 22px/1 "Helvetica Neue", sans-serif;
+  letter-spacing: 0.46em; text-transform: uppercase;
+  color: #f7e8c4;
+  align-self: end; justify-self: start;
+  margin-bottom: 28px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+}
+.headline {
+  align-self: end;
+  font-family: "Bodoni Moda", "Didot", serif;
+  font-weight: 400;
+  font-size: 168px;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-shadow: 0 6px 36px rgba(0,0,0,0.7);
+}
+.headline em { font-style: italic; font-weight: 400; color: #f3c89a; }
+@keyframes drift-up {
+  from { transform: translateY(36px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes track-in {
+  from { letter-spacing: 0.22em; opacity: 0; }
+  to   { letter-spacing: 0.46em; opacity: 1; }
+}
+@keyframes scrim-in { from { opacity: 0; } to { opacity: 1; } }
+.scrim    { animation: scrim-in 0.6s ease-out 0s both; }
+.eyebrow  { animation: track-in 1.0s var(--ease-out-quint) 0.2s both; }
+.headline { animation: drift-up 1.2s var(--ease-out-expo) 0.4s both; }
+</style></head>
+<body>
+  <div class="scrim"></div>
+  <div class="frame">
+    <div></div>
+    <div>
+      <div class="eyebrow">An American Icon</div>
+      <h1 class="headline">Built<br><em>to last.</em></h1>
+    </div>
+  </div>
+</body></html>

@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# eval-kill — terminate a running wavelet eval and its agent subprocess(es).
+#
+# Usage: eval-kill <short-name>
+#
+# Sends SIGTERM to the workbench parent + all `claude -p` children. The
+# workdir is preserved so post-mortems can inspect what got written.
+
+set -uo pipefail
+
+if [[ $# -ne 1 ]]; then
+  echo "usage: $0 <short-name>" >&2
+  exit 2
+fi
+
+SHORT="$1"
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+PID_FILE="$ROOT/evals/runs/_logs/${SHORT}.pid"
+
+if [[ ! -f "$PID_FILE" ]]; then
+  echo "eval-kill: no pid file at $PID_FILE" >&2
+  exit 1
+fi
+
+PID=$(cat "$PID_FILE")
+
+if ! kill -0 "$PID" 2>/dev/null; then
+  echo "eval-kill: pid $PID is not alive"
+  exit 0
+fi
+
+echo "eval-kill: terminating workbench pid=$PID"
+# Kill all claude -p children first so they don't restart the agent
+for child in $(pgrep -P "$PID" 2>/dev/null); do
+  if kill -0 "$child" 2>/dev/null; then
+    echo "  killing child $child"
+    kill -TERM "$child" 2>/dev/null || true
+  fi
+done
+
+# Also catch any orphaned claude -p processes (workbench may have respawned)
+for orphan in $(pgrep -f "claude -p" 2>/dev/null); do
+  if kill -0 "$orphan" 2>/dev/null; then
+    echo "  killing orphan claude-p $orphan"
+    kill -TERM "$orphan" 2>/dev/null || true
+  fi
+done
+
+kill -TERM "$PID" 2>/dev/null || true
+
+# Give it 5 seconds for graceful shutdown, then SIGKILL
+for _ in $(seq 1 5); do
+  kill -0 "$PID" 2>/dev/null || break
+  sleep 1
+done
+if kill -0 "$PID" 2>/dev/null; then
+  echo "eval-kill: workbench didn't exit cleanly, SIGKILL"
+  kill -KILL "$PID" 2>/dev/null || true
+fi
+
+echo "eval-kill: done. workdir preserved for post-mortem."

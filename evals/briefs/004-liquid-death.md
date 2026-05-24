@@ -86,15 +86,15 @@ Whichever register you pick: locked lens character, locked lighting, locked grad
 
 ## Where to learn
 
-You are running in a Claude Code session. The `wavelet` and `adalign` CLIs are on your PATH. Discover everything from there:
+You are running in a Claude Code session. The `wavelet` + `brandwork` CLIs are on your PATH. Discover everything from there:
 
 - `wavelet --help` — top-level subcommands
 - `wavelet <subcommand> --help` — per-subcommand flags, backends, and examples
 - `wavelet pipelines show commercial` — the eight-stage pipeline spec
-- `adalign --help` — brand grounding (login already done; `brand.brief`, `brand.ads`, `brand.product` are the tools you'll use most)
+- `brandwork --help` — brand grounding (login already done; `brand.brief`, `brand.ads`, `brand.product` are the tools you'll use most)
 - The `wavelet-director` skill, if loaded by Claude Code's skill discovery, has the canonical recipe — invoke it if you see it in your skill list
 
-Do not look for monorepo paths or internal documentation. You only have what a Claude Code user with `wavelet` + `adalign` installed would have.
+Do not look for monorepo paths or internal documentation. You only have what a Claude Code user with `wavelet` + `brandwork` installed would have.
 
 ## Self-check before declaring done
 
