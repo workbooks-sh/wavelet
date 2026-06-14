@@ -435,6 +435,670 @@ pub fn render_animated_gif_from_path(
     Ok(out.into_inner())
 }
 
+// ── presentation (.pptx) export lane — IN-GUEST, pure-Rust OOXML ──────────────
+//
+// A multi-scene composition becomes a PowerPoint deck: ONE slide per scene,
+// each slide a full-bleed picture of that scene rendered by the render-core.
+// The .pptx is a ZIP of OOXML parts ([Content_Types].xml, _rels/.rels,
+// ppt/presentation.xml + rels, one ppt/slides/slideN.xml + rels per scene, a
+// minimal slideLayout + slideMaster, and ppt/media/imageN.png). Built with the
+// pure-Rust `zip` crate (flate2/miniz_oxide backend) — NO native exec, links
+// under wasm32-wasip1, runs under wasmtime.
+//
+// "Scene" convention (string-level, no DOM dependency):
+//   1. elements carrying a `data-scene` attribute (any tag) — preferred;
+//   2. else top-level `<section>` elements;
+//   3. else the whole composition is a single scene.
+// Each scene is rendered by re-rendering the WHOLE composition with an injected
+// stylesheet that hides every scene element except the i-th and makes the
+// visible one full-bleed, then painting the frame. This reuses the exact Blitz
+// /Stylo/Vello pipeline (styles, fonts, assets, CSS timeline) verbatim.
+
+use std::io::Write as _;
+
+/// EMU (English Metric Units) per inch — OOXML's absolute unit. 914400 EMU = 1".
+const EMU_PER_INCH: i64 = 914_400;
+
+/// How scenes are delimited inside a composition.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum SceneKind {
+    /// `data-scene`-attributed elements.
+    DataAttr,
+    /// `<section>` elements.
+    Section,
+    /// The whole document is one scene.
+    Whole,
+}
+
+/// Detect the scene kind + count of scenes in a composition's HTML. `data-scene`
+/// wins; else `<section>`; else the whole doc (count 1). Counting is a tag/attr
+/// scan that ignores `<script>`/`<style>`/comment contents so CSS or JS that
+/// merely mentions the token isn't miscounted.
+fn detect_scenes(html: &str) -> (SceneKind, usize) {
+    let body = strip_non_markup(html);
+    let data_n = count_data_scene_opening_tags(&body);
+    if data_n > 0 {
+        return (SceneKind::DataAttr, data_n);
+    }
+    let section_n = count_opening_tags(&body, "section");
+    if section_n > 0 {
+        return (SceneKind::Section, section_n);
+    }
+    (SceneKind::Whole, 1)
+}
+
+/// Remove `<!-- -->` comments and the *contents* of `<script>`/`<style>` so a
+/// scene-token mention inside CSS/JS doesn't get miscounted as a scene element.
+/// Keeps the surrounding markup intact. Operates on the lowercased copy used for
+/// counting (we only need positions/structure, not original-case text).
+fn strip_non_markup(html: &str) -> String {
+    let lower = html.to_ascii_lowercase();
+    let mut out = String::with_capacity(lower.len());
+    let mut rest: &str = &lower;
+    'outer: loop {
+        // Comment?
+        if let Some(stripped) = rest.strip_prefix("<!--") {
+            match stripped.find("-->") {
+                Some(end) => {
+                    rest = &stripped[end + 3..];
+                    continue 'outer;
+                }
+                None => break,
+            }
+        }
+        // <script> / <style> — skip their inner content.
+        for tag in ["script", "style"] {
+            let open = format!("<{tag}");
+            if rest.starts_with(&open) {
+                match rest.find('>') {
+                    Some(gt) => {
+                        out.push_str(&rest[..=gt]); // opening tag
+                        let after = &rest[gt + 1..];
+                        let close = format!("</{tag}");
+                        match after.find(&close) {
+                            Some(rel) => {
+                                let close_part = &after[rel..];
+                                match close_part.find('>') {
+                                    Some(cgt) => {
+                                        out.push_str(&close_part[..=cgt]); // closing tag
+                                        rest = &close_part[cgt + 1..];
+                                    }
+                                    None => {
+                                        rest = "";
+                                    }
+                                }
+                            }
+                            None => {
+                                rest = "";
+                            }
+                        }
+                    }
+                    None => {
+                        rest = "";
+                    }
+                }
+                continue 'outer;
+            }
+        }
+        // Default: copy one char.
+        match rest.chars().next() {
+            Some(c) => {
+                out.push(c);
+                rest = &rest[c.len_utf8()..];
+            }
+            None => break,
+        }
+    }
+    out
+}
+
+/// Count opening tags `<name ...>` / `<name>` (not closing `</name>`), case-
+/// insensitive, requiring a word boundary after the name.
+fn count_opening_tags(html: &str, name: &str) -> usize {
+    let lower = html.to_ascii_lowercase();
+    let needle = format!("<{name}");
+    let bytes = lower.as_bytes();
+    let mut count = 0;
+    let mut from = 0;
+    while let Some(rel) = lower[from..].find(&needle) {
+        let pos = from + rel;
+        let after = pos + needle.len();
+        // boundary: next char must be whitespace, '>' or '/'
+        let ok = bytes
+            .get(after)
+            .map(|&c| c == b' ' || c == b'>' || c == b'/' || c == b'\t' || c == b'\n' || c == b'\r')
+            .unwrap_or(false);
+        if ok {
+            count += 1;
+        }
+        from = after;
+    }
+    count
+}
+
+/// Count opening tags (any name) that carry a `data-scene` attribute. Scans for
+/// `data-scene` occurrences that sit inside an opening tag.
+fn count_data_scene_opening_tags(html: &str) -> usize {
+    let lower = html.to_ascii_lowercase();
+    let mut count = 0;
+    let mut from = 0;
+    while let Some(rel) = lower[from..].find("data-scene") {
+        let pos = from + rel;
+        // walk back to the nearest '<' and forward to '>' to confirm we're
+        // inside an opening (non-closing) tag.
+        if let Some(lt) = lower[..pos].rfind('<') {
+            let is_closing = lower.as_bytes().get(lt + 1) == Some(&b'/');
+            let gt = lower[pos..].find('>').map(|r| pos + r);
+            if !is_closing && gt.is_some() {
+                count += 1;
+            }
+        }
+        from = pos + "data-scene".len();
+    }
+    count
+}
+
+/// CSS that isolates the scene marked `data-wavelet-scene="index"` and makes it
+/// the only visible, full-bleed content. Every scene element carries a
+/// `data-wavelet-scene` ordinal (injected by [`annotate_scenes`]) so isolation
+/// works regardless of whether scenes are the same tag. For `SceneKind::Whole`
+/// no isolation is needed (the whole doc IS the scene).
+fn scene_isolation_css(kind: SceneKind, index: usize, _total: usize) -> String {
+    if kind == SceneKind::Whole {
+        return String::new();
+    }
+    // Hide every scene element; reveal + full-bleed the target. `!important`
+    // so author rules can't re-hide it. Position it to cover the viewport.
+    format!(
+        "<style id=\"__wavelet_scene_iso\">\n\
+         [data-wavelet-scene]{{display:none !important;}}\n\
+         [data-wavelet-scene=\"{index}\"]{{display:block !important;position:absolute !important;\
+         left:0 !important;top:0 !important;right:0 !important;bottom:0 !important;\
+         width:100% !important;height:100% !important;margin:0 !important;}}\n\
+         </style>"
+    )
+}
+
+/// Annotate each scene element with `data-wavelet-scene="<ordinal>"` (0-based) so
+/// CSS isolation can target any scene by ordinal regardless of tag. Rewrites the
+/// opening tag of every scene element in document order. Returns the rewritten
+/// HTML. For `SceneKind::Whole` the HTML is returned unchanged.
+fn annotate_scenes(html: &str, kind: SceneKind) -> String {
+    match kind {
+        SceneKind::Whole => html.to_string(),
+        SceneKind::DataAttr => annotate_by(html, &|lower, lt| {
+            // Opening tag whose attributes (up to '>') contain `data-scene`.
+            tag_attrs_contain(lower, lt, "data-scene")
+        }),
+        SceneKind::Section => annotate_by(html, &|lower, lt| {
+            // Opening <section ...> tag.
+            tag_name_is(lower, lt, "section")
+        }),
+    }
+}
+
+/// True if the opening tag starting at `lt` (a '<') has tag-name `name`.
+fn tag_name_is(lower: &str, lt: usize, name: &str) -> bool {
+    let after = &lower[lt + 1..];
+    if after.starts_with('/') {
+        return false; // closing tag
+    }
+    let open = name;
+    if !after.starts_with(open) {
+        return false;
+    }
+    // boundary char after the name
+    after[open.len()..]
+        .chars()
+        .next()
+        .map(|c| c == ' ' || c == '>' || c == '/' || c == '\t' || c == '\n' || c == '\r')
+        .unwrap_or(false)
+}
+
+/// True if the opening tag starting at `lt` contains attribute substring `attr`
+/// before its closing '>'. Skips closing tags.
+fn tag_attrs_contain(lower: &str, lt: usize, attr: &str) -> bool {
+    let after = &lower[lt + 1..];
+    if after.starts_with('/') {
+        return false;
+    }
+    match after.find('>') {
+        Some(gt) => after[..gt].contains(attr),
+        None => false,
+    }
+}
+
+/// Walk the HTML, and for each opening tag where `pred(lower, lt)` is true,
+/// inject ` data-wavelet-scene="<ordinal>"` right after the tag name. Ordinals
+/// increment in document order. Operates on original-case `html` (matches the
+/// lowercased copy by byte offset — ASCII-lowercasing preserves byte lengths).
+fn annotate_by(html: &str, pred: &dyn Fn(&str, usize) -> bool) -> String {
+    let lower = html.to_ascii_lowercase();
+    let mut out = String::with_capacity(html.len() + 64);
+    let mut ordinal = 0usize;
+    let mut i = 0usize;
+    let bytes = lower.as_bytes();
+    while i < html.len() {
+        if bytes[i] == b'<' && pred(&lower, i) {
+            // Find end of the tag name (after '<'): up to first whitespace/ '>' / '/'.
+            let name_start = i + 1;
+            let mut j = name_start;
+            while j < html.len() {
+                let c = bytes[j];
+                if c == b' ' || c == b'>' || c == b'/' || c == b'\t' || c == b'\n' || c == b'\r' {
+                    break;
+                }
+                j += 1;
+            }
+            out.push_str(&html[i..j]); // '<' + tag name
+            out.push_str(&format!(" data-wavelet-scene=\"{ordinal}\""));
+            ordinal += 1;
+            i = j;
+        } else {
+            // copy one UTF-8 char
+            let ch = html[i..].chars().next().unwrap();
+            out.push(ch);
+            i += ch.len_utf8();
+        }
+    }
+    out
+}
+
+/// Build the per-scene HTML by annotating scene elements then injecting the
+/// isolation `<style>` before `</head>`. If there's no `</head>`, inject right
+/// after `<body>`/`<html>` or prepend. The original composition styles, fonts,
+/// assets and timeline are all preserved — only visibility changes.
+fn compose_scene_html(html: &str, kind: SceneKind, index: usize, total: usize) -> String {
+    let css = scene_isolation_css(kind, index, total);
+    if css.is_empty() {
+        return html.to_string();
+    }
+    let html = annotate_scenes(html, kind);
+    let lower = html.to_ascii_lowercase();
+    if let Some(pos) = lower.find("</head>") {
+        let mut out = String::with_capacity(html.len() + css.len());
+        out.push_str(&html[..pos]);
+        out.push_str(&css);
+        out.push_str(&html[pos..]);
+        out
+    } else if let Some(pos) = lower.find("<body") {
+        // insert after the <body ...> opening tag's '>'
+        if let Some(rel) = lower[pos..].find('>') {
+            let at = pos + rel + 1;
+            let mut out = String::with_capacity(html.len() + css.len());
+            out.push_str(&html[..at]);
+            out.push_str(&css);
+            out.push_str(&html[at..]);
+            out
+        } else {
+            format!("{css}{html}")
+        }
+    } else {
+        format!("{css}{html}")
+    }
+}
+
+/// Render one scene of a composition to RGBA8 by isolating it and painting the
+/// frame at `t = frame/fps`. `base_url` resolves relative `<img>` assets.
+fn render_scene_rgba(
+    html: &str,
+    kind: SceneKind,
+    index: usize,
+    total: usize,
+    frame: u32,
+    fps: u32,
+    width: u32,
+    height: u32,
+    base_url: Option<String>,
+) -> Vec<u8> {
+    let scene_html = compose_scene_html(html, kind, index, total);
+    render_frame_rgba_with_base(&scene_html, frame, fps, width, height, base_url)
+}
+
+/// Number of scenes in a composition file (reads the file). Useful for callers
+/// that want to size a deck before rendering.
+pub fn count_scenes_in_path(composition_path: &Path) -> std::io::Result<usize> {
+    let html = std::fs::read_to_string(composition_path)?;
+    Ok(detect_scenes(&html).1)
+}
+
+/// Render every scene of a composition file to PNG bytes, one per slide.
+///
+/// Returns `Vec<png_bytes>` in scene order. `frame`/`fps` seek the CSS timeline
+/// (a still snapshot per slide). Relative `<img>` assets resolve against the
+/// composition's directory.
+pub fn render_scene_pngs_from_path(
+    composition_path: &Path,
+    frame: u32,
+    fps: u32,
+    width: u32,
+    height: u32,
+) -> std::io::Result<Vec<Vec<u8>>> {
+    let (html, base) = read_composition(composition_path)?;
+    let (kind, total) = detect_scenes(&html);
+    let mut pngs = Vec::with_capacity(total);
+    for i in 0..total {
+        let rgba = render_scene_rgba(&html, kind, i, total, frame, fps, width, height, base.clone());
+        pngs.push(rgba_to_png(&rgba, width, height));
+    }
+    Ok(pngs)
+}
+
+/// Assemble a valid OOXML `.pptx` deck from per-scene PNG bytes — one full-bleed
+/// picture slide per PNG. Slide size is derived from the pixel `width`/`height`
+/// at 96 DPI (the OOXML default), so the picture fills the slide exactly.
+///
+/// The archive contains: `[Content_Types].xml`, `_rels/.rels`,
+/// `ppt/presentation.xml` (+ rels), `ppt/slideMasters/slideMaster1.xml` (+rels),
+/// `ppt/slideLayouts/slideLayout1.xml` (+rels), `ppt/theme/theme1.xml`, one
+/// `ppt/slides/slideN.xml` (+rels) per scene, and `ppt/media/imageN.png`.
+/// Built with the pure-Rust `zip` crate — opens in PowerPoint / Keynote /
+/// LibreOffice Impress / Google Slides.
+pub fn assemble_pptx(slide_pngs: &[Vec<u8>], width: u32, height: u32) -> std::io::Result<Vec<u8>> {
+    use zip::write::SimpleFileOptions;
+    use zip::{CompressionMethod, ZipWriter};
+
+    let n = slide_pngs.len().max(1);
+    // Slide dimensions in EMU from pixels at 96 DPI.
+    let cx = (width as i64) * EMU_PER_INCH / 96;
+    let cy = (height as i64) * EMU_PER_INCH / 96;
+
+    let cursor = Cursor::new(Vec::new());
+    let mut zip = ZipWriter::new(cursor);
+    // Deterministic: fixed mtime, deflate. (Determinism keeps the export
+    // reproducible — same scenes => same bytes.)
+    let deflate = SimpleFileOptions::default()
+        .compression_method(CompressionMethod::Deflated)
+        .last_modified_time(zip::DateTime::default());
+    // PNG is already compressed; store the media to avoid double work.
+    let stored = SimpleFileOptions::default()
+        .compression_method(CompressionMethod::Stored)
+        .last_modified_time(zip::DateTime::default());
+
+    let put = |zip: &mut ZipWriter<Cursor<Vec<u8>>>,
+                   name: &str,
+                   data: &[u8],
+                   opts: SimpleFileOptions|
+     -> std::io::Result<()> {
+        zip.start_file(name, opts)
+            .map_err(|e| std::io::Error::other(e.to_string()))?;
+        zip.write_all(data)?;
+        Ok(())
+    };
+
+    // [Content_Types].xml
+    put(&mut zip, "[Content_Types].xml", content_types_xml(n).as_bytes(), deflate)?;
+    // _rels/.rels
+    put(&mut zip, "_rels/.rels", root_rels_xml().as_bytes(), deflate)?;
+    // theme
+    put(&mut zip, "ppt/theme/theme1.xml", theme1_xml().as_bytes(), deflate)?;
+    // presentation + rels
+    put(&mut zip, "ppt/presentation.xml", presentation_xml(n, cx, cy).as_bytes(), deflate)?;
+    put(&mut zip, "ppt/_rels/presentation.xml.rels", presentation_rels_xml(n).as_bytes(), deflate)?;
+    // master + rels
+    put(&mut zip, "ppt/slideMasters/slideMaster1.xml", slide_master_xml().as_bytes(), deflate)?;
+    put(
+        &mut zip,
+        "ppt/slideMasters/_rels/slideMaster1.xml.rels",
+        slide_master_rels_xml().as_bytes(),
+        deflate,
+    )?;
+    // layout + rels
+    put(&mut zip, "ppt/slideLayouts/slideLayout1.xml", slide_layout_xml().as_bytes(), deflate)?;
+    put(
+        &mut zip,
+        "ppt/slideLayouts/_rels/slideLayout1.xml.rels",
+        slide_layout_rels_xml().as_bytes(),
+        deflate,
+    )?;
+
+    // slides + per-slide rels + media
+    for i in 0..n {
+        let idx = i + 1;
+        let png = slide_pngs.get(i).map(|v| v.as_slice()).unwrap_or(&[]);
+        put(
+            &mut zip,
+            &format!("ppt/slides/slide{idx}.xml"),
+            slide_xml(idx, cx, cy).as_bytes(),
+            deflate,
+        )?;
+        put(
+            &mut zip,
+            &format!("ppt/slides/_rels/slide{idx}.xml.rels"),
+            slide_rels_xml(idx).as_bytes(),
+            deflate,
+        )?;
+        put(&mut zip, &format!("ppt/media/image{idx}.png"), png, stored)?;
+    }
+
+    let cursor = zip.finish().map_err(|e| std::io::Error::other(e.to_string()))?;
+    Ok(cursor.into_inner())
+}
+
+/// End-to-end: render a multi-scene composition file to a `.pptx` byte buffer
+/// (one full-bleed picture slide per scene). `frame`/`fps` seek the CSS timeline
+/// for the still snapshot painted onto each slide.
+pub fn render_pptx_from_path(
+    composition_path: &Path,
+    frame: u32,
+    fps: u32,
+    width: u32,
+    height: u32,
+) -> std::io::Result<Vec<u8>> {
+    let pngs = render_scene_pngs_from_path(composition_path, frame, fps, width, height)?;
+    assemble_pptx(&pngs, width, height)
+}
+
+// ── OOXML part templates ──────────────────────────────────────────────────────
+
+fn content_types_xml(n: usize) -> String {
+    let mut slides = String::new();
+    for i in 1..=n {
+        slides.push_str(&format!(
+            "<Override PartName=\"/ppt/slides/slide{i}.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.slide+xml\"/>"
+        ));
+    }
+    format!(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\
+<Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\">\
+<Default Extension=\"rels\" ContentType=\"application/vnd.openxmlformats-package.relationships+xml\"/>\
+<Default Extension=\"xml\" ContentType=\"application/xml\"/>\
+<Default Extension=\"png\" ContentType=\"image/png\"/>\
+<Override PartName=\"/ppt/presentation.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml\"/>\
+<Override PartName=\"/ppt/slideMasters/slideMaster1.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml\"/>\
+<Override PartName=\"/ppt/slideLayouts/slideLayout1.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml\"/>\
+<Override PartName=\"/ppt/theme/theme1.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.theme+xml\"/>\
+{slides}\
+</Types>"
+    )
+}
+
+fn root_rels_xml() -> String {
+    "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\
+<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">\
+<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument\" Target=\"ppt/presentation.xml\"/>\
+</Relationships>"
+        .to_string()
+}
+
+fn presentation_xml(n: usize, cx: i64, cy: i64) -> String {
+    // Master is rId1; slides start at rId2.
+    let mut sldid = String::new();
+    for i in 0..n {
+        let rid = i + 2;
+        let id = 256 + i; // sldId values must be >= 256
+        sldid.push_str(&format!("<p:sldId id=\"{id}\" r:id=\"rId{rid}\"/>"));
+    }
+    format!(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\
+<p:presentation xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" \
+xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" \
+xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\">\
+<p:sldMasterIdLst><p:sldMasterId id=\"2147483648\" r:id=\"rId1\"/></p:sldMasterIdLst>\
+<p:sldIdLst>{sldid}</p:sldIdLst>\
+<p:sldSz cx=\"{cx}\" cy=\"{cy}\"/>\
+<p:notesSz cx=\"{cy}\" cy=\"{cx}\"/>\
+</p:presentation>"
+    )
+}
+
+fn presentation_rels_xml(n: usize) -> String {
+    let mut rels = String::new();
+    // rId1 = master
+    rels.push_str(
+        "<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster\" Target=\"slideMasters/slideMaster1.xml\"/>",
+    );
+    // rId2.. = slides
+    for i in 0..n {
+        let rid = i + 2;
+        let idx = i + 1;
+        rels.push_str(&format!(
+            "<Relationship Id=\"rId{rid}\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide\" Target=\"slides/slide{idx}.xml\"/>"
+        ));
+    }
+    // theme rel after slides
+    let theme_rid = n + 2;
+    rels.push_str(&format!(
+        "<Relationship Id=\"rId{theme_rid}\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme\" Target=\"theme/theme1.xml\"/>"
+    ));
+    format!(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\
+<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">{rels}</Relationships>"
+    )
+}
+
+fn slide_xml(idx: usize, cx: i64, cy: i64) -> String {
+    // A single full-bleed picture filling the slide (off=0, ext=slide size).
+    format!(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\
+<p:sld xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" \
+xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" \
+xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\">\
+<p:cSld><p:spTree>\
+<p:nvGrpSpPr><p:cNvPr id=\"1\" name=\"\"/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr>\
+<p:grpSpPr><a:xfrm><a:off x=\"0\" y=\"0\"/><a:ext cx=\"{cx}\" cy=\"{cy}\"/>\
+<a:chOff x=\"0\" y=\"0\"/><a:chExt cx=\"{cx}\" cy=\"{cy}\"/></a:xfrm></p:grpSpPr>\
+<p:pic>\
+<p:nvPicPr><p:cNvPr id=\"{pic_id}\" name=\"Scene {idx}\"/>\
+<p:cNvPicPr><a:picLocks noChangeAspect=\"1\"/></p:cNvPicPr><p:nvPr/></p:nvPicPr>\
+<p:blipFill><a:blip r:embed=\"rId1\"/><a:stretch><a:fillRect/></a:stretch></p:blipFill>\
+<p:spPr><a:xfrm><a:off x=\"0\" y=\"0\"/><a:ext cx=\"{cx}\" cy=\"{cy}\"/></a:xfrm>\
+<a:prstGeom prst=\"rect\"><a:avLst/></a:prstGeom></p:spPr>\
+</p:pic>\
+</p:spTree></p:cSld><p:clrMapOvr><a:overrideClrMapping/></p:clrMapOvr></p:sld>",
+        pic_id = idx + 1,
+    )
+}
+
+fn slide_rels_xml(idx: usize) -> String {
+    format!(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\
+<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">\
+<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/image\" Target=\"../media/image{idx}.png\"/>\
+<Relationship Id=\"rId2\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout\" Target=\"../slideLayouts/slideLayout1.xml\"/>\
+</Relationships>"
+    )
+}
+
+fn slide_master_xml() -> String {
+    "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\
+<p:sldMaster xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" \
+xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" \
+xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\">\
+<p:cSld><p:bg><p:bgPr><a:solidFill><a:srgbClr val=\"FFFFFF\"/></a:solidFill>\
+<a:effectLst/></p:bgPr></p:bg>\
+<p:spTree>\
+<p:nvGrpSpPr><p:cNvPr id=\"1\" name=\"\"/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr>\
+<p:grpSpPr/></p:spTree></p:cSld>\
+<p:clrMap bg1=\"lt1\" tx1=\"dk1\" bg2=\"lt2\" tx2=\"dk2\" accent1=\"accent1\" accent2=\"accent2\" \
+accent3=\"accent3\" accent4=\"accent4\" accent5=\"accent5\" accent6=\"accent6\" hlink=\"hlink\" folHlink=\"folHlink\"/>\
+<p:sldLayoutIdLst><p:sldLayoutId id=\"2147483649\" r:id=\"rId1\"/></p:sldLayoutIdLst>\
+</p:sldMaster>"
+        .to_string()
+}
+
+fn slide_master_rels_xml() -> String {
+    "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\
+<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">\
+<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout\" Target=\"../slideLayouts/slideLayout1.xml\"/>\
+<Relationship Id=\"rId2\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme\" Target=\"../theme/theme1.xml\"/>\
+</Relationships>"
+        .to_string()
+}
+
+fn slide_layout_xml() -> String {
+    "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\
+<p:sldLayout xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" \
+xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" \
+xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" type=\"blank\" preserve=\"1\">\
+<p:cSld name=\"Blank\"><p:spTree>\
+<p:nvGrpSpPr><p:cNvPr id=\"1\" name=\"\"/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr>\
+<p:grpSpPr/></p:spTree></p:cSld>\
+<p:clrMapOvr><a:overrideClrMapping bg1=\"lt1\" tx1=\"dk1\" bg2=\"lt2\" tx2=\"dk2\" accent1=\"accent1\" \
+accent2=\"accent2\" accent3=\"accent3\" accent4=\"accent4\" accent5=\"accent5\" accent6=\"accent6\" \
+hlink=\"hlink\" folHlink=\"folHlink\"/></p:clrMapOvr>\
+</p:sldLayout>"
+        .to_string()
+}
+
+fn slide_layout_rels_xml() -> String {
+    "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\
+<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">\
+<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster\" Target=\"../slideMasters/slideMaster1.xml\"/>\
+</Relationships>"
+        .to_string()
+}
+
+fn theme1_xml() -> String {
+    // A minimal but schema-valid Office theme (one clrScheme/fontScheme/fmtScheme).
+    "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\
+<a:theme xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" name=\"Office Theme\">\
+<a:themeElements>\
+<a:clrScheme name=\"Office\">\
+<a:dk1><a:sysClr val=\"windowText\" lastClr=\"000000\"/></a:dk1>\
+<a:lt1><a:sysClr val=\"window\" lastClr=\"FFFFFF\"/></a:lt1>\
+<a:dk2><a:srgbClr val=\"44546A\"/></a:dk2>\
+<a:lt2><a:srgbClr val=\"E7E6E6\"/></a:lt2>\
+<a:accent1><a:srgbClr val=\"4472C4\"/></a:accent1>\
+<a:accent2><a:srgbClr val=\"ED7D31\"/></a:accent2>\
+<a:accent3><a:srgbClr val=\"A5A5A5\"/></a:accent3>\
+<a:accent4><a:srgbClr val=\"FFC000\"/></a:accent4>\
+<a:accent5><a:srgbClr val=\"5B9BD5\"/></a:accent5>\
+<a:accent6><a:srgbClr val=\"70AD47\"/></a:accent6>\
+<a:hlink><a:srgbClr val=\"0563C1\"/></a:hlink>\
+<a:folHlink><a:srgbClr val=\"954F72\"/></a:folHlink>\
+</a:clrScheme>\
+<a:fontScheme name=\"Office\">\
+<a:majorFont><a:latin typeface=\"Calibri Light\"/><a:ea typeface=\"\"/><a:cs typeface=\"\"/></a:majorFont>\
+<a:minorFont><a:latin typeface=\"Calibri\"/><a:ea typeface=\"\"/><a:cs typeface=\"\"/></a:minorFont>\
+</a:fontScheme>\
+<a:fmtScheme name=\"Office\">\
+<a:fillStyleLst>\
+<a:solidFill><a:schemeClr val=\"phClr\"/></a:solidFill>\
+<a:solidFill><a:schemeClr val=\"phClr\"/></a:solidFill>\
+<a:solidFill><a:schemeClr val=\"phClr\"/></a:solidFill>\
+</a:fillStyleLst>\
+<a:lnStyleLst>\
+<a:ln w=\"6350\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\"><a:solidFill><a:schemeClr val=\"phClr\"/></a:solidFill><a:prstDash val=\"solid\"/></a:ln>\
+<a:ln w=\"12700\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\"><a:solidFill><a:schemeClr val=\"phClr\"/></a:solidFill><a:prstDash val=\"solid\"/></a:ln>\
+<a:ln w=\"19050\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\"><a:solidFill><a:schemeClr val=\"phClr\"/></a:solidFill><a:prstDash val=\"solid\"/></a:ln>\
+</a:lnStyleLst>\
+<a:effectStyleLst>\
+<a:effectStyle><a:effectLst/></a:effectStyle>\
+<a:effectStyle><a:effectLst/></a:effectStyle>\
+<a:effectStyle><a:effectLst/></a:effectStyle>\
+</a:effectStyleLst>\
+<a:bgFillStyleLst>\
+<a:solidFill><a:schemeClr val=\"phClr\"/></a:solidFill>\
+<a:solidFill><a:schemeClr val=\"phClr\"/></a:solidFill>\
+<a:solidFill><a:schemeClr val=\"phClr\"/></a:solidFill>\
+</a:bgFillStyleLst>\
+</a:fmtScheme>\
+</a:themeElements>\
+</a:theme>"
+        .to_string()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -481,5 +1145,110 @@ mod tests {
             r > 180 && g < 100 && b < 100,
             "expected red image pixel, got ({r},{g},{b}) — data: image did not paint"
         );
+    }
+
+    // ── presentation (.pptx) export ───────────────────────────────────────────
+
+    const DECK: &str = r#"<!doctype html><html><head><style>
+      html,body{margin:0;padding:0;width:100%;height:100%}
+      section{position:absolute;inset:0}
+      .a{background:#3fe081}.b{background:#149157}.c{background:#0b1020}
+      h1{color:#fff;font-family:sans-serif;font-size:64px;margin:40px}
+    </style></head><body>
+      <section class="a"><h1>One</h1></section>
+      <section class="b"><h1>Two</h1></section>
+      <section class="c"><h1>Three</h1></section>
+    </body></html>"#;
+
+    #[test]
+    fn detect_section_scenes() {
+        let (kind, n) = detect_scenes(DECK);
+        assert_eq!(kind, SceneKind::Section);
+        assert_eq!(n, 3, "expected 3 <section> scenes");
+    }
+
+    #[test]
+    fn detect_data_scene_scenes_mixed_tags() {
+        let html = r#"<body><div data-scene>a</div><article data-scene="x">b</article></body>"#;
+        let (kind, n) = detect_scenes(html);
+        assert_eq!(kind, SceneKind::DataAttr);
+        assert_eq!(n, 2);
+    }
+
+    #[test]
+    fn scene_token_in_style_or_script_not_counted() {
+        // `data-scene` mentioned only inside CSS/JS must NOT count as a scene.
+        let html = r#"<head><style>.x[data-scene]{color:red}</style>
+            <script>var s="<section>"</script></head><body><p>hi</p></body>"#;
+        let (kind, n) = detect_scenes(html);
+        assert_eq!(kind, SceneKind::Whole);
+        assert_eq!(n, 1);
+    }
+
+    #[test]
+    fn annotate_assigns_ordinals_in_order() {
+        let out = annotate_scenes(DECK, SceneKind::Section);
+        assert!(out.contains("<section data-wavelet-scene=\"0\" class=\"a\""));
+        assert!(out.contains("<section data-wavelet-scene=\"1\" class=\"b\""));
+        assert!(out.contains("<section data-wavelet-scene=\"2\" class=\"c\""));
+    }
+
+    #[test]
+    fn scenes_render_distinctly() {
+        // Each isolated section has a different solid background, so the three
+        // rendered scenes must differ from one another.
+        let (w, h) = (200u32, 120u32);
+        let (kind, total) = detect_scenes(DECK);
+        let s0 = render_scene_rgba(DECK, kind, 0, total, 0, 30, w, h, None);
+        let s1 = render_scene_rgba(DECK, kind, 1, total, 0, 30, w, h, None);
+        let s2 = render_scene_rgba(DECK, kind, 2, total, 0, 30, w, h, None);
+        assert_eq!(s0.len(), (w * h * 4) as usize);
+        assert!(s0 != s1, "scene 0 == scene 1 — isolation failed");
+        assert!(s1 != s2, "scene 1 == scene 2 — isolation failed");
+        // Scene 0 background is bright green (#3fe081): sample a pixel away from text.
+        let idx = ((100 * w + 180) * 4) as usize;
+        let (r, g, b) = (s0[idx], s0[idx + 1], s0[idx + 2]);
+        assert!(
+            g > 150 && r < 150 && b < 180,
+            "scene 0 not green ({r},{g},{b}) — wrong scene painted"
+        );
+    }
+
+    #[test]
+    fn assemble_pptx_is_a_valid_zip_with_expected_parts() {
+        // Two trivial 2x2 PNGs as slides.
+        let png = rgba_to_png(&[0u8; 2 * 2 * 4], 2, 2);
+        let pptx = assemble_pptx(&[png.clone(), png.clone()], 1280, 720).expect("assemble");
+        // Re-open with the zip crate and verify the required OOXML parts exist.
+        let reader =
+            zip::ZipArchive::new(Cursor::new(pptx)).expect("output is not a valid zip");
+        let names: Vec<String> = (0..reader.len())
+            .map(|i| reader.name_for_index(i).unwrap().to_string())
+            .collect();
+        for required in [
+            "[Content_Types].xml",
+            "_rels/.rels",
+            "ppt/presentation.xml",
+            "ppt/_rels/presentation.xml.rels",
+            "ppt/slideMasters/slideMaster1.xml",
+            "ppt/slideLayouts/slideLayout1.xml",
+            "ppt/theme/theme1.xml",
+            "ppt/slides/slide1.xml",
+            "ppt/slides/slide2.xml",
+            "ppt/slides/_rels/slide1.xml.rels",
+            "ppt/slides/_rels/slide2.xml.rels",
+            "ppt/media/image1.png",
+            "ppt/media/image2.png",
+        ] {
+            assert!(names.iter().any(|n| n == required), "missing part: {required}");
+        }
+    }
+
+    #[test]
+    fn pptx_is_deterministic() {
+        let png = rgba_to_png(&[7u8; 4 * 4 * 4], 4, 4);
+        let a = assemble_pptx(&[png.clone()], 640, 360).unwrap();
+        let b = assemble_pptx(&[png], 640, 360).unwrap();
+        assert_eq!(a, b, "pptx assembly is not byte-deterministic");
     }
 }

@@ -51,3 +51,16 @@ data-url = "0.3"
 
 # bytes type used by the NetProvider/NetHandler trait surface.
 bytes = "1"
+
+# Pure-Rust ZIP writer for the .pptx (OOXML) presentation export lane. A .pptx
+# is a ZIP of XML parts + the per-scene PNGs. `deflate-flate2` pins the flate2
+# (miniz_oxide) pure-Rust deflate backend — no system zlib, links under
+# wasm32-wasip1 (the nexus target). default-features off drops time/getrandom/
+# aes (none needed to WRITE a deterministic archive).
+#
+# NOTE: zip pulls `typed-path` (path utils), whose 0.12.x gates a nightly
+# `feature(wasip2)` ONLY under `target_os=wasi, target_env=p2`, so the crate no
+# longer compiles for wasm32-WASIP2 on stable (E0554). That is an upstream
+# typed-path bug, isolated to the wasip2 target — wasm32-wasip1 (the nexus
+# target this lane runs on) and wasm32-unknown-unknown build clean.
+zip = { version = "8", default-features = false, features = ["deflate-flate2"] }
