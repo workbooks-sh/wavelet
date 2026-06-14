@@ -42,3 +42,10 @@ png = "0.17"
 
 # URL parsing for base_url resolution.
 url = "2"
+
+# data: URI decoding (WHATWG Fetch data: URL processing) for inline <img>
+# assets — same crate servo/blitz use. Pure Rust, links under WASI.
+data-url = "0.3"
+
+# bytes type used by the NetProvider/NetHandler trait surface.
+bytes = "1"

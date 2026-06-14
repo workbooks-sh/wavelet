@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background: #0b1020;
+        overflow: hidden;
+      }
+
+      /* The brand petal asset, loaded from a RELATIVE file path resolved
+         against this composition's directory by the FileNetProvider
+         (assets/petal.png). It spins + drifts in. */
+      #mark {
+        position: absolute;
+        left: 80px;
+        top: 200px;
+        width: 320px;
+        height: 320px;
+        animation: spin 4s linear infinite, rise 1.2s ease-out forwards;
+      }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+      @keyframes rise {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+
+      h1 {
+        position: absolute;
+        left: 480px;
+        top: 250px;
+        margin: 0;
+        font-size: 96px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: #fff;
+        font-family: sans-serif;
+        animation: slidein 1s ease-out forwards;
+      }
+      p {
+        position: absolute;
+        left: 484px;
+        top: 380px;
+        margin: 0;
+        font-size: 34px;
+        color: #3fe081;
+        font-family: sans-serif;
+        animation: slidein 1s 0.25s ease-out both;
+      }
+      @keyframes slidein {
+        from { opacity: 0; transform: translateX(60px); }
+        to   { opacity: 1; transform: translateX(0); }
+      }
+
+      /* A progress bar growing across the bottom — pure CSS timeline. */
+      #bar {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 18px;
+        background: linear-gradient(90deg, #149157, #3fe081);
+        animation: grow 4s linear forwards;
+      }
+      @keyframes grow {
+        from { width: 0; }
+        to   { width: 1280px; }
+      }
+    </style>
+  </head>
+  <body>
+    <img id="mark" src="assets/petal.png" />
+    <h1>Wavelet</h1>
+    <p>frames assembled in the nexus</p>
+    <div id="bar"></div>
+  </body>
+</html>

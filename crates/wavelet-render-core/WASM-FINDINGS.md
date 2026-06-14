@@ -16,6 +16,36 @@ under wasmtime, no GPU, no native code).
 
 ---
 
+## Phase 1 — real renderer (file compositions + assets + frame sequences)
+
+The carve graduated from a single hardcoded `&SCENE` to a real renderer:
+
+1. **Load a composition from a file path** (`render_*_from_path`,
+   `read_composition`) read via WASI `std::fs` — no hardcoded HTML.
+2. **Asset resolution** via [`FileNetProvider`] (a `blitz_traits::NetProvider`):
+   - relative `<img src="assets/petal.png">` resolves against the
+     composition's directory (`base_url` = a `file://` dir URL) and is read
+     from the WASI-preopened tenant dir with `std::fs::read`;
+   - inline `data:` URIs decode via the `data-url` crate (servo/blitz's).
+   No live `http(s)` — filesystem-only, matching the in-sandbox asset model.
+   (On `wasm32-unknown-unknown` there is no fs, so the `file:` branch +
+   directory base-url are `cfg`-compiled out; only `data:` URIs resolve
+   there. The nexus runs on `wasm32-wasip1`, which has WASI fs.)
+3. **Frame sequence** (`render_sequence_to_dir`, `bin/render_seq`): renders
+   `0..N` frames (N = round(fps·duration)) to `frame_00000.png …`,
+   parameterized `--w --h --fps --duration`. **Deterministic** — re-running
+   the same args produces byte-identical PNGs (verified via `diff -rq`).
+4. **Sample composition**: `examples/clip/clip.html` — CSS `@keyframes`
+   (spin + fade-in petal, sliding text, growing progress bar) + the bundled
+   `examples/clip/assets/petal.png` asset.
+
+Proven in wasmtime: `render_seq.wasm examples/clip/clip.html /out --fps 24
+--duration 2` wrote 48 PNGs; the relative petal asset painted (green pixels
+present); the animation advances frame-to-frame (growing file sizes + bar).
+Sequence frame proof: `proof/nexus-seq-frame12-wasip1.png`.
+
+---
+
 ## Stage-by-stage
 
 ### Stage 1 — baseline (native)
