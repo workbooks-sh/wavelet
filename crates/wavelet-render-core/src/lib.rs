@@ -1099,6 +1099,270 @@ fn theme1_xml() -> String {
         .to_string()
 }
 
+// ── film lane — workbook EDIT-STATE timeline → demo video frame sequence ───────
+//
+// PHASE 4: turn an ordered list of workbook edit STATES into a demo film, entirely
+// in-guest. A timeline is a JSON array of STEPS, each:
+//     { "snapshot_html": "<full workbook HTML at this edit step>",  // inline, OR
+//       "snapshot_file": "snap1.html",   // a file ref resolved in the sandbox CWD
+//       "label":         "what changed at this step",
+//       "hold_secs":     2.0 }           // how long this scene holds on screen
+// (top-level may be the bare array OR `{ "steps": [...] }`).
+//
+// Each step is painted FULL-BLEED (the snapshot HTML rendered as-is, made to fill
+// the viewport) with the `label` composited as an on-screen CAPTION (an overlay
+// injected into the snapshot before paint, so it rides on top of the workbook).
+// Between steps a short CROSSFADE provides a tasteful cut (CPU alpha-blend of the
+// outgoing step's last frame with the incoming step's first frame). The result is
+// a deterministic `frame_%05d.png` sequence the existing ffmpeg lane encodes to
+// mp4 — NO native exec, NO GPU.
+
+use serde::Deserialize;
+
+/// One edit-step of a film timeline.
+#[derive(Debug, Clone, Deserialize)]
+pub struct FilmStep {
+    /// The workbook HTML at this edit step (inline). Mutually-exclusive-ish with
+    /// `snapshot_file`; if both are set, inline wins.
+    #[serde(default)]
+    pub snapshot_html: Option<String>,
+    /// A path to the snapshot HTML, resolved relative to the timeline's directory
+    /// (the host stages these into the sandbox CWD). Used when `snapshot_html` is
+    /// absent.
+    #[serde(default)]
+    pub snapshot_file: Option<String>,
+    /// On-screen caption describing what changed at this step.
+    #[serde(default)]
+    pub label: String,
+    /// How long this scene holds on screen, in seconds (the still snapshot is
+    /// painted once and repeated for the hold). Defaults to 2.0 when absent/<=0.
+    #[serde(default)]
+    pub hold_secs: Option<f64>,
+}
+
+impl FilmStep {
+    fn hold(&self) -> f64 {
+        match self.hold_secs {
+            Some(s) if s > 0.0 => s,
+            _ => 2.0,
+        }
+    }
+}
+
+/// A film timeline: either a bare array of steps or `{ "steps": [...] }`.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(untagged)]
+enum TimelineDoc {
+    Bare(Vec<FilmStep>),
+    Wrapped { steps: Vec<FilmStep> },
+}
+
+impl TimelineDoc {
+    fn into_steps(self) -> Vec<FilmStep> {
+        match self {
+            TimelineDoc::Bare(v) => v,
+            TimelineDoc::Wrapped { steps } => steps,
+        }
+    }
+}
+
+/// Parse a timeline.json string into the ordered step list.
+pub fn parse_timeline(json: &str) -> Result<Vec<FilmStep>, String> {
+    let doc: TimelineDoc = serde_json::from_str(json).map_err(|e| format!("timeline parse: {e}"))?;
+    let steps = doc.into_steps();
+    if steps.is_empty() {
+        return Err("timeline has no steps".to_string());
+    }
+    Ok(steps)
+}
+
+/// Read + parse a timeline.json from a file path (WASI `std::fs`).
+pub fn read_timeline(path: &Path) -> std::io::Result<Vec<FilmStep>> {
+    let json = std::fs::read_to_string(path)?;
+    parse_timeline(&json).map_err(std::io::Error::other)
+}
+
+/// HTML-escape a caption string so it can't break out of the injected overlay
+/// markup (the label is author/agent-supplied text, not markup).
+fn escape_html_text(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    for c in s.chars() {
+        match c {
+            '&' => out.push_str("&amp;"),
+            '<' => out.push_str("&lt;"),
+            '>' => out.push_str("&gt;"),
+            '"' => out.push_str("&quot;"),
+            '\'' => out.push_str("&#39;"),
+            _ => out.push(c),
+        }
+    }
+    out
+}
+
+/// Inject a full-bleed normalization + a caption overlay into a snapshot's HTML.
+///
+/// The snapshot is rendered AS-IS but: (a) `html,body` are forced to fill the
+/// viewport with no margin so the workbook is full-bleed; (b) a fixed caption bar
+/// is appended carrying `label`. The overlay uses a high z-index + `!important`
+/// so it sits above the workbook regardless of the workbook's own stacking.
+/// Empty `label` → no caption (just the full-bleed normalization).
+fn compose_film_scene_html(snapshot: &str, label: &str) -> String {
+    let caption = if label.trim().is_empty() {
+        String::new()
+    } else {
+        let safe = escape_html_text(label);
+        // A modest lower-left caption pill — small, low-chrome (matches the brand
+        // guidance to keep overlays small/modern, not heavy drop-shadow chrome).
+        format!(
+            "<div id=\"__wavelet_caption\">{safe}</div>"
+        )
+    };
+    let overlay = format!(
+        "<style id=\"__wavelet_film_iso\">\
+         html,body{{margin:0 !important;padding:0 !important;\
+         width:100% !important;height:100% !important;overflow:hidden !important;}}\
+         #__wavelet_caption{{position:fixed !important;left:36px !important;bottom:36px !important;\
+         z-index:2147483647 !important;max-width:78% !important;\
+         font-family:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;\
+         font-size:26px !important;font-weight:600 !important;line-height:1.25 !important;\
+         color:#fff !important;padding:12px 18px !important;\
+         background:rgba(11,16,32,0.72) !important;\
+         border-left:3px solid #3fe081 !important;border-radius:6px !important;\
+         letter-spacing:0.01em !important;}}\
+         </style>{caption}"
+    );
+
+    let lower = snapshot.to_ascii_lowercase();
+    // Prefer injecting just before </body> so the caption is the last (top) node;
+    // else before </html>; else append.
+    if let Some(pos) = lower.rfind("</body>") {
+        let mut out = String::with_capacity(snapshot.len() + overlay.len());
+        out.push_str(&snapshot[..pos]);
+        out.push_str(&overlay);
+        out.push_str(&snapshot[pos..]);
+        out
+    } else if let Some(pos) = lower.rfind("</html>") {
+        let mut out = String::with_capacity(snapshot.len() + overlay.len());
+        out.push_str(&snapshot[..pos]);
+        out.push_str(&overlay);
+        out.push_str(&snapshot[pos..]);
+        out
+    } else {
+        format!("{snapshot}{overlay}")
+    }
+}
+
+/// Alpha-blend two equal-length RGBA8 buffers: `out = a*(1-t) + b*t`, per channel.
+/// `t` in [0,1]. Used for the crossfade cut between steps.
+fn blend_rgba(a: &[u8], b: &[u8], t: f64) -> Vec<u8> {
+    debug_assert_eq!(a.len(), b.len());
+    let t = t.clamp(0.0, 1.0);
+    let inv = 1.0 - t;
+    a.iter()
+        .zip(b.iter())
+        .map(|(&x, &y)| (x as f64 * inv + y as f64 * t).round().clamp(0.0, 255.0) as u8)
+        .collect()
+}
+
+/// Resolve a step's snapshot HTML + the asset base URL to use when painting it.
+///
+/// `snapshot_html` inline → no asset base (relative `<img>` won't resolve; inline
+/// snapshots are expected self-contained / data: URIs). `snapshot_file` → read the
+/// file and use ITS directory as the asset base, so a snapshot's relative assets
+/// resolve exactly like a standalone composition. `timeline_dir` is the directory
+/// the timeline.json lives in (file refs resolve against it).
+fn resolve_step_html(
+    step: &FilmStep,
+    timeline_dir: &Path,
+) -> std::io::Result<(String, Option<String>)> {
+    if let Some(html) = &step.snapshot_html {
+        if !html.is_empty() {
+            return Ok((html.clone(), None));
+        }
+    }
+    if let Some(file) = &step.snapshot_file {
+        let p = if Path::new(file).is_absolute() {
+            std::path::PathBuf::from(file)
+        } else {
+            timeline_dir.join(file)
+        };
+        let html = std::fs::read_to_string(&p)?;
+        let base = dir_base_url(&p);
+        return Ok((html, base));
+    }
+    Err(std::io::Error::other(
+        "film step has neither snapshot_html nor snapshot_file",
+    ))
+}
+
+/// Render a film from a timeline file to a deterministic PNG frame sequence in
+/// `out_dir` (`frame_00000.png` ..). Returns the number of frames written.
+///
+/// For each step: paint the snapshot full-bleed with its `label` caption ONCE,
+/// then write that still for `round(fps * hold_secs)` frames (the "hold"). Between
+/// consecutive steps, write `round(fps * crossfade_secs)` blended frames that fade
+/// the previous step's frame into the next step's frame — a tasteful cut. Set
+/// `crossfade_secs = 0.0` for hard cuts.
+///
+/// All in-guest: Blitz/Stylo/Vello-CPU paint, CPU alpha-blend for the fade, PNG
+/// encode. NO ffmpeg, NO native exec, NO GPU. Deterministic.
+pub fn render_film_to_dir(
+    timeline_path: &Path,
+    out_dir: &Path,
+    fps: u32,
+    width: u32,
+    height: u32,
+    crossfade_secs: f64,
+) -> std::io::Result<u32> {
+    let steps = read_timeline(timeline_path)?;
+    let timeline_dir = timeline_path.parent().unwrap_or_else(|| Path::new("."));
+    std::fs::create_dir_all(out_dir)?;
+    let fps = fps.max(1);
+    let crossfade_secs = crossfade_secs.max(0.0);
+
+    // Paint each step's still once (the hold is just repetition of the still).
+    let mut stills: Vec<Vec<u8>> = Vec::with_capacity(steps.len());
+    for step in &steps {
+        let (html, base) = resolve_step_html(step, timeline_dir)?;
+        let scene_html = compose_film_scene_html(&html, &step.label);
+        // Seek the CSS clock to t=0 for the still — a snapshot is a STATE, not an
+        // animation; frame 0 is its canonical look.
+        let rgba = render_frame_rgba_with_base(&scene_html, 0, fps, width, height, base);
+        stills.push(rgba);
+    }
+
+    let cross_n = (fps as f64 * crossfade_secs).round() as u32;
+    let mut frame_idx: u32 = 0;
+
+    let write_frame = |out_dir: &Path, idx: u32, rgba: &[u8]| -> std::io::Result<()> {
+        let png = rgba_to_png(rgba, width, height);
+        std::fs::write(out_dir.join(format!("frame_{idx:05}.png")), &png)
+    };
+
+    for (i, step) in steps.iter().enumerate() {
+        // Crossfade INTO this step from the previous step's still (skip for the
+        // first step — nothing to fade from).
+        if i > 0 && cross_n > 0 {
+            let prev = &stills[i - 1];
+            let cur = &stills[i];
+            for k in 1..=cross_n {
+                let t = k as f64 / (cross_n as f64 + 1.0);
+                let blended = blend_rgba(prev, cur, t);
+                write_frame(out_dir, frame_idx, &blended)?;
+                frame_idx += 1;
+            }
+        }
+        // Hold this step's still.
+        let hold_n = (fps as f64 * step.hold()).round().max(1.0) as u32;
+        for _ in 0..hold_n {
+            write_frame(out_dir, frame_idx, &stills[i])?;
+            frame_idx += 1;
+        }
+    }
+
+    Ok(frame_idx)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1250,5 +1514,113 @@ mod tests {
         let a = assemble_pptx(&[png.clone()], 640, 360).unwrap();
         let b = assemble_pptx(&[png], 640, 360).unwrap();
         assert_eq!(a, b, "pptx assembly is not byte-deterministic");
+    }
+
+    // ── film lane (edit-state timeline → frame sequence) ───────────────────────
+
+    #[test]
+    fn parse_bare_and_wrapped_timeline() {
+        let bare = r#"[{"snapshot_html":"<p>a</p>","label":"one","hold_secs":1.5},
+                       {"snapshot_html":"<p>b</p>","label":"two"}]"#;
+        let s = parse_timeline(bare).expect("parse bare");
+        assert_eq!(s.len(), 2);
+        assert_eq!(s[0].label, "one");
+        assert_eq!(s[0].hold(), 1.5);
+        assert_eq!(s[1].hold(), 2.0, "missing hold_secs defaults to 2.0");
+
+        let wrapped = r#"{"steps":[{"snapshot_file":"snap.html","label":"x"}]}"#;
+        let w = parse_timeline(wrapped).expect("parse wrapped");
+        assert_eq!(w.len(), 1);
+        assert_eq!(w[0].snapshot_file.as_deref(), Some("snap.html"));
+    }
+
+    #[test]
+    fn empty_timeline_is_an_error() {
+        assert!(parse_timeline("[]").is_err());
+        assert!(parse_timeline(r#"{"steps":[]}"#).is_err());
+    }
+
+    #[test]
+    fn caption_is_injected_and_escaped() {
+        let html = "<!doctype html><html><body><h1>Workbook</h1></body></html>";
+        let out = compose_film_scene_html(html, "<b>edit</b> & stuff");
+        assert!(out.contains("__wavelet_caption"));
+        assert!(out.contains("&lt;b&gt;edit&lt;/b&gt; &amp; stuff"), "label not escaped");
+        assert!(out.contains("<div id=\"__wavelet_caption\">"), "caption div missing");
+        // injected before </body>
+        let cap_pos = out.find("<div id=\"__wavelet_caption\">").unwrap();
+        let body_close = out.find("</body>").unwrap();
+        assert!(cap_pos < body_close);
+        // empty label → no caption div (the id still appears in the style selector,
+        // but the caption element itself must NOT be present).
+        let none = compose_film_scene_html(html, "   ");
+        assert!(!none.contains("<div id=\"__wavelet_caption\">"));
+        assert!(none.contains("__wavelet_film_iso"), "full-bleed style still injected");
+    }
+
+    #[test]
+    fn blend_is_a_linear_mix() {
+        let a = vec![0u8, 100, 200, 255];
+        let b = vec![100u8, 200, 0, 255];
+        let mid = blend_rgba(&a, &b, 0.5);
+        assert_eq!(mid, vec![50u8, 150, 100, 255]);
+        assert_eq!(blend_rgba(&a, &b, 0.0), a);
+        assert_eq!(blend_rgba(&a, &b, 1.0), b);
+    }
+
+    #[test]
+    fn render_film_writes_expected_frame_count_with_crossfade() {
+        use std::io::Write;
+        let dir = std::env::temp_dir().join(format!(
+            "wavelet_film_test_{}",
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        std::fs::create_dir_all(&dir).unwrap();
+        let timeline = dir.join("timeline.json");
+        let json = r#"[
+            {"snapshot_html":"<!doctype html><html><body style='background:#3fe081'></body></html>","label":"step one","hold_secs":1.0},
+            {"snapshot_html":"<!doctype html><html><body style='background:#0b1020'></body></html>","label":"step two","hold_secs":1.0}
+        ]"#;
+        std::fs::File::create(&timeline).unwrap().write_all(json.as_bytes()).unwrap();
+
+        let frames_dir = dir.join("frames");
+        let (w, h, fps) = (160u32, 90u32, 10u32);
+        // hold 1.0s @ 10fps = 10 frames each step; crossfade 0.4s = 4 frames between.
+        let n = render_film_to_dir(&timeline, &frames_dir, fps, w, h, 0.4).unwrap();
+        assert_eq!(n, 10 + 4 + 10, "expected hold+crossfade+hold frame count");
+        assert!(frames_dir.join("frame_00000.png").exists());
+        assert!(frames_dir.join(format!("frame_{:05}.png", n - 1)).exists());
+
+        // The two steps have different backgrounds → first hold frame and last
+        // hold frame must differ (proves distinct scenes rendered).
+        let f0 = std::fs::read(frames_dir.join("frame_00000.png")).unwrap();
+        let flast = std::fs::read(frames_dir.join(format!("frame_{:05}.png", n - 1))).unwrap();
+        assert!(f0 != flast, "first and last step frames identical — scenes not distinct");
+
+        std::fs::remove_dir_all(&dir).ok();
+    }
+
+    #[test]
+    fn render_film_hard_cut_no_crossfade() {
+        use std::io::Write;
+        let dir = std::env::temp_dir().join(format!(
+            "wavelet_film_hardcut_{}",
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        std::fs::create_dir_all(&dir).unwrap();
+        let timeline = dir.join("t.json");
+        let json = r#"[{"snapshot_html":"<body>a</body>","label":"a","hold_secs":0.5},
+                       {"snapshot_html":"<body>b</body>","label":"b","hold_secs":0.5}]"#;
+        std::fs::File::create(&timeline).unwrap().write_all(json.as_bytes()).unwrap();
+        let frames_dir = dir.join("f");
+        let n = render_film_to_dir(&timeline, &frames_dir, 10, 80, 45, 0.0).unwrap();
+        assert_eq!(n, 5 + 5, "hard cut = holds only, no crossfade frames");
+        std::fs::remove_dir_all(&dir).ok();
     }
 }

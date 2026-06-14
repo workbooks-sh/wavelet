@@ -1,0 +1,21 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+  html,body{margin:0;background:#0b1020;color:#fff;
+            font-family:'Geist',-apple-system,system-ui,sans-serif}
+  .bar{height:44px;background:#11182f;display:flex;align-items:center;
+       padding:0 18px;color:#9aa4c0;font-size:14px;font-family:monospace}
+  .dot{width:11px;height:11px;border-radius:50%;background:#3fe081;margin-right:8px}
+  .cell{margin:28px;background:#11182f;border:1px solid #1d2845;border-radius:10px;
+        padding:20px}
+  .cell .code{font-family:monospace;font-size:18px;color:#3fe081}
+  .chart{display:flex;align-items:flex-end;gap:14px;height:180px;margin-top:22px}
+  .chart i{flex:1;background:linear-gradient(#3fe081,#149157);border-radius:4px 4px 0 0}
+</style></head><body>
+  <div class="bar"><span class="dot"></span>sales.workbook — 1 cell</div>
+  <div class="cell">
+    <div class="code">df.groupby("month").sum().plot(kind="bar")</div>
+    <div class="chart"><i style="height:40%"></i><i style="height:65%"></i>
+      <i style="height:52%"></i><i style="height:88%"></i><i style="height:70%"></i>
+      <i style="height:95%"></i></div>
+  </div>
+</body></html>

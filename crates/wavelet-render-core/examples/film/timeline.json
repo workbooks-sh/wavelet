@@ -1,0 +1,12 @@
+[
+  {
+    "snapshot_file": "snap-1.html",
+    "label": "Start with an empty workbook",
+    "hold_secs": 1.8
+  },
+  {
+    "snapshot_file": "snap-2.html",
+    "label": "Add a cell — group by month and plot a bar chart",
+    "hold_secs": 2.4
+  }
+]

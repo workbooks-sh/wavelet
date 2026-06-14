@@ -64,3 +64,10 @@ bytes = "1"
 # typed-path bug, isolated to the wasip2 target — wasm32-wasip1 (the nexus
 # target this lane runs on) and wasm32-unknown-unknown build clean.
 zip = { version = "8", default-features = false, features = ["deflate-flate2"] }
+
+# JSON parsing for the `film` lane's timeline.json (an ordered list of edit-step
+# snapshots). serde_json is pure-Rust and links clean under wasm32-wasip1 (the
+# nexus target) — no getrandom/native dep. We parse the timeline into a typed
+# Vec<FilmStep> here; the host stages snapshot_file refs into the sandbox first.
+serde = { version = "1", default-features = false, features = ["derive", "alloc"] }
+serde_json = { version = "1", default-features = false, features = ["alloc"] }
