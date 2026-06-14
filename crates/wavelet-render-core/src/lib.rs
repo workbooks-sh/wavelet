@@ -295,6 +295,146 @@ pub fn rgba_to_png(rgba: &[u8], width: u32, height: u32) -> Vec<u8> {
     out
 }
 
+// ── still-image + animated-GIF encode lane (in-guest, pure-Rust `image`) ──────
+//
+// The render-core paints to RGBA8; the `image` crate (already a dep for `<img>`
+// decode) re-encodes that to the still formats and to an animated GIF over the
+// frame *sequence* — NO ffmpeg, NO native exec. Everything below links under
+// wasm32-wasip1 and runs under wasmtime.
+
+use image::codecs::gif::{GifEncoder, Repeat};
+use image::{ImageFormat, RgbaImage};
+use std::io::Cursor;
+
+/// The still-image output formats render_media can emit. GIF is handled by the
+/// animated-sequence path, not here.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum StillFormat {
+    Png,
+    Jpeg,
+    Webp,
+}
+
+impl StillFormat {
+    /// Parse a `--format` token. `gif` is intentionally NOT a still format.
+    pub fn parse(s: &str) -> Option<StillFormat> {
+        match s.to_ascii_lowercase().as_str() {
+            "png" => Some(StillFormat::Png),
+            "jpeg" | "jpg" => Some(StillFormat::Jpeg),
+            "webp" => Some(StillFormat::Webp),
+            _ => None,
+        }
+    }
+
+    /// Conventional file extension (no dot).
+    pub fn ext(self) -> &'static str {
+        match self {
+            StillFormat::Png => "png",
+            StillFormat::Jpeg => "jpg",
+            StillFormat::Webp => "webp",
+        }
+    }
+}
+
+/// Wrap an RGBA8 buffer in an `image::RgbaImage` (validates the length).
+fn rgba_image(rgba: &[u8], width: u32, height: u32) -> RgbaImage {
+    RgbaImage::from_raw(width, height, rgba.to_vec())
+        .expect("rgba buffer length != width*height*4")
+}
+
+/// Encode an RGBA8 buffer to JPEG bytes. JPEG has no alpha channel, so the
+/// buffer is flattened to RGB8 (alpha dropped) before encoding.
+pub fn rgba_to_jpeg(rgba: &[u8], width: u32, height: u32) -> Vec<u8> {
+    let dynimg = image::DynamicImage::ImageRgba8(rgba_image(rgba, width, height));
+    let rgb = dynimg.to_rgb8(); // drop alpha — JPEG is opaque
+    let mut out = Cursor::new(Vec::new());
+    image::DynamicImage::ImageRgb8(rgb)
+        .write_to(&mut out, ImageFormat::Jpeg)
+        .expect("jpeg encode");
+    out.into_inner()
+}
+
+/// Encode an RGBA8 buffer to WebP bytes (lossless, alpha preserved).
+pub fn rgba_to_webp(rgba: &[u8], width: u32, height: u32) -> Vec<u8> {
+    let dynimg = image::DynamicImage::ImageRgba8(rgba_image(rgba, width, height));
+    let mut out = Cursor::new(Vec::new());
+    dynimg
+        .write_to(&mut out, ImageFormat::WebP)
+        .expect("webp encode");
+    out.into_inner()
+}
+
+/// Encode an RGBA8 buffer to the chosen still format.
+pub fn rgba_to_still(rgba: &[u8], width: u32, height: u32, fmt: StillFormat) -> Vec<u8> {
+    match fmt {
+        StillFormat::Png => rgba_to_png(rgba, width, height),
+        StillFormat::Jpeg => rgba_to_jpeg(rgba, width, height),
+        StillFormat::Webp => rgba_to_webp(rgba, width, height),
+    }
+}
+
+/// Render a single composition frame from a file path to the chosen still
+/// format. Relative `<img>` assets resolve against the composition's directory.
+pub fn render_still_from_path(
+    composition_path: &Path,
+    frame: u32,
+    fps: u32,
+    width: u32,
+    height: u32,
+    fmt: StillFormat,
+) -> std::io::Result<Vec<u8>> {
+    let (html, base) = read_composition(composition_path)?;
+    let rgba = render_frame_rgba_with_base(&html, frame, fps, width, height, base);
+    Ok(rgba_to_still(&rgba, width, height, fmt))
+}
+
+/// Render an ANIMATED GIF of the WHOLE composition from a file path.
+///
+/// Paints frames `0..N` (N = `round(fps * duration_secs)`), each as one GIF
+/// frame, with the per-frame delay derived from `fps` (1/fps seconds), and
+/// loops forever. The GIF is built entirely in-guest via `image`'s
+/// `GifEncoder` — NO ffmpeg. Returns the GIF bytes.
+///
+/// GIF is a 256-colour palette format; `image`'s encoder quantizes each frame's
+/// RGBA8 to that palette (alpha is binary). This is the lossy cost of GIF — for
+/// full-colour motion use the mp4 encode lane. Frame delay is centiseconds
+/// internally (GIF's unit); `image` derives that from the `Delay` we pass.
+pub fn render_animated_gif_from_path(
+    composition_path: &Path,
+    fps: u32,
+    duration_secs: f64,
+    width: u32,
+    height: u32,
+) -> std::io::Result<Vec<u8>> {
+    use image::{Delay, Frame};
+
+    let (html, base) = read_composition(composition_path)?;
+    let fps = fps.max(1);
+    let n = (fps as f64 * duration_secs).round().max(1.0) as u32;
+
+    // Per-frame delay = 1/fps second, expressed as a rational in milliseconds so
+    // the GIF clock matches the render fps (image rounds to GIF's centisecond grid).
+    let delay = Delay::from_numer_denom_ms(1000, fps);
+
+    let mut out = Cursor::new(Vec::new());
+    {
+        let mut encoder = GifEncoder::new(&mut out);
+        // Loop forever — the whole composition plays on repeat.
+        encoder
+            .set_repeat(Repeat::Infinite)
+            .expect("gif set_repeat");
+
+        for frame in 0..n {
+            let rgba = render_frame_rgba_with_base(&html, frame, fps, width, height, base.clone());
+            let img = rgba_image(&rgba, width, height);
+            let gframe = Frame::from_parts(img, 0, 0, delay);
+            encoder.encode_frame(gframe).expect("gif encode_frame");
+        }
+        // encoder dropped here — flushes the trailer into `out`.
+    }
+    Ok(out.into_inner())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

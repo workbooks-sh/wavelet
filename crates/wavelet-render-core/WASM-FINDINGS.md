@@ -205,3 +205,51 @@ sandbox today is encode, and that was always expected (native ffmpeg).
 4. Optional: port the CPU `css_filter` pass for filter/blur effects.
 5. Decide font policy in-nexus (embed a default + host-fetch override per
    the wavelet-fonts "fetch not bundle" canon).
+
+## Still images + animated GIF — IN-GUEST (Phase 1), no ffmpeg
+
+The `image` crate (already a dep for `<img>` decode) carries an in-guest
+encode lane for STILL frames and ANIMATED GIF — pure Rust, links under
+wasm32-wasip1, runs under wasmtime, wasi-only imports. NO ffmpeg, NO native
+exec, NO GPU. (mp4/H.264 still uses the Forge ffmpeg→wasi lane; that is a
+separate codec problem, not this lane.)
+
+### `render_media` bin — CLI
+
+```
+render_media <composition.html> <out.ext>
+             [--format png|jpeg|webp|gif]
+             [--frame N] [--w W] [--h H] [--fps FPS] [--duration SECS]
+```
+
+- **format** — explicit `--format` wins; else inferred from `<out.ext>`; else
+  `png`. `png|jpeg|webp` = a SINGLE still frame (`--frame`, default 24).
+  `gif` = an animated GIF of the WHOLE composition (frames `0..round(fps*duration)`,
+  infinite loop, per-frame delay = 1/fps).
+- **jpeg** drops alpha (opaque); **png/webp** preserve alpha; **gif** is
+  256-colour palette-quantized per frame (the GIF cost — use the mp4 lane for
+  full-colour motion).
+- Defaults: frame=24, w=1280, h=720, fps=30, duration=2.0.
+
+Build + run (wasm32-wasip1, proven empirically in wasmtime):
+
+```
+cargo build --bin render_media --target wasm32-wasip1 --release
+W=target/wasm32-wasip1/release/render_media.wasm
+wasmtime --dir=.::/in --dir=/out::/out "$W" /in/clip.html /out/f.png  --format png  --frame 24
+wasmtime --dir=.::/in --dir=/out::/out "$W" /in/clip.html /out/f.jpg  --format jpeg --frame 24
+wasmtime --dir=.::/in --dir=/out::/out "$W" /in/clip.html /out/f.webp --format webp --frame 24
+wasmtime --dir=.::/in --dir=/out::/out "$W" /in/clip.html /out/a.gif  --format gif  --fps 12 --duration 2
+```
+
+Verified: PNG 1280x720 RGBA, JPEG 1280x720 (3 components), WebP RIFF/WebP,
+GIF89a 24 frames loop=0 @80ms (=12fps). `wasm-tools print | grep import`
+shows ONLY `wasi_snapshot_preview1`.
+
+### lib API (callable from a richer host/bin)
+
+- `StillFormat::{Png,Jpeg,Webp}` + `StillFormat::parse(&str)` + `.ext()`.
+- `rgba_to_png/jpeg/webp(rgba,w,h) -> Vec<u8>` and `rgba_to_still(rgba,w,h,fmt)`.
+- `render_still_from_path(path,frame,fps,w,h,fmt) -> io::Result<Vec<u8>>`.
+- `render_animated_gif_from_path(path,fps,duration_secs,w,h) -> io::Result<Vec<u8>>`
+  (image's `GifEncoder`, `Repeat::Infinite`, delay = `Delay::from_numer_denom_ms(1000,fps)`).
