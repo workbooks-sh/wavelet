@@ -1,0 +1,44 @@
+[package]
+name = "wavelet-render-core"
+version = "0.0.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+publish = false
+description = "Wavelet render core — the carved render slice (Blitz HTML/CSS + Stylo timeline + anyrender_vello_cpu CPU rasterizer) that paints composition frames to RGBA/PNG with NO native exec, NO GPU, NO rsmpeg. The keystone for assembling video frames inside a WASM sandbox (the nexus). Encode + services stay host-side."
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+# HTML + CSS render pipeline (upstream Blitz, crates.io).
+# default-features=false drops system_fonts (won't link under WASI) — we
+# bundle a static font via blitz-dom's font registration instead.
+blitz-dom = { version = "=0.3.0-alpha.3", default-features = false, features = ["woff"] }
+blitz-html = { version = "=0.3.0-alpha.3", default-features = false }
+blitz-paint = { version = "=0.3.0-alpha.3", default-features = false }
+blitz-traits = { version = "=0.3.0-alpha.3", default-features = false }
+
+# Pure-CPU Vello rasterizer — peniko/kurbo drawing model, no wgpu, no GPU.
+anyrender = "0.10"
+anyrender_vello_cpu = "=0.12.1"
+# Pin the vello_cpu / vello_common pair together. A fresh resolve otherwise
+# drags in vello_common 0.0.9 alongside vello_cpu 0.0.8 (built against 0.0.8),
+# which fails to compile (AtlasPaint / Pixmap API drift in text.rs). The
+# parent monolith locks both at 0.0.8; we replicate that here.
+vello_cpu = "=0.0.8"
+vello_common = "=0.0.8"
+# glifo 0.1.1 pulls vello_common 0.0.9, colliding with vello_cpu 0.0.8's
+# vello_common 0.0.8 (the AtlasPaint/Pixmap drift in vello_cpu text.rs). The
+# parent monolith locks glifo 0.1.0 (uses vello_common 0.0.8). Replicate.
+glifo = "=0.1.0"
+peniko = "0.6"
+kurbo = "0.13"
+
+# image decode so <img> works; matches blitz-dom's pinned image=0.25.6.
+image = { version = "=0.25.6", default-features = false, features = ["png"] }
+
+# PNG output.
+png = "0.17"
+
+# URL parsing for base_url resolution.
+url = "2"
