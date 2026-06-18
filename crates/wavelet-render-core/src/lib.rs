@@ -36,7 +36,7 @@ use anyrender::{ImageRenderer, PaintScene as _};
 use anyrender_vello_cpu::VelloCpuImageRenderer;
 pub mod js;
 use blitz_dom::node::NodeData;
-use blitz_dom::{build_single_font_ctx, BaseDocument, DocumentConfig};
+use blitz_dom::{build_single_font_ctx, BaseDocument, DocumentConfig, LocalName};
 use blitz_html::HtmlDocument;
 use blitz_paint::paint_scene;
 use blitz_traits::net::{Bytes, NetHandler, NetProvider, Request};
@@ -1643,6 +1643,39 @@ pub fn rendered_text(doc: &BaseDocument) -> String {
         .filter(|l| !l.is_empty())
         .collect::<Vec<_>>()
         .join("\n")
+}
+
+/// Per-node layout boxes for the **geometry bridge**. For every element carrying a `data-wb-nid`
+/// attribute (stamped by the JS-DOM side before serialization), emit one line
+/// `<nid> <x> <y> <width> <height>` — viewport-relative CSS px from real Blitz/Taffy layout. The host
+/// injects these back into the in-engine JS-DOM so `getBoundingClientRect`/`offset*` return true
+/// numbers instead of zero. Line-based, not JSON: trivially parsed, no allocator churn.
+pub fn measured_boxes(doc: &BaseDocument) -> String {
+    let mut out = String::new();
+    let root = doc.root_node().id;
+    collect_boxes(doc, root, &mut out);
+    out
+}
+
+fn collect_boxes(doc: &BaseDocument, id: usize, out: &mut String) {
+    // Read nid + children, then drop the node borrow before the `&self` rect query / recursion.
+    let (nid, kids) = match doc.get_node(id) {
+        Some(node) => (
+            node.attr(LocalName::from("data-wb-nid")).map(|s| s.to_string()),
+            node.children.clone(),
+        ),
+        None => return,
+    };
+
+    if let Some(nid) = nid {
+        if let Some(r) = doc.get_client_bounding_rect(id) {
+            out.push_str(&format!("{} {:.2} {:.2} {:.2} {:.2}\n", nid, r.x, r.y, r.width, r.height));
+        }
+    }
+
+    for c in kids {
+        collect_boxes(doc, c, out);
+    }
 }
 
 fn walk_text(doc: &BaseDocument, id: usize, out: &mut String) {
