@@ -337,6 +337,20 @@ fn build_dom_globals(ctx: &mut Context) {
         .build();
     let _ = ctx.register_global_property(js_string!("location"), location, Attribute::all());
     let _ = ctx.register_global_property(js_string!("navigator"), navigator, Attribute::all());
+
+    // window / self alias the global object, so `window.X`, `self.X`, and bare `X` are the same —
+    // most framework boot code references these and throws ReferenceError without them.
+    let global = ctx.global_object();
+    let _ = ctx.register_global_property(js_string!("window"), global.clone(), Attribute::all());
+    let _ = ctx.register_global_property(js_string!("self"), global.clone(), Attribute::all());
+
+    // common no-op timing/observer globals so boot code doesn't throw (no real event loop yet).
+    let raf = jsfn(ctx, noop);
+    let _ = ctx.register_global_property(js_string!("requestAnimationFrame"), raf, Attribute::all());
+    let st = jsfn(ctx, noop);
+    let _ = ctx.register_global_property(js_string!("setTimeout"), st, Attribute::all());
+    let al = jsfn(ctx, noop);
+    let _ = ctx.register_global_property(js_string!("addEventListener"), al, Attribute::all());
 }
 
 fn find_element(doc: &BaseDocument, id: usize, name: &str) -> Option<usize> {

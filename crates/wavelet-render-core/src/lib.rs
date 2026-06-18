@@ -1687,3 +1687,11 @@ pub fn render_js_text(html: &str, base_url: Option<String>) -> String {
     js::run_scripts(&mut doc);
     rendered_text(doc.as_ref())
 }
+
+/// Render a page WITH its inline JavaScript run against the DOM (Boa) → PNG. JS-aware screenshot.
+pub fn render_js_png(html: &str, base_url: Option<String>, width: u32, height: u32) -> Vec<u8> {
+    let mut doc = load_html_with_base(html, width, height, base_url);
+    js::run_scripts(&mut doc);
+    let rgba = render_doc_rgba(doc.as_mut(), width, height);
+    rgba_to_png(&rgba, width, height)
+}

@@ -34,8 +34,7 @@ fn main() {
     let h: u32 = arg(&args, 5, 2400);
 
     let base = if base_url.is_empty() { None } else { Some(base_url) };
-    let rgba = wavelet_render_core::render_frame_rgba_with_base(&html, 0, 30, w, h, base);
-    let png = wavelet_render_core::rgba_to_png(&rgba, w, h);
+    let png = wavelet_render_core::render_js_png(&html, base, w, h);
 
     if let Err(e) = std::fs::write(out, &png) {
         eprintln!("render_page: cannot write {}: {}", out, e);
