@@ -34,6 +34,7 @@ use std::sync::Arc;
 
 use anyrender::{ImageRenderer, PaintScene as _};
 use anyrender_vello_cpu::VelloCpuImageRenderer;
+pub mod js;
 use blitz_dom::node::NodeData;
 use blitz_dom::{build_single_font_ctx, BaseDocument, DocumentConfig};
 use blitz_html::HtmlDocument;
@@ -148,6 +149,9 @@ pub fn load_html_with_base(
             viewport: Some(Viewport::new(width, height, 1.0, ColorScheme::Light)),
             font_ctx: Some(build_single_font_ctx(BUNDLED_FONT)),
             net_provider: Some(Arc::new(FileNetProvider)),
+            // The real HTML parser provider so `set_inner_html` (the JS DOM layer) works — without
+            // it the doc defaults to DummyHtmlParserProvider and inner-HTML mutations are no-ops.
+            html_parser_provider: Some(Arc::new(blitz_html::HtmlProvider)),
             base_url,
             ..Default::default()
         },
@@ -1675,4 +1679,11 @@ fn walk_text(doc: &BaseDocument, id: usize, out: &mut String) {
             }
         }
     }
+}
+
+/// Render a page WITH its inline JavaScript run against the DOM (Boa) → rendered text. Layer 3.
+pub fn render_js_text(html: &str, base_url: Option<String>) -> String {
+    let mut doc = load_html_with_base(html, 1280, 2400, base_url);
+    js::run_scripts(&mut doc);
+    rendered_text(doc.as_ref())
 }

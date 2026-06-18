@@ -71,3 +71,8 @@ zip = { version = "8", default-features = false, features = ["deflate-flate2"] }
 # Vec<FilmStep> here; the host stages snapshot_file refs into the sandbox first.
 serde = { version = "1", default-features = false, features = ["derive", "alloc"] }
 serde_json = { version = "1", default-features = false, features = ["alloc"] }
+
+# Pure-Rust JS engine (Boa) for the in-wasm browser JS layer — runs a page's <script> against the
+# Blitz DOM (Layer 3). Pure Rust → compiles to wasm32-wasip1 with no C-sysroot pain, and shares the
+# process with Blitz so DOM bindings are direct calls (no FFI).
+boa_engine = "0.20"
