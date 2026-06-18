@@ -34,6 +34,7 @@ use std::sync::Arc;
 
 use anyrender::{ImageRenderer, PaintScene as _};
 use anyrender_vello_cpu::VelloCpuImageRenderer;
+use blitz_dom::node::NodeData;
 use blitz_dom::{build_single_font_ctx, BaseDocument, DocumentConfig};
 use blitz_html::HtmlDocument;
 use blitz_paint::paint_scene;
@@ -1622,5 +1623,56 @@ mod tests {
         let n = render_film_to_dir(&timeline, &frames_dir, 10, 80, 45, 0.0).unwrap();
         assert_eq!(n, 5 + 5, "hard cut = holds only, no crossfade frames");
         std::fs::remove_dir_all(&dir).ok();
+    }
+}
+
+/// Extract readable text from a parsed document for agent scraping. Walks the DOM in document order,
+/// skips non-content elements (script/style/head/noscript/template/svg), and inserts newlines at
+/// block boundaries. Whitespace is collapsed per line, blank lines dropped. This is the agent-facing
+/// "rendered text" of a page — CSS-aware via Blitz, no JS.
+pub fn rendered_text(doc: &BaseDocument) -> String {
+    let mut out = String::new();
+    let root = doc.root_node().id;
+    walk_text(doc, root, &mut out);
+    out.split('\n')
+        .map(|l| l.split_whitespace().collect::<Vec<_>>().join(" "))
+        .filter(|l| !l.is_empty())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+fn walk_text(doc: &BaseDocument, id: usize, out: &mut String) {
+    let node = match doc.get_node(id) {
+        Some(n) => n,
+        None => return,
+    };
+    match &node.data {
+        NodeData::Text(t) => out.push_str(&t.content),
+        NodeData::Element(_) => {
+            let name = node
+                .element_data()
+                .map(|e| e.name.local.as_ref().to_string())
+                .unwrap_or_default();
+            if matches!(name.as_str(), "script" | "style" | "head" | "noscript" | "template" | "svg") {
+                return;
+            }
+            let block = matches!(
+                name.as_str(),
+                "p" | "div" | "section" | "article" | "li" | "tr" | "h1" | "h2" | "h3" | "h4" | "h5"
+                    | "h6" | "header" | "footer" | "nav" | "main" | "aside" | "blockquote" | "pre"
+                    | "figure" | "figcaption" | "hr" | "br" | "ul" | "ol" | "table" | "title"
+            );
+            for c in &node.children {
+                walk_text(doc, *c, out);
+            }
+            if block {
+                out.push('\n');
+            }
+        }
+        _ => {
+            for c in &node.children {
+                walk_text(doc, *c, out);
+            }
+        }
     }
 }
