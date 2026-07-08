@@ -137,17 +137,70 @@ fn dir_base_url(composition_path: &Path) -> Option<String> {
 /// `base_url` (a `file://` dir URL) is what relative `<img src>` paths
 /// resolve against; pass `None` for a self-contained composition (only
 /// `data:` URIs). A [`FileNetProvider`] is always wired so assets load.
+/// CSS4 `ui-*` generic font families (`ui-sans-serif`, `ui-monospace`, …) reach the
+/// font stack unmapped — when one is the ONLY family (no classic-generic fallback),
+/// text silently renders zero glyphs. Everything resolves to the single bundled font
+/// anyway, so rewriting the token to its classic generic is behavior-preserving and
+/// closes the invisible-text hole. Boundary-aware: whole tokens only.
+fn normalize_ui_font_generics(html: &str) -> String {
+    const MAP: [(&str, &str); 4] = [
+        ("ui-sans-serif", "sans-serif"),
+        ("ui-monospace", "monospace"),
+        ("ui-serif", "serif"),
+        ("ui-rounded", "sans-serif"),
+    ];
+    let boundary = |c: Option<char>| {
+        !matches!(c, Some(ch) if ch.is_ascii_alphanumeric() || ch == '-' || ch == '_')
+    };
+    let mut out = html.to_string();
+    for (from, to) in MAP {
+        if !out.contains(from) {
+            continue;
+        }
+        let mut result = String::with_capacity(out.len());
+        let mut rest = out.as_str();
+        while let Some(pos) = rest.find(from) {
+            result.push_str(&rest[..pos]);
+            let before = result.chars().last();
+            let after = rest[pos + from.len()..].chars().next();
+            if boundary(before) && boundary(after) {
+                result.push_str(to);
+            } else {
+                result.push_str(from);
+            }
+            rest = &rest[pos + from.len()..];
+        }
+        result.push_str(rest);
+        out = result;
+    }
+    out
+}
+
 pub fn load_html_with_base(
     html: &str,
     width: u32,
     height: u32,
     base_url: Option<String>,
 ) -> HtmlDocument {
+    load_html_with_base_font(html, width, height, base_url, None)
+}
+
+/// Like [`load_html_with_base`], but with a caller-supplied font (TTF/OTF bytes)
+/// replacing the bundled Geist — the host-fed font seam: pass the deck's real
+/// font so re-rendered text matches the live stage's measure exactly.
+pub fn load_html_with_base_font(
+    html: &str,
+    width: u32,
+    height: u32,
+    base_url: Option<String>,
+    font: Option<&[u8]>,
+) -> HtmlDocument {
+    let html = &normalize_ui_font_generics(html);
     let mut document = HtmlDocument::from_html(
         html,
         DocumentConfig {
             viewport: Some(Viewport::new(width, height, 1.0, ColorScheme::Light)),
-            font_ctx: Some(build_single_font_ctx(BUNDLED_FONT)),
+            font_ctx: Some(build_single_font_ctx(font.unwrap_or(BUNDLED_FONT))),
             net_provider: Some(Arc::new(FileNetProvider)),
             // The real HTML parser provider so `set_inner_html` (the JS DOM layer) works — without
             // it the doc defaults to DummyHtmlParserProvider and inner-HTML mutations are no-ops.
@@ -274,12 +327,32 @@ pub fn render_sequence_to_dir(
     width: u32,
     height: u32,
 ) -> std::io::Result<u32> {
+    render_sequence_to_dir_font(composition_path, out_dir, fps, duration_secs, width, height, None)
+}
+
+/// [`render_sequence_to_dir`] with a caller-supplied font (see
+/// [`load_html_with_base_font`]).
+pub fn render_sequence_to_dir_font(
+    composition_path: &Path,
+    out_dir: &Path,
+    fps: u32,
+    duration_secs: f64,
+    width: u32,
+    height: u32,
+    font: Option<&[u8]>,
+) -> std::io::Result<u32> {
     let (html, base) = read_composition(composition_path)?;
     std::fs::create_dir_all(out_dir)?;
     let fps = fps.max(1);
     let n = (fps as f64 * duration_secs).round() as u32;
+    // Parse ONCE, seek the Stylo animation clock per frame — the monolith's
+    // render_offline loop. resolve(t) is a pure clock seek, so this matches the
+    // old re-parse-per-frame output while dropping the dominant per-frame cost.
+    let mut document = load_html_with_base_font(&html, width, height, base, font);
     for frame in 0..n {
-        let rgba = render_frame_rgba_with_base(&html, frame, fps, width, height, base.clone());
+        let t_secs = frame as f64 / fps as f64;
+        document.as_mut().resolve(t_secs);
+        let rgba = render_doc_rgba(document.as_mut(), width, height);
         let png = rgba_to_png(&rgba, width, height);
         let path = out_dir.join(format!("frame_{frame:05}.png"));
         std::fs::write(&path, &png)?;
