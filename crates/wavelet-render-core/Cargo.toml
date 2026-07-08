@@ -10,6 +10,7 @@ description = "Wavelet render core — the carved render slice (Blitz HTML/CSS +
 crate-type = ["rlib", "cdylib"]
 
 [dependencies]
+parley = "0.9"
 # HTML + CSS render pipeline (upstream Blitz, crates.io).
 # default-features=false drops system_fonts (won't link under WASI) — we
 # bundle a static font via blitz-dom's font registration instead.

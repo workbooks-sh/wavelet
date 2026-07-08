@@ -36,7 +36,7 @@ use anyrender::{ImageRenderer, PaintScene as _};
 use anyrender_vello_cpu::VelloCpuImageRenderer;
 pub mod js;
 use blitz_dom::node::NodeData;
-use blitz_dom::{build_single_font_ctx, BaseDocument, DocumentConfig, LocalName};
+use blitz_dom::{BaseDocument, DocumentConfig, FontContext, LocalName};
 use blitz_html::HtmlDocument;
 use blitz_paint::paint_scene;
 use blitz_traits::net::{Bytes, NetHandler, NetProvider, Request};
@@ -51,6 +51,12 @@ use peniko::{Color, Fill};
 /// documents for `build_single_font_ctx`. A production nexus can swap in a
 /// host-fetched, content-addressed font here instead of the embedded blob.
 static BUNDLED_FONT: &[u8] = include_bytes!("../assets/font.ttf");
+
+/// The built-in fallback font bytes (Geist, OFL) — exported so callers of the
+/// multi-font APIs can keep it as the coverage floor at the end of the chain.
+pub fn bundled_font() -> &'static [u8] {
+    BUNDLED_FONT
+}
 
 /// A [`NetProvider`] that serves sub-resources (currently `<img>`) from the
 /// filesystem and from inline `data:` URIs — and nothing else.
@@ -137,12 +143,92 @@ fn dir_base_url(composition_path: &Path) -> Option<String> {
 /// `base_url` (a `file://` dir URL) is what relative `<img src>` paths
 /// resolve against; pass `None` for a self-contained composition (only
 /// `data:` URIs). A [`FileNetProvider`] is always wired so assets load.
-/// CSS4 `ui-*` generic font families (`ui-sans-serif`, `ui-monospace`, …) reach the
-/// font stack unmapped — when one is the ONLY family (no classic-generic fallback),
-/// text silently renders zero glyphs. Everything resolves to the single bundled font
-/// anyway, so rewriting the token to its classic generic is behavior-preserving and
-/// closes the invisible-text hole. Boundary-aware: whole tokens only.
-fn normalize_ui_font_generics(html: &str) -> String {
+/// Font context over one or more font blobs (first = primary metrics, rest =
+/// per-glyph fallback). Unlike blitz's `build_single_font_ctx`, EVERY
+/// [`GenericFamily`] is populated — including the CSS4 `ui-*` generics
+/// (`ui-monospace`, `ui-sans-serif`, …). blitz only maps 4 classic generics,
+/// so `font-family: ui-monospace` (no fallback) resolved to an EMPTY family
+/// list and text rendered zero glyphs. Populating the full map fixes that at
+/// the resolution layer, for any font set.
+pub fn build_font_ctx(fonts: &[&[u8]]) -> FontContext {
+    use blitz_dom::decode_font_bytes;
+    use parley::fontique::{Blob, Collection, CollectionOptions, GenericFamily, SourceCache};
+    use std::sync::Arc;
+
+    let mut ctx = FontContext {
+        source_cache: SourceCache::new_shared(),
+        collection: Collection::new(CollectionOptions {
+            shared: false,
+            system_fonts: false,
+        }),
+    };
+    let mut family_ids = Vec::new();
+    for font_data in fonts {
+        let decoded = decode_font_bytes(font_data).into_owned();
+        let registered = ctx
+            .collection
+            .register_fonts(Blob::new(Arc::new(decoded) as _), None);
+        family_ids.extend(registered.iter().map(|(id, _)| *id));
+    }
+    for generic in [
+        GenericFamily::Serif,
+        GenericFamily::SansSerif,
+        GenericFamily::Monospace,
+        GenericFamily::Cursive,
+        GenericFamily::Fantasy,
+        GenericFamily::SystemUi,
+        GenericFamily::UiSerif,
+        GenericFamily::UiSansSerif,
+        GenericFamily::UiMonospace,
+        GenericFamily::UiRounded,
+        GenericFamily::Emoji,
+        GenericFamily::Math,
+        GenericFamily::FangSong,
+    ] {
+        ctx.collection
+            .append_generic_families(generic, family_ids.iter().copied());
+    }
+    ctx
+}
+
+pub fn load_html_with_base(
+    html: &str,
+    width: u32,
+    height: u32,
+    base_url: Option<String>,
+) -> HtmlDocument {
+    load_html_with_base_font(html, width, height, base_url, None)
+}
+
+/// Like [`load_html_with_base`], but with caller-supplied fonts (TTF/OTF
+/// bytes) — the host-fed font seam. First font = primary metrics (pass the
+/// deck's real font so re-renders match the live stage measure); later fonts
+/// are per-glyph fallbacks. The bundled Geist is ALWAYS appended last, so
+/// coverage never regresses below the built-in.
+pub fn load_html_with_base_font(
+    html: &str,
+    width: u32,
+    height: u32,
+    base_url: Option<String>,
+    font: Option<&[u8]>,
+) -> HtmlDocument {
+    let fonts: Vec<&[u8]> = match font {
+        Some(f) => vec![f, BUNDLED_FONT],
+        None => vec![BUNDLED_FONT],
+    };
+    load_html_with_base_fonts(html, width, height, base_url, &fonts)
+}
+
+/// Multi-font variant: `fonts` in priority order (first = primary metrics,
+/// rest = per-glyph fallback). Callers wanting the built-in floor should
+/// include [`BUNDLED_FONT`]-equivalent bytes or use the single-font wrapper.
+/// Stylo 0.17 does NOT map the CSS4 `ui-*` generic tokens onto fontique's
+/// generic families — it treats them as unknown NAMED families, which resolve
+/// to zero glyphs (verified empirically: populating `GenericFamily::UiMonospace`
+/// in the ctx alone does not rescue `font-family: ui-monospace`). Until the
+/// stylo mapping lands upstream, rewrite the tokens to their classic generics.
+/// Boundary-aware: whole tokens only.
+fn rewrite_ui_tokens(css: &str) -> String {
     const MAP: [(&str, &str); 4] = [
         ("ui-sans-serif", "sans-serif"),
         ("ui-monospace", "monospace"),
@@ -152,7 +238,7 @@ fn normalize_ui_font_generics(html: &str) -> String {
     let boundary = |c: Option<char>| {
         !matches!(c, Some(ch) if ch.is_ascii_alphanumeric() || ch == '-' || ch == '_')
     };
-    let mut out = html.to_string();
+    let mut out = css.to_string();
     for (from, to) in MAP {
         if !out.contains(from) {
             continue;
@@ -176,31 +262,72 @@ fn normalize_ui_font_generics(html: &str) -> String {
     out
 }
 
-pub fn load_html_with_base(
-    html: &str,
-    width: u32,
-    height: u32,
-    base_url: Option<String>,
-) -> HtmlDocument {
-    load_html_with_base_font(html, width, height, base_url, None)
+/// Stylo 0.17 does NOT map the CSS4 `ui-*` generic tokens onto fontique's
+/// generic families — it treats them as unknown NAMED families, which resolve
+/// to zero glyphs (verified empirically: populating `GenericFamily::UiMonospace`
+/// in the ctx alone does not rescue `font-family: ui-monospace`). Until that
+/// mapping lands upstream, rewrite the tokens to their classic generics —
+/// ONLY inside CSS contexts (`<style>` blocks and `style="…"` attributes), so
+/// visible text content that merely mentions "ui-monospace" is untouched.
+fn normalize_ui_font_generics(html: &str) -> String {
+    if !html.contains("ui-") {
+        return html.to_string();
+    }
+    let bytes = html.as_bytes();
+    let lower = html.to_ascii_lowercase();
+    let mut out = String::with_capacity(html.len());
+    let mut i = 0;
+    while i < bytes.len() {
+        // <style …> … </style>
+        if lower[i..].starts_with("<style") {
+            if let Some(open_end) = lower[i..].find('>') {
+                let content_start = i + open_end + 1;
+                let close = lower[content_start..]
+                    .find("</style")
+                    .map(|p| content_start + p)
+                    .unwrap_or(bytes.len());
+                out.push_str(&html[i..content_start]);
+                out.push_str(&rewrite_ui_tokens(&html[content_start..close]));
+                i = close;
+                continue;
+            }
+        }
+        // style="…" / style='…' attribute values
+        if lower[i..].starts_with("style=") {
+            let q_start = i + "style=".len();
+            let quote = bytes.get(q_start).copied();
+            if quote == Some(b'"') || quote == Some(b'\'') {
+                let q = quote.unwrap() as char;
+                if let Some(end_rel) = html[q_start + 1..].find(q) {
+                    let val_start = q_start + 1;
+                    let val_end = val_start + end_rel;
+                    out.push_str(&html[i..val_start]);
+                    out.push_str(&rewrite_ui_tokens(&html[val_start..val_end]));
+                    i = val_end;
+                    continue;
+                }
+            }
+        }
+        let ch_len = html[i..].chars().next().map(|c| c.len_utf8()).unwrap_or(1);
+        out.push_str(&html[i..i + ch_len]);
+        i += ch_len;
+    }
+    out
 }
 
-/// Like [`load_html_with_base`], but with a caller-supplied font (TTF/OTF bytes)
-/// replacing the bundled Geist — the host-fed font seam: pass the deck's real
-/// font so re-rendered text matches the live stage's measure exactly.
-pub fn load_html_with_base_font(
+pub fn load_html_with_base_fonts(
     html: &str,
     width: u32,
     height: u32,
     base_url: Option<String>,
-    font: Option<&[u8]>,
+    fonts: &[&[u8]],
 ) -> HtmlDocument {
     let html = &normalize_ui_font_generics(html);
     let mut document = HtmlDocument::from_html(
         html,
         DocumentConfig {
             viewport: Some(Viewport::new(width, height, 1.0, ColorScheme::Light)),
-            font_ctx: Some(build_single_font_ctx(font.unwrap_or(BUNDLED_FONT))),
+            font_ctx: Some(build_font_ctx(fonts)),
             net_provider: Some(Arc::new(FileNetProvider)),
             // The real HTML parser provider so `set_inner_html` (the JS DOM layer) works — without
             // it the doc defaults to DummyHtmlParserProvider and inner-HTML mutations are no-ops.
@@ -341,6 +468,25 @@ pub fn render_sequence_to_dir_font(
     height: u32,
     font: Option<&[u8]>,
 ) -> std::io::Result<u32> {
+    let fonts: Vec<&[u8]> = match font {
+        Some(f) => vec![f, BUNDLED_FONT],
+        None => vec![BUNDLED_FONT],
+    };
+    render_sequence_to_dir_fonts(composition_path, out_dir, fps, duration_secs, width, height, &fonts)
+}
+
+/// Multi-font variant of [`render_sequence_to_dir`]: `fonts` in priority
+/// order. Include the bundled floor yourself if wanted (the single-font
+/// wrappers do).
+pub fn render_sequence_to_dir_fonts(
+    composition_path: &Path,
+    out_dir: &Path,
+    fps: u32,
+    duration_secs: f64,
+    width: u32,
+    height: u32,
+    fonts: &[&[u8]],
+) -> std::io::Result<u32> {
     let (html, base) = read_composition(composition_path)?;
     std::fs::create_dir_all(out_dir)?;
     let fps = fps.max(1);
@@ -348,7 +494,7 @@ pub fn render_sequence_to_dir_font(
     // Parse ONCE, seek the Stylo animation clock per frame — the monolith's
     // render_offline loop. resolve(t) is a pure clock seek, so this matches the
     // old re-parse-per-frame output while dropping the dominant per-frame cost.
-    let mut document = load_html_with_base_font(&html, width, height, base, font);
+    let mut document = load_html_with_base_fonts(&html, width, height, base, fonts);
     for frame in 0..n {
         let t_secs = frame as f64 / fps as f64;
         document.as_mut().resolve(t_secs);
